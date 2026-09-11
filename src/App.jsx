@@ -104,8 +104,8 @@ const HeroScrollSequence = () => {
                     <span className="font-mono-custom text-xs text-[var(--text-muted)] tracking-widest bg-[var(--bg-secondary)]/80 px-2 py-1">[ARCHITECTURAL MATRIX]</span>
                     <Sparkles size={16} className="text-[var(--text-muted)]" />
                   </div>
-                  <div className="absolute inset-0 pointer-events-none flex items-center justify-center overflow-hidden opacity-90 mix-blend-screen">
-                    <img src="/profile.jpg" alt="Profile Pixel Art" className="w-full h-full object-cover object-[center_20%] opacity-90" />
+                  <div className="absolute inset-0 pointer-events-none flex items-center justify-end overflow-hidden opacity-90 mix-blend-screen p-8">
+                    <img src="/profile.jpg" alt="Profile Pixel Art" className="max-w-full max-h-full object-contain opacity-90" />
                   </div>
                   <div className="relative z-10 flex items-center gap-4 bg-[var(--bg-secondary)]/80 p-3 rounded-lg border border-[var(--border-color)]/30 backdrop-blur-md w-fit">
                     <span className="w-8 h-8 rounded-full bg-[var(--text-primary)] text-[var(--bg-primary)] flex items-center justify-center font-bold font-mono-custom text-sm">
