@@ -99,22 +99,9 @@ const HeroScrollSequence = () => {
             </div>
             
             <div className="relative hidden lg:block h-[450px]">
-              <div className="absolute inset-0 rounded-3xl border border-[var(--border-color)] bg-[var(--bg-secondary)] backdrop-blur-sm overflow-hidden flex flex-col justify-between p-8">
-                  <div className="flex justify-between items-start z-10 relative">
-                    <span className="font-mono-custom text-xs text-[var(--text-muted)] tracking-widest bg-[var(--bg-secondary)]/80 px-2 py-1">[ARCHITECTURAL MATRIX]</span>
-                    <Sparkles size={16} className="text-[var(--text-muted)]" />
-                  </div>
-                  <div className="absolute inset-0 pointer-events-none flex items-center justify-end overflow-hidden opacity-90 mix-blend-screen p-8">
-                    <img src="/profile.jpg" alt="Profile Pixel Art" className="max-w-full max-h-full object-contain opacity-90" />
-                  </div>
-                  <div className="relative z-10 flex items-center gap-4 bg-[var(--bg-secondary)]/80 p-3 rounded-lg border border-[var(--border-color)]/30 backdrop-blur-md w-fit">
-                    <span className="w-8 h-8 rounded-full bg-[var(--text-primary)] text-[var(--bg-primary)] flex items-center justify-center font-bold font-mono-custom text-sm">
-                      RJ
-                    </span>
-                    <span className="font-cursive text-3xl tracking-wider text-[var(--text-primary)]">Rithya Jayaram</span>
-                  </div>
-                  <div className="relative z-10 font-mono-custom font-bold text-sm tracking-widest text-[var(--text-primary)] bg-[var(--bg-primary)]/80 px-2 py-1 w-fit">
-                  SCROLL TO EXPLORE
+              <div className="absolute inset-0 rounded-3xl border border-[var(--border-color)] bg-[var(--bg-secondary)] overflow-hidden">
+                <div className="absolute inset-0 pointer-events-none flex items-center justify-center overflow-hidden opacity-90 mix-blend-screen p-8">
+                  <img src="/profile.jpg" alt="Profile Pixel Art" className="max-w-full max-h-full object-contain opacity-90" />
                 </div>
               </div>
             </div>
