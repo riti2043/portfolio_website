@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=DotGothic16&family=VT323&family=Sacramento&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Silkscreen&family=Playfair+Display:ital,wght@0,400;0,700;1,400;1,700&family=VT323&display=swap');
 @import "tailwindcss";
 
 @layer base {
@@ -22,16 +22,18 @@
     --text-primary: #E6E3DF;
     --text-muted: #8f3723;
     --border-color: #db5435;
-    --card-bg: #0b0b0b;
+    --card-bg: #1a1210;
     --grid-line: rgba(219, 84, 53, 0.15);
     --accent: #db5435;
-    --accent-inverse: #0b0b0b;
+    --accent-inverse: #E6E3DF;
   }
 }
 
 @layer utilities {
   .font-cursive {
-    font-family: 'Sacramento', cursive;
+    font-family: 'Playfair Display', serif;
+    font-style: italic;
+    font-weight: 700;
   }
   .btn-bitmap {
     box-shadow: 4px 4px 0px var(--accent);
@@ -52,7 +54,7 @@ body {
   margin: 0;
   background-color: var(--bg-primary);
   color: var(--text-primary);
-  font-family: 'DotGothic16', sans-serif;
+  font-family: 'Silkscreen', cursive;
   transition: background-color 0.3s ease, color 0.3s ease;
   overflow-x: hidden;
   /* Disable antialiasing for maximum retro crispness */

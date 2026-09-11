@@ -66,10 +66,6 @@ const HeroScrollSequence = () => {
         <motion.div style={{ opacity: opacity1, y: y1 }} className="absolute inset-0 flex items-center justify-center px-6 z-10">
           <div className="max-w-7xl mx-auto w-full grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
             <div className="space-y-8">
-              <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-[var(--border-color)] text-xs font-mono-custom pointer-events-auto">
-                <span className="w-2 h-2 rounded-full bg-[var(--accent)] animate-pulse" />
-                Available for work · 2026
-              </div>
               <h1 className="text-6xl sm:text-7xl lg:text-8xl font-bold tracking-tighter leading-[1.1]">
                 Hello There!
               </h1>
@@ -82,27 +78,25 @@ const HeroScrollSequence = () => {
                     animate={{ opacity: 1, y: 0 }}
                     exit={{ opacity: 0, y: -30 }}
                     transition={{ duration: 0.5, ease: "easeOut" }}
-                    className="text-[var(--text-primary)] relative"
+                    className="text-[var(--text-primary)] relative font-cursive"
                   >
                     {titles[titleIndex]}
                   </motion.div>
                 </AnimatePresence>
               </div>
-              <div className="flex flex-wrap items-center gap-4 pt-4 font-mono-custom text-sm pointer-events-auto">
-                <a href="#projects" className="btn-bitmap flex items-center gap-2 px-6 py-3 font-mono-custom text-xl">
+              <div className="flex flex-wrap items-center gap-4 pt-4 text-sm pointer-events-auto">
+                <a href="#projects" className="btn-bitmap flex items-center gap-2 px-6 py-3 text-xl">
                   /view projects <ChevronDown size={16} />
                 </a>
-                <a href="#contact" className="btn-bitmap flex items-center gap-2 px-6 py-3 font-mono-custom text-xl">
+                <a href="#contact" className="btn-bitmap flex items-center gap-2 px-6 py-3 text-xl">
                   Let's talk <ArrowUpRight size={16} />
                 </a>
               </div>
             </div>
             
             <div className="relative hidden lg:block h-[450px]">
-              <div className="absolute inset-0 rounded-3xl border border-[var(--border-color)] bg-[var(--bg-secondary)] overflow-hidden">
-                <div className="absolute inset-0 pointer-events-none flex items-center justify-center overflow-hidden opacity-90 mix-blend-screen p-8">
-                  <img src="/profile.jpg" alt="Profile Pixel Art" className="max-w-full max-h-full object-contain opacity-90" />
-                </div>
+              <div className="absolute inset-0 pointer-events-none flex items-center justify-center overflow-hidden opacity-90 mix-blend-screen">
+                <img src="/profile.jpg" alt="Profile Pixel Art" className="max-w-full max-h-full object-contain opacity-90" />
               </div>
             </div>
           </div>
