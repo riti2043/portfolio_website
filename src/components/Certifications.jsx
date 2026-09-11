@@ -15,7 +15,7 @@ export const Certifications = () => {
     <section className="py-24 px-6 relative z-10 w-full border-b border-[var(--border-color)]">
       <div className="max-w-7xl mx-auto w-full">
         <h2 className="text-3xl md:text-5xl font-mono-custom mb-12 uppercase border-b-2 border-[var(--border-color)] inline-block pb-2">
-          > Certifications.exe
+          &gt; Certifications.exe
         </h2>
         
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">

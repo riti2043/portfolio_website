@@ -86,7 +86,7 @@ export const KnowledgeGraph = () => {
       <div className="max-w-7xl mx-auto w-full">
         <div className="flex flex-col md:flex-row justify-between items-end mb-12">
           <h2 className="text-3xl md:text-5xl font-mono-custom uppercase border-b-2 border-[var(--border-color)] inline-block pb-2">
-            > Neural_Map.exe
+            &gt; Neural_Map.exe
           </h2>
           <p className="font-mono-custom opacity-70 max-w-sm text-right mt-4 md:mt-0">
             [Interactive Mode]: Drag nodes to explore the UVCE Marvel Level 3 topology and broader ML knowledge base.

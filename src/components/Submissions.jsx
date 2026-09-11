@@ -69,7 +69,7 @@ export const Submissions = () => {
     <section className="py-24 px-6 relative z-10 w-full border-b border-[var(--border-color)]">
       <div className="max-w-7xl mx-auto w-full flex flex-col items-center">
         <h2 className="text-3xl md:text-5xl font-mono-custom mb-4 uppercase border-b-2 border-[var(--border-color)] inline-block pb-2 w-full text-left">
-          > Submissions.log
+          &gt; Submissions.log
         </h2>
         
         <div className="w-full flex justify-between items-center mb-12 font-mono-custom">
