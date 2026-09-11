@@ -22,139 +22,24 @@ const LinkedinIcon = ({ size = 20, className = "" }) => (
   </svg>
 );
 
-const AsciiHeroText = () => {
-  const containerRef = useRef(null);
-  const canvasRef    = useRef(null);
-  const animRef      = useRef(null);
-  const rot          = useRef({ x: 0, y: 0, tx: 0, ty: 0 });
-
-  useEffect(() => {
-    const canvas = canvasRef.current;
-    if (!canvas) return;
-    const ctx = canvas.getContext('2d');
-
-    const LED  = 5;   // each bitmap pixel becomes a 5×5 square
-    const GAP  = 2;   // 2px gap between squares (gives the grid/matrix look)
-    const CELL = LED + GAP;
-
-    let leds = [];
-    let W = 0, H = 0;
-
-    const buildLeds = () => {
-      W = canvas.offsetWidth;
-      H = canvas.offsetHeight;
-      canvas.width  = W;
-      canvas.height = H;
-
-      // --- 1. Render Press Start 2P on a hidden canvas ---
-      const off = document.createElement('canvas');
-      off.width  = W;
-      off.height = H;
-      const oCtx = off.getContext('2d');
-
-      // Split into two lines so it always fits any screen width
-      const fSize = Math.min(H * 0.36, W * 0.055);
-      oCtx.font         = `${fSize}px 'Press Start 2P', monospace`;
-      oCtx.textBaseline = 'top';
-      oCtx.textAlign    = 'left';
-      oCtx.fillStyle    = 'white';
-      oCtx.fillText('RITHYA',  8, H * 0.04);
-      oCtx.fillText('JAYARAM', 8, H * 0.52);
-
-      // --- 2. Read every pixel; sample on CELL grid ---
-      const px = oCtx.getImageData(0, 0, W, H).data;
-      leds = [];
-      for (let y = 0; y < H; y += CELL) {
-        for (let x = 0; x < W; x += CELL) {
-          // Sample centre of this cell
-          const cx  = Math.min(W - 1, Math.floor(x + CELL / 2));
-          const cy  = Math.min(H - 1, Math.floor(y + CELL / 2));
-          const idx = (cy * W + cx) * 4;
-          if (px[idx + 3] > 60) {           // alpha threshold → inside a letter
-            leds.push({
-              x,
-              y,
-              phase: Math.random() * Math.PI * 2,   // independent flicker offset
-            });
-          }
-        }
-      }
-    };
-
-    let scanX = 0;
-
-    const animate = () => {
-      ctx.clearRect(0, 0, W, H);
-      const t = Date.now() * 0.0018;
-      scanX = (scanX + 1.8) % W;
-
-      for (const led of leds) {
-        // Slow independent pulse per LED
-        const pulse     = 0.55 + 0.45 * Math.sin(t * 0.9 + led.phase);
-        // Scanline brightens LEDs it passes over
-        const scanDist  = Math.abs(led.x - scanX);
-        const scanBoost = Math.max(0, 1 - scanDist / 90) * 0.55;
-        const a         = Math.min(1, pulse + scanBoost);
-
-        // Main LED square — orange, brightness driven by a
-        ctx.fillStyle = `rgb(${Math.round(219*a+30*(1-a))},${Math.round(84*a*0.6)},${Math.round(53*a*0.4)})`;
-        ctx.fillRect(led.x, led.y, LED, LED);
-
-        // Hot-spot centre when fully lit
-        if (a > 0.82) {
-          ctx.fillStyle = `rgba(255,200,140,${((a - 0.82) * 3).toFixed(2)})`;
-          ctx.fillRect(led.x + 1, led.y + 1, LED - 2, LED - 2);
-        }
-      }
-
-      animRef.current = requestAnimationFrame(animate);
-    };
-
-    document.fonts.load(`16px 'Press Start 2P'`).then(() => {
-      buildLeds();
-      animate();
-    });
-
-    // Mouse tilt
-    const el = containerRef.current;
-    const onMove = (e) => {
-      if (!el) return;
-      const r = el.getBoundingClientRect();
-      rot.current.tx = -((e.clientY - r.top  - r.height / 2) / (r.height / 2)) * 10;
-      rot.current.ty =  ((e.clientX - r.left - r.width  / 2) / (r.width  / 2)) * 16;
-    };
-    const onLeave = () => { rot.current.tx = 0; rot.current.ty = 0; };
-    if (el) { el.addEventListener('mousemove', onMove); el.addEventListener('mouseleave', onLeave); }
-
-    // Smooth tilt loop
-    const tiltLoop = () => {
-      rot.current.x += (rot.current.tx - rot.current.x) * 0.07;
-      rot.current.y += (rot.current.ty - rot.current.y) * 0.07;
-      canvas.style.transform =
-        `perspective(900px) rotateX(${rot.current.x.toFixed(2)}deg) rotateY(${rot.current.y.toFixed(2)}deg)`;
-      requestAnimationFrame(tiltLoop);
-    };
-    tiltLoop();
-
-    const onResize = () => { cancelAnimationFrame(animRef.current); buildLeds(); animate(); };
-    window.addEventListener('resize', onResize);
-
-    return () => {
-      cancelAnimationFrame(animRef.current);
-      window.removeEventListener('resize', onResize);
-      if (el) { el.removeEventListener('mousemove', onMove); el.removeEventListener('mouseleave', onLeave); }
-    };
-  }, []);
-
-  return (
-    <div ref={containerRef} style={{ width: '100%', cursor: 'crosshair', paddingBottom: '8px' }}>
-      <canvas
-        ref={canvasRef}
-        style={{ width: '100%', height: '240px', display: 'block' }}
-      />
-    </div>
-  );
-};
+const AsciiHeroText = () => (
+  <h1
+    style={{
+      fontFamily: "'Cinzel Decorative', serif",
+      fontSize: 'clamp(32px, 6.5vw, 110px)',
+      fontWeight: 900,
+      color: '#db5435',
+      margin: 0,
+      padding: '0 0 6px 0',
+      lineHeight: 1.05,
+      letterSpacing: '0.04em',
+      userSelect: 'none',
+      whiteSpace: 'nowrap',
+    }}
+  >
+    Rithya Jayaram
+  </h1>
+);
 
 
 const NetworkStatus = () => {
@@ -214,11 +99,11 @@ const NetworkStatus = () => {
 
 const ProfileDashboard = () => {
   return (
-    <section id="hero" className="min-h-screen pt-8 pb-16 px-6 lg:px-12 flex flex-col items-center justify-center relative">
-      <div className="max-w-[1400px] w-full mx-auto relative z-10 grid grid-cols-1 lg:grid-cols-12 gap-8 items-start mt-8 lg:mt-0">
+    <section id="hero" className="min-h-screen pt-2 pb-6 px-6 lg:px-12 flex flex-col items-center justify-start relative">
+      <div className="max-w-[1400px] w-full mx-auto relative z-10 grid grid-cols-1 lg:grid-cols-12 gap-4 items-start mt-0">
         
-        {/* HEADER (Spans all 12 cols so the boxes below align perfectly) */}
-        <div className="lg:col-span-12">
+        {/* HEADER — flush under navbar */}
+        <div className="lg:col-span-12 pb-2">
           <AsciiHeroText />
         </div>
 
