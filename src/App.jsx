@@ -22,6 +22,43 @@ const LinkedinIcon = ({ size = 20, className = "" }) => (
   </svg>
 );
 
+const MovingBitsCursive = () => {
+  const [bgSvg, setBgSvg] = useState('');
+  
+  useEffect(() => {
+    const chars = '01';
+    const generateSvg = () => {
+      let textNodes = '';
+      for(let y=10; y<=100; y+=10) {
+        let row = '';
+        for(let x=0; x<30; x++) row += chars[Math.floor(Math.random()*2)];
+        textNodes += `<text x='0' y='${y}' font-family='monospace' font-size='10' fill='white' font-weight='bold'>${row}</text>`;
+      }
+      return `data:image/svg+xml,${encodeURIComponent(`<svg xmlns='http://www.w3.org/2000/svg' width='100' height='100'>${textNodes}</svg>`)}`;
+    };
+    
+    setBgSvg(generateSvg());
+    const int = setInterval(() => setBgSvg(generateSvg()), 150); // Scramble rapidly!
+    return () => clearInterval(int);
+  }, []);
+
+  return (
+    <h1 
+      className="text-6xl md:text-7xl lg:text-8xl xl:text-[90px] whitespace-nowrap tracking-tight font-bold mb-6 text-left cursor-crosshair transition-all duration-300 hover:scale-[1.01]" 
+      style={{ 
+        fontFamily: "'Dancing Script', cursive",
+        backgroundImage: `url("${bgSvg}")`,
+        WebkitBackgroundClip: 'text',
+        WebkitTextFillColor: 'transparent',
+        WebkitTextStroke: '1px rgba(255,255,255,0.7)',
+        filter: 'drop-shadow(3px 3px 0px rgba(219,84,53,0.6))'
+      }}
+    >
+      Rithya Jayaram
+    </h1>
+  );
+};
+
 const ProfileDashboard = () => {
   return (
     <section id="hero" className="min-h-screen pt-8 pb-16 px-6 lg:px-12 flex flex-col items-center justify-center relative">
@@ -30,10 +67,8 @@ const ProfileDashboard = () => {
         {/* LEFT BOX (Now Main Profile): NAME + PHOTO + STATS (Spans 9 cols) */}
         <div className="lg:col-span-9 flex flex-col">
           
-          {/* MOVING BITS TEXT HEADER */}
-          <h1 className="text-5xl md:text-6xl lg:text-7xl xl:text-[72px] whitespace-nowrap tracking-tighter font-black mb-6 uppercase leading-none text-left cursor-crosshair text-moving-bits" style={{ fontFamily: "'Silkscreen', cursive" }}>
-            RITHYA JAYARAM
-          </h1>
+          {/* MOVING BITS CURSIVE HEADER */}
+          <MovingBitsCursive />
 
           {/* UNIFIED CONTAINER (PHOTO + STATS) */}
           <div className="hud-glow bg-[#0f0f0f] flex flex-col md:flex-row flex-1">
