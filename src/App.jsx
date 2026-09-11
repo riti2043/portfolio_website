@@ -22,55 +22,6 @@ const LinkedinIcon = ({ size = 20, className = "" }) => (
   </svg>
 );
 
-const ASCII_RITHYA = `██████╗  ██╗ ████████╗ ██╗  ██╗ ██╗   ██╗  █████╗ 
-██╔══██╗ ██║ ╚══██╔══╝ ██║  ██║ ╚██╗ ██╔╝ ██╔══██╗
-██████╔╝ ██║    ██║    ███████║  ╚████╔╝  ███████║
-██╔══██╗ ██║    ██║    ██╔══██║   ╚██╔╝   ██╔══██║
-██║  ██║ ██║    ██║    ██║  ██║    ██║    ██║  ██║
-╚═╝  ╚═╝ ╚═╝    ╚═╝    ╚═╝  ╚═╝    ╚═╝    ╚═╝  ╚═╝`;
-
-const ASCII_JAYARAM = `      ██╗  █████╗  ██╗   ██╗  █████╗  ██████╗  █████╗  ███╗   ███╗
-      ██║ ██╔══██╗ ╚██╗ ██╔╝ ██╔══██╗ ██╔══██╗ ██╔══██╗ ████╗ ████║
-      ██║ ███████║  ╚████╔╝  ███████║ ██████╔╝ ███████║ ██╔████╔██║
-██╗   ██║ ██╔══██║   ╚██╔╝   ██╔══██║ ██╔══██╗ ██╔══██║ ██║╚██╔╝██║
-╚██████╔╝ ██║  ██║    ██║    ██║  ██║ ██║  ██║ ██║  ██║ ██║ ╚═╝ ██║
- ╚═════╝  ╚═╝  ╚═╝    ╚═╝    ╚═╝  ╚═╝ ╚═╝  ╚═╝ ╚═╝  ╚═╝ ╚═╝     ╚═╝`;
-
-const BoilingAscii = ({ baseText }) => {
-  const [content, setContent] = useState(baseText);
-  const [isHovered, setIsHovered] = useState(false);
-
-  useEffect(() => {
-    const noise = ['▓', '▒', '░', '█', '█', '█']; 
-    const speed = isHovered ? 40 : 120;
-    const volatility = isHovered ? 0.3 : 0.03;
-
-    const interval = setInterval(() => {
-      let newContent = baseText.split('').map(char => {
-        if (char === '█' || char === '═' || char === '║') {
-          return Math.random() < volatility ? noise[Math.floor(Math.random() * noise.length)] : char;
-        }
-        return char;
-      }).join('');
-      setContent(newContent);
-    }, speed);
-
-    return () => clearInterval(interval);
-  }, [baseText, isHovered]);
-
-  return (
-    <pre 
-      onMouseEnter={() => setIsHovered(true)}
-      onMouseLeave={() => setIsHovered(false)}
-      className={\`font-mono text-[8px] sm:text-[10px] md:text-[12px] lg:text-[10px] xl:text-[12px] leading-[1.1] transition-colors duration-300 ease-in-out cursor-crosshair \${
-        isHovered ? 'text-[var(--accent)] drop-shadow-[0_0_12px_var(--accent)]' : 'text-white'
-      }\`}
-    >
-      {content}
-    </pre>
-  );
-};
-
 const ProfileDashboard = () => {
   return (
     <section id="hero" className="min-h-screen pt-8 pb-16 px-6 lg:px-12 flex flex-col items-center justify-center relative">
@@ -79,11 +30,10 @@ const ProfileDashboard = () => {
         {/* LEFT BOX (Now Main Profile): NAME + PHOTO + STATS (Spans 9 cols) */}
         <div className="lg:col-span-9 flex flex-col">
           
-          {/* BIG ASCII NAME HEADER */}
-          <div className="flex flex-wrap lg:flex-nowrap gap-4 md:gap-6 mb-6 overflow-hidden w-full">
-            <BoilingAscii baseText={ASCII_RITHYA} />
-            <BoilingAscii baseText={ASCII_JAYARAM} />
-          </div>
+          {/* MOVING BITS TEXT HEADER */}
+          <h1 className="text-5xl md:text-6xl lg:text-7xl xl:text-[72px] whitespace-nowrap tracking-tighter font-black mb-6 uppercase leading-none text-left cursor-crosshair text-moving-bits" style={{ fontFamily: "'Silkscreen', cursive" }}>
+            RITHYA JAYARAM
+          </h1>
 
           {/* UNIFIED CONTAINER (PHOTO + STATS) */}
           <div className="hud-glow bg-[#0f0f0f] flex flex-col md:flex-row flex-1">

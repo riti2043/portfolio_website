@@ -117,6 +117,28 @@ body {
   font-family: 'Orbitron', sans-serif;
 }
 
+.text-moving-bits {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='40' height='40'%3E%3Cstyle%3Etext %7B font-family: monospace; font-size: 8px; fill: %23ffffff; font-weight: bold; %7D%3C/style%3E%3Ctext x='0' y='8'%3E01001%3C/text%3E%3Ctext x='0' y='16'%3E10110%3C/text%3E%3Ctext x='0' y='24'%3E11010%3C/text%3E%3Ctext x='0' y='32'%3E00101%3C/text%3E%3Ctext x='0' y='40'%3E10010%3C/text%3E%3C/svg%3E");
+  background-size: 40px 40px;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  -webkit-text-stroke: 1px rgba(255,255,255,1);
+  filter: drop-shadow(4px 4px 0px rgba(0,0,0,1)) drop-shadow(4px 4px 0px rgba(255,255,255,0.8));
+  animation: bits-scroll 4s linear infinite;
+}
+
+.text-moving-bits:hover {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='40' height='40'%3E%3Cstyle%3Etext %7B font-family: monospace; font-size: 8px; fill: %23db5435; font-weight: bold; %7D%3C/style%3E%3Ctext x='0' y='8'%3E01001%3C/text%3E%3Ctext x='0' y='16'%3E10110%3C/text%3E%3Ctext x='0' y='24'%3E11010%3C/text%3E%3Ctext x='0' y='32'%3E00101%3C/text%3E%3Ctext x='0' y='40'%3E10010%3C/text%3E%3C/svg%3E");
+  -webkit-text-stroke: 1px var(--accent);
+  filter: drop-shadow(4px 4px 0px rgba(0,0,0,1)) drop-shadow(4px 4px 0px var(--accent)) drop-shadow(0 0 12px var(--accent));
+  animation: bits-scroll 0.5s linear infinite;
+}
+
+@keyframes bits-scroll {
+  from { background-position: 0 0; }
+  to { background-position: 0 160px; }
+}
+
 /* Subtle Film Grain Effect */
 .grain-overlay {
   position: fixed;
