@@ -23,109 +23,126 @@ const LinkedinIcon = ({ size = 20, className = "" }) => (
 );
 
 const AsciiHeroText = () => {
-  const canvasRef = useRef(null);
+  const containerRef = useRef(null);
+  const textWrapRef = useRef(null);
+  const scanRef = useRef(null);
   const animRef = useRef(null);
+  const rot = useRef({ x: 0, y: 0, tx: 0, ty: 0 });
+
+  // Build the 3D extruded text-shadow stack once
+  const textShadow = (() => {
+    const layers = [];
+    const depth = 30;
+    for (let i = 1; i <= depth; i++) {
+      const t = i / depth;
+      // Starts bright orange, fades to very dark burnt
+      const r = Math.floor(200 - t * 140);
+      const g = Math.floor(55 - t * 45);
+      const b = Math.floor(30 - t * 22);
+      layers.push(`${i}px ${i * 0.7}px 0 rgb(${r},${g},${b})`);
+    }
+    // Soft ambient shadow at the base
+    layers.push(`${depth + 2}px ${depth * 0.7 + 2}px 14px rgba(0,0,0,0.7)`);
+    return layers.join(', ');
+  })();
 
   useEffect(() => {
-    const canvas = canvasRef.current;
-    if (!canvas) return;
-    const ctx = canvas.getContext('2d');
-
-    let W, H, maskCanvas;
-    const ROW_H = 16;       // height of each scrolling text row
-    const CHAR_W = 10;      // monospace char width
-    const stream = 'RITHYAJAYARAM RJ 01 アイウ #@$ ';
-    let rows = [];
-
-    const build = () => {
-      W = canvas.offsetWidth;
-      H = canvas.offsetHeight;
-      canvas.width = W;
-      canvas.height = H;
-
-      // --- Offscreen mask: draw the letter shapes ---
-      maskCanvas = document.createElement('canvas');
-      maskCanvas.width = W;
-      maskCanvas.height = H;
-      const mCtx = maskCanvas.getContext('2d');
-      const fSize = Math.min(H * 0.80, W * 0.115);
-      mCtx.font = `900 ${fSize}px 'Bebas Neue', sans-serif`;
-      mCtx.textBaseline = 'middle';
-      mCtx.textAlign = 'left';
-      mCtx.fillStyle = 'white';
-      mCtx.fillText('RITHYA JAYARAM', 4, H / 2);
-
-      // --- One scrolling row per text row ---
-      const numRows = Math.ceil(H / ROW_H);
-      rows = Array.from({ length: numRows }, (_, i) => ({
-        y: i * ROW_H + ROW_H * 0.85,
-        // Stagger starting offsets so all rows aren't in sync
-        offset: Math.random() * W,
-        // Slightly varied speeds per row
-        speed: 0.8 + Math.random() * 0.7,
-      }));
+    const onMouseMove = (e) => {
+      const el = containerRef.current;
+      if (!el) return;
+      const rect = el.getBoundingClientRect();
+      rot.current.tx = -((e.clientY - rect.top - rect.height / 2) / (rect.height / 2)) * 12;
+      rot.current.ty = ((e.clientX - rect.left - rect.width / 2) / (rect.width / 2)) * 18;
     };
+    const onMouseLeave = () => { rot.current.tx = 0; rot.current.ty = 0; };
 
-    const tile = stream.repeat(Math.ceil((10000) / stream.length)); // long pre-built string
+    const el = containerRef.current;
+    if (el) {
+      el.addEventListener('mousemove', onMouseMove);
+      el.addEventListener('mouseleave', onMouseLeave);
+    }
 
-    const animate = () => {
-      ctx.clearRect(0, 0, W, H);
+    let scanY = -10;
 
-      // --- Draw all horizontal text streams ---
-      ctx.font = `bold ${ROW_H - 2}px 'Courier New', monospace`;
-
-      for (const row of rows) {
-        // Scroll left
-        row.offset += row.speed;
-        if (row.offset > W) row.offset -= W;
-
-        // Draw two copies so the seam is never visible
-        const startX = -(row.offset % W);
-        for (let pass = 0; pass < 3; pass++) {
-          const baseX = startX + pass * W;
-          // Render characters across the width
-          for (let ci = 0; ci * CHAR_W + baseX < W + CHAR_W; ci++) {
-            const x = ci * CHAR_W + baseX;
-            if (x < -CHAR_W) continue;
-            const ch = tile[(Math.floor(row.offset / CHAR_W) + ci) % stream.length];
-            // Slight per-char brightness variation for texture
-            const alpha = 0.8 + 0.2 * Math.sin(ci * 1.3 + row.offset * 0.05);
-            ctx.fillStyle = `rgba(219,84,53,${alpha.toFixed(2)})`;
-            ctx.fillText(ch, x, row.y);
-          }
-        }
+    const loop = () => {
+      // Smooth lerp rotation toward mouse target
+      rot.current.x += (rot.current.tx - rot.current.x) * 0.07;
+      rot.current.y += (rot.current.ty - rot.current.y) * 0.07;
+      if (textWrapRef.current) {
+        textWrapRef.current.style.transform =
+          `rotateX(${rot.current.x.toFixed(2)}deg) rotateY(${rot.current.y.toFixed(2)}deg)`;
       }
 
-      // --- Clip everything to the letter shapes ---
-      ctx.globalCompositeOperation = 'destination-in';
-      ctx.drawImage(maskCanvas, 0, 0);
-      ctx.globalCompositeOperation = 'source-over';
+      // Scanline sweeps down on loop
+      const h = containerRef.current?.offsetHeight ?? 200;
+      scanY += 1.2;
+      if (scanY > h + 10) scanY = -10;
+      if (scanRef.current) scanRef.current.style.top = `${scanY}px`;
 
-      animRef.current = requestAnimationFrame(animate);
+      animRef.current = requestAnimationFrame(loop);
     };
 
-    document.fonts.load("900 100px 'Bebas Neue'").then(() => {
-      build();
-      animate();
-    });
-
-    const onResize = () => {
-      cancelAnimationFrame(animRef.current);
-      build();
-      animate();
-    };
-    window.addEventListener('resize', onResize);
+    loop();
     return () => {
       cancelAnimationFrame(animRef.current);
-      window.removeEventListener('resize', onResize);
+      if (el) {
+        el.removeEventListener('mousemove', onMouseMove);
+        el.removeEventListener('mouseleave', onMouseLeave);
+      }
     };
   }, []);
 
   return (
-    <canvas
-      ref={canvasRef}
-      style={{ width: '100%', height: '180px', display: 'block' }}
-    />
+    <div
+      ref={containerRef}
+      style={{
+        width: '100%',
+        position: 'relative',
+        padding: '6px 4px 42px', // bottom padding absorbs the 3D shadow overhang
+        perspective: '900px',
+        perspectiveOrigin: '50% 50%',
+        cursor: 'crosshair',
+        overflow: 'visible',
+      }}
+    >
+      {/* 3D tilt wrapper */}
+      <div
+        ref={textWrapRef}
+        style={{ transformStyle: 'preserve-3d', display: 'inline-block', width: '100%' }}
+      >
+        <h1
+          style={{
+            fontFamily: "'Russo One', sans-serif",
+            fontSize: 'clamp(52px, 9.2vw, 148px)',
+            color: '#db5435',
+            textShadow,
+            margin: 0,
+            lineHeight: 1,
+            letterSpacing: '-0.01em',
+            userSelect: 'none',
+            whiteSpace: 'nowrap',
+          }}
+        >
+          RITHYA JAYARAM
+        </h1>
+      </div>
+
+      {/* Scanline sweep overlay */}
+      <div
+        ref={scanRef}
+        style={{
+          position: 'absolute',
+          left: 0,
+          right: 0,
+          height: '8px',
+          background:
+            'linear-gradient(to bottom, transparent, rgba(255,180,120,0.5), rgba(255,255,220,0.85), rgba(255,180,120,0.5), transparent)',
+          pointerEvents: 'none',
+          mixBlendMode: 'screen',
+          filter: 'blur(1.5px)',
+        }}
+      />
+    </div>
   );
 };
 
