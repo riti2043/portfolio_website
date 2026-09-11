@@ -72,20 +72,48 @@ const NetworkStatus = () => {
   const [liveCount, setLiveCount] = useState(1);
 
   useEffect(() => {
-    let localVisits = parseInt(localStorage.getItem('site_visits') || '1024');
-    localVisits += 1;
-    localStorage.setItem('site_visits', localVisits);
-
-    fetch('https://api.counterapi.dev/v1/rithyajayaram/portfolio/up')
-      .then(res => res.json())
-      .then(data => {
-        if (data.count) {
-          setTotalVisits(String(data.count).padStart(5, '0'));
-        } else {
-          setTotalVisits(String(localVisits).padStart(5, '0'));
-        }
-      })
-      .catch(() => setTotalVisits(String(localVisits).padStart(5, '0')));
+    // Clever approach: Fetch the external SVG image and parse the actual visitor number out of it!
+    const badgeUrl = 'https://api.visitorbadge.io/api/visitors?path=rithyajayaram_portfolio_tracker';
+    
+    const fetchBadge = async () => {
+       try {
+          // Try fetching via CORS proxy so we can read the raw SVG text
+          const res = await fetch(`https://corsproxy.io/?${encodeURIComponent(badgeUrl)}`);
+          if (!res.ok) throw new Error('Proxy failed');
+          const svg = await res.text();
+          
+          // Parse the text tags from the SVG image
+          const matches = svg.match(/<text[^>]*>([0-9,]+)<\/text>/g);
+          if (matches && matches.length >= 2) {
+             // Usually the second text block is the actual count
+             const countStr = matches[1].replace(/<[^>]+>/g, '').replace(/,/g, '');
+             setTotalVisits(countStr.padStart(5, '0'));
+             return;
+          }
+       } catch (err) {
+          console.warn("Proxy fetch failed, attempting direct fetch...");
+          try {
+             const res2 = await fetch(badgeUrl);
+             const svg2 = await res2.text();
+             const matches2 = svg2.match(/<text[^>]*>([0-9,]+)<\/text>/g);
+             if (matches2 && matches2.length >= 2) {
+                const countStr2 = matches2[1].replace(/<[^>]+>/g, '').replace(/,/g, '');
+                setTotalVisits(countStr2.padStart(5, '0'));
+                return;
+             }
+          } catch (e) {
+             console.error("Direct fetch failed too.");
+          }
+       }
+       
+       // Absolute fallback to local incrementing if completely offline/blocked
+       let localVisits = parseInt(localStorage.getItem('site_visits') || '1024');
+       localVisits += 1;
+       localStorage.setItem('site_visits', localVisits);
+       setTotalVisits(String(localVisits).padStart(5, '0'));
+    };
+    
+    fetchBadge();
   }, []);
 
   useEffect(() => {
