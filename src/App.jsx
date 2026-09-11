@@ -27,33 +27,11 @@ const ProfileDashboard = () => {
     <section id="hero" className="min-h-screen pt-8 pb-16 px-6 lg:px-12 flex flex-col items-center justify-center relative">
       <div className="max-w-[1400px] w-full mx-auto relative z-10 grid grid-cols-1 lg:grid-cols-12 gap-8 items-start mt-8 lg:mt-0">
         
-        {/* LEFT BOX: ABOUT ME (Spans 3 cols) */}
-        <div className="lg:col-span-3 flex flex-col hud-glow bg-[#0f0f0f] p-0 h-full">
-          <div className="p-6 flex-1 border-b hud-divider">
-             <h2 className="text-sm font-mono-custom text-glow mb-4 uppercase">about me text</h2>
-             {/* Ruled lines overlay */}
-             <div className="relative font-mono-custom text-xs leading-[30px] text-[var(--text-primary)]" 
-                  style={{ 
-                    backgroundImage: 'repeating-linear-gradient(transparent, transparent 29px, rgba(219,84,53,0.3) 30px)',
-                    backgroundSize: '100% 30px'
-                  }}>
-               <p className="pt-1">
-                 A passionate AI & ML developer focused on integrating deep learning with modern generative architecture. I love solving complex problems with robust code.
-               </p>
-             </div>
-          </div>
-          
-          <div className="p-6 flex flex-col gap-4">
-             <a href="#projects" className="btn-pixel w-full text-center py-3 text-sm">VIEW PROJECTS</a>
-             <a href="#contact" className="btn-pixel w-full text-center py-3 text-sm">LET'S TALK</a>
-          </div>
-        </div>
-
-        {/* RIGHT BOX: NAME + PHOTO + STATS (Spans 9 cols) */}
+        {/* LEFT BOX (Now Main Profile): NAME + PHOTO + STATS (Spans 9 cols) */}
         <div className="lg:col-span-9 flex flex-col">
           
           {/* BIG NAME HEADER */}
-          <h1 className="text-6xl md:text-8xl font-sans-custom font-black text-glow mb-6 uppercase tracking-tight leading-none text-left">
+          <h1 className="text-5xl md:text-6xl lg:text-7xl xl:text-[72px] whitespace-nowrap tracking-tighter font-black text-glow mb-6 uppercase leading-none text-left" style={{ fontFamily: "'Silkscreen', cursive" }}>
             RITHYA JAYARAM
           </h1>
 
@@ -70,7 +48,7 @@ const ProfileDashboard = () => {
             {/* STATS & CHARTS SECTION */}
             <div className="md:w-7/12 flex flex-col">
               
-              {/* STATS TABLE (Image 3 style) */}
+              {/* STATS TABLE */}
               <div className="flex flex-col font-mono-custom text-xs sm:text-sm border-b hud-divider">
                 <div className="flex border-b hud-divider p-5 uppercase">
                   <span className="text-glow w-24 sm:w-32">AGE :</span>
@@ -96,10 +74,8 @@ const ProfileDashboard = () => {
                  <div className="relative flex items-center justify-center w-[140px] h-[140px]">
                     <div className="absolute inset-0 flex items-center justify-center">
                        <svg width="100%" height="100%" viewBox="0 0 100 100" className="opacity-80">
-                          {/* Hexagon Grid */}
                           <polygon points="50,5 93,25 93,75 50,95 7,75 7,25" fill="none" stroke="var(--accent)" strokeWidth="1" opacity="0.4" />
                           <polygon points="50,25 73,38 73,62 50,75 27,62 27,38" fill="none" stroke="var(--accent)" strokeWidth="1" opacity="0.4" />
-                          {/* Data Polygon */}
                           <polygon points="50,15 80,45 60,85 40,70 15,35" fill="rgba(219,84,53,0.3)" stroke="var(--accent)" strokeWidth="1.5" className="drop-shadow-[0_0_4px_var(--accent)]" />
                        </svg>
                     </div>
@@ -110,7 +86,7 @@ const ProfileDashboard = () => {
                     <span className="absolute -bottom-4 text-[10px] text-glow font-mono-custom">creativity</span>
                  </div>
                  
-                 {/* Progress Bars (Image 4 style) */}
+                 {/* Progress Bars */}
                  <div className="flex flex-col justify-center gap-6 font-mono-custom text-xs w-[160px]">
                     <div>
                        <div className="mb-2 text-glow uppercase">AI / ML</div>
@@ -129,6 +105,28 @@ const ProfileDashboard = () => {
             </div>
           </div>
         </div>
+
+        {/* RIGHT BOX (Now About Me) (Spans 3 cols) */}
+        <div className="lg:col-span-3 flex flex-col hud-glow bg-[#0f0f0f] p-0 h-full">
+          <div className="p-6 flex-1 border-b hud-divider">
+             <h2 className="text-sm font-mono-custom text-glow mb-4 uppercase">about me text</h2>
+             <div className="relative font-mono-custom text-xs leading-[30px] text-[var(--text-primary)]" 
+                  style={{ 
+                    backgroundImage: 'repeating-linear-gradient(transparent, transparent 29px, rgba(219,84,53,0.3) 30px)',
+                    backgroundSize: '100% 30px'
+                  }}>
+               <p className="pt-1">
+                 A passionate AI & ML developer focused on integrating deep learning with modern generative architecture. I love solving complex problems with robust code.
+               </p>
+             </div>
+          </div>
+          
+          <div className="p-6 flex flex-col gap-4">
+             <a href="#projects" className="btn-pixel w-full text-center py-3 text-sm">VIEW PROJECTS</a>
+             <a href="#contact" className="btn-pixel w-full text-center py-3 text-sm">LET'S TALK</a>
+          </div>
+        </div>
+
       </div>
     </section>
   );
