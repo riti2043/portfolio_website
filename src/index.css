@@ -40,7 +40,7 @@
     color: #ffffff !important;
     text-transform: uppercase;
     font-family: 'Silkscreen', cursive;
-    border: 2px solid var(--text-primary);
+    border: 2px solid #2c2927;
     border-radius: 6px;
     box-shadow: 
       0px 4px 0px rgba(0,0,0,0.8),
