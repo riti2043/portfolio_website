@@ -79,7 +79,7 @@ const ProfileDashboard = () => {
           <MovingBitsCursive />
 
           {/* UNIFIED CONTAINER (PHOTO + STATS) */}
-          <div className="hud-glow bg-[#0f0f0f] flex flex-col md:flex-row flex-1">
+          <div className="hud-box flex flex-col md:flex-row flex-1 mt-4">
             
             {/* PHOTO SECTION */}
             <div className="md:w-5/12 border-b md:border-b-0 md:border-r hud-divider p-2">
@@ -95,46 +95,46 @@ const ProfileDashboard = () => {
               <div className="flex-1 flex flex-col p-4">
 
                 {/* STATS TABLE */}
-                <div className="flex flex-col font-orbitron text-xs sm:text-[13px] border hud-divider mb-4 p-2 shadow-[0_0_8px_rgba(219,84,53,0.1)]">
+                <div className="flex flex-col font-orbitron text-xs sm:text-[13px] hud-box mb-6 p-4">
                   <div className="flex justify-between items-center border-b hud-divider py-3 px-2">
                     <span className="text-glow tracking-widest uppercase">AGE</span>
-                    <span className="text-[var(--text-primary)]">20</span>
+                    <span className="text-white font-bold drop-shadow-[0_0_5px_rgba(255,255,255,0.6)]">20</span>
                   </div>
                   <div className="flex justify-between items-center border-b hud-divider py-3 px-2">
                     <span className="text-glow tracking-widest uppercase">ROLE</span>
-                    <span className="text-[var(--text-primary)]">AI Enthusiast</span>
+                    <span className="text-white font-bold drop-shadow-[0_0_5px_rgba(255,255,255,0.6)]">AI Enthusiast</span>
                   </div>
                   <div className="flex justify-between items-center border-b hud-divider py-3 px-2">
                     <span className="text-glow tracking-widest uppercase">BASE</span>
-                    <span className="text-[var(--text-primary)] text-right">University Visveshwaraiya<br/>College of Engineering</span>
+                    <span className="text-white font-bold text-right drop-shadow-[0_0_5px_rgba(255,255,255,0.6)]">University Visveshwaraiya<br/>College of Engineering</span>
                   </div>
                   <div className="flex justify-between items-center py-3 px-2">
                     <span className="text-glow tracking-widest uppercase">LOCATION</span>
-                    <span className="text-[var(--text-primary)] text-right">Bangalore, Karnataka</span>
+                    <span className="text-white font-bold text-right drop-shadow-[0_0_5px_rgba(255,255,255,0.6)]">Bangalore, Karnataka</span>
                   </div>
                 </div>
                 
                 {/* CHARTS (Radar + Progress) */}
-                <div className="flex flex-row items-stretch justify-between gap-4 h-48">
+                <div className="flex flex-row items-stretch justify-between gap-6 h-48">
                    {/* Radar Box */}
-                   <div className="relative flex items-center justify-center w-1/2 border hud-divider p-2 shadow-[0_0_8px_rgba(219,84,53,0.1)]">
+                   <div className="relative flex items-center justify-center w-1/2 hud-box p-2">
                       <div className="absolute inset-0 flex items-center justify-center p-3">
-                         <svg width="100%" height="100%" viewBox="0 0 100 100" className="opacity-90 drop-shadow-[0_0_4px_var(--accent)]">
+                         <svg width="100%" height="100%" viewBox="0 0 100 100" className="opacity-100 drop-shadow-[0_0_6px_var(--accent)]">
                             {/* Inner rings */}
-                            <polygon points="50,15 80.3,32.5 80.3,67.5 50,85 19.7,67.5 19.7,32.5" fill="none" stroke="var(--accent)" strokeWidth="0.5" opacity="0.3" />
-                            <polygon points="50,25 71.6,37.5 71.6,62.5 50,75 28.4,62.5 28.4,37.5" fill="none" stroke="var(--accent)" strokeWidth="0.5" opacity="0.3" />
-                            <polygon points="50,35 63,42.5 63,57.5 50,65 37,57.5 37,42.5" fill="none" stroke="var(--accent)" strokeWidth="0.5" opacity="0.3" />
+                            <polygon points="50,15 80.3,32.5 80.3,67.5 50,85 19.7,67.5 19.7,32.5" fill="none" stroke="var(--accent)" strokeWidth="0.5" opacity="0.4" />
+                            <polygon points="50,25 71.6,37.5 71.6,62.5 50,75 28.4,62.5 28.4,37.5" fill="none" stroke="var(--accent)" strokeWidth="0.5" opacity="0.4" />
+                            <polygon points="50,35 63,42.5 63,57.5 50,65 37,57.5 37,42.5" fill="none" stroke="var(--accent)" strokeWidth="0.5" opacity="0.4" />
                             {/* Outer Hexagon Grid */}
-                            <polygon points="50,5 89,27.5 89,72.5 50,95 11,72.5 11,27.5" fill="none" stroke="var(--accent)" strokeWidth="1" opacity="0.6" />
+                            <polygon points="50,5 89,27.5 89,72.5 50,95 11,72.5 11,27.5" fill="none" stroke="var(--accent)" strokeWidth="1.5" opacity="0.8" />
                             {/* Spokes */}
-                            <line x1="50" y1="50" x2="50" y2="5" stroke="var(--accent)" strokeWidth="0.5" opacity="0.4" />
-                            <line x1="50" y1="50" x2="89" y2="27.5" stroke="var(--accent)" strokeWidth="0.5" opacity="0.4" />
-                            <line x1="50" y1="50" x2="89" y2="72.5" stroke="var(--accent)" strokeWidth="0.5" opacity="0.4" />
-                            <line x1="50" y1="50" x2="50" y2="95" stroke="var(--accent)" strokeWidth="0.5" opacity="0.4" />
-                            <line x1="50" y1="50" x2="11" y2="72.5" stroke="var(--accent)" strokeWidth="0.5" opacity="0.4" />
-                            <line x1="50" y1="50" x2="11" y2="27.5" stroke="var(--accent)" strokeWidth="0.5" opacity="0.4" />
+                            <line x1="50" y1="50" x2="50" y2="5" stroke="var(--accent)" strokeWidth="0.5" opacity="0.5" />
+                            <line x1="50" y1="50" x2="89" y2="27.5" stroke="var(--accent)" strokeWidth="0.5" opacity="0.5" />
+                            <line x1="50" y1="50" x2="89" y2="72.5" stroke="var(--accent)" strokeWidth="0.5" opacity="0.5" />
+                            <line x1="50" y1="50" x2="50" y2="95" stroke="var(--accent)" strokeWidth="0.5" opacity="0.5" />
+                            <line x1="50" y1="50" x2="11" y2="72.5" stroke="var(--accent)" strokeWidth="0.5" opacity="0.5" />
+                            <line x1="50" y1="50" x2="11" y2="27.5" stroke="var(--accent)" strokeWidth="0.5" opacity="0.5" />
                             {/* Data Polygon */}
-                            <polygon points="50,15 71.6,37.5 63,57.5 50,75 28.4,62.5 19.7,32.5" fill="rgba(219,84,53,0.4)" stroke="var(--accent)" strokeWidth="1.5" />
+                            <polygon points="50,15 71.6,37.5 63,57.5 50,75 28.4,62.5 19.7,32.5" fill="rgba(219,84,53,0.5)" stroke="var(--accent)" strokeWidth="2" />
                          </svg>
                       </div>
                       {/* Labels */}
@@ -145,21 +145,22 @@ const ProfileDashboard = () => {
                    </div>
                    
                    {/* Progress Bars Box */}
-                   <div className="flex flex-col justify-center gap-6 font-orbitron text-xs w-1/2 border hud-divider p-4 shadow-[0_0_8px_rgba(219,84,53,0.1)]">
+                   <div className="flex flex-col justify-center gap-6 font-orbitron text-xs w-1/2 hud-box p-5">
                       <div>
                          <div className="mb-2 text-glow uppercase tracking-widest text-[10px]">AI / ML</div>
-                         <div className="h-4 w-full border-2 border-[var(--accent)] p-[2px]">
-                            <div className="h-full w-[85%] progress-segmented shadow-[0_0_8px_var(--accent)]"></div>
+                         <div className="h-4 w-full border-2 border-[var(--accent)] p-[2px] shadow-[0_0_10px_rgba(219,84,53,0.3)]">
+                            <div className="h-full w-[85%] progress-segmented shadow-[0_0_10px_var(--accent)]"></div>
                          </div>
                       </div>
                       <div>
                          <div className="mb-2 text-glow uppercase tracking-widest text-[10px]">Development</div>
-                         <div className="h-4 w-full border-2 border-[var(--accent)] p-[2px]">
-                            <div className="h-full w-[75%] progress-segmented shadow-[0_0_8px_var(--accent)]"></div>
+                         <div className="h-4 w-full border-2 border-[var(--accent)] p-[2px] shadow-[0_0_10px_rgba(219,84,53,0.3)]">
+                            <div className="h-full w-[75%] progress-segmented shadow-[0_0_10px_var(--accent)]"></div>
                          </div>
                       </div>
                    </div>
                 </div>
+                
                 
               </div>
             </div>
@@ -167,7 +168,7 @@ const ProfileDashboard = () => {
         </div>
 
         {/* RIGHT BOX (Now About Me) (Spans 3 cols) */}
-        <div className="lg:col-span-3 flex flex-col hud-glow bg-[#0f0f0f] p-0 h-full">
+        <div className="lg:col-span-3 flex flex-col hud-box p-0 h-full mt-10 lg:mt-32">
           <div className="p-6 flex-1 border-b hud-divider">
              <h2 className="text-sm font-mono-custom text-glow mb-4 uppercase">about me text</h2>
              <div className="relative font-mono-custom text-xs leading-[30px] text-[var(--text-primary)]" 
