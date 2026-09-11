@@ -2,6 +2,9 @@ import React, { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence, useScroll, useTransform } from 'framer-motion';
 import { Sun, Moon, ArrowUpRight, Menu, X, Download, Mail, Code2, Sparkles, ExternalLink, ChevronDown, CheckCircle2 } from 'lucide-react';
 import { GitHubCalendar } from 'react-github-calendar';
+import { Certifications } from './components/Certifications';
+import { KnowledgeGraph } from './components/KnowledgeGraph';
+import { Submissions } from './components/Submissions';
 
 // Custom SVG Icons for Github & Linkedin
 const GithubIcon = ({ size = 20, className = "" }) => (
@@ -361,7 +364,10 @@ export default function App() {
         </AnimatePresence>
       </nav>
 
+      {/* Hero Scroll Section covers 0-60% */}
       <HeroScrollSequence />
+      
+      <Certifications />
 
       {/* ==================== SKILLS & GITHUB ACTIVITY SECTION (UNIFIED) ==================== */}
       <section id="skills" className="py-24 border-t border-[var(--border-color)] px-6 max-w-7xl mx-auto">
@@ -549,6 +555,9 @@ export default function App() {
           ))}
         </div>
       </section>
+
+      <KnowledgeGraph />
+      <Submissions />
 
       {/* ==================== CONTACT & FOOTER SECTION ==================== */}
       <section id="contact" className="py-24 border-t border-[var(--border-color)] px-6 max-w-7xl mx-auto">
