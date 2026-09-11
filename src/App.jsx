@@ -31,100 +31,90 @@ const AsciiHeroText = () => {
     if (!canvas) return;
     const ctx = canvas.getContext('2d');
 
-    let particles = [];
-    let textPixels = [];
-    let W = 0, H = 0;
+    let W, H, maskCanvas;
+    const ROW_H = 16;       // height of each scrolling text row
+    const CHAR_W = 10;      // monospace char width
+    const stream = 'RITHYAJAYARAM RJ 01 アイウ #@$ ';
+    let rows = [];
 
-    const DOT_SIZE = 2;        // px size of each dot
-    const DOT_GAP = 4;         // sample every Nth pixel (controls density)
-    const DRIFT = 1.6;         // max random drift speed
-
-    const buildParticles = () => {
+    const build = () => {
       W = canvas.offsetWidth;
       H = canvas.offsetHeight;
       canvas.width = W;
       canvas.height = H;
 
-      // Draw text on offscreen canvas to find letter pixels
-      const off = document.createElement('canvas');
-      off.width = W;
-      off.height = H;
-      const offCtx = off.getContext('2d');
+      // --- Offscreen mask: draw the letter shapes ---
+      maskCanvas = document.createElement('canvas');
+      maskCanvas.width = W;
+      maskCanvas.height = H;
+      const mCtx = maskCanvas.getContext('2d');
+      const fSize = Math.min(H * 0.80, W * 0.115);
+      mCtx.font = `900 ${fSize}px 'Bebas Neue', sans-serif`;
+      mCtx.textBaseline = 'middle';
+      mCtx.textAlign = 'left';
+      mCtx.fillStyle = 'white';
+      mCtx.fillText('RITHYA JAYARAM', 4, H / 2);
 
-      const fontSize = Math.min(H * 0.78, W * 0.11);
-      offCtx.font = `900 ${fontSize}px 'Bebas Neue', sans-serif`;
-      offCtx.textBaseline = 'middle';
-      offCtx.textAlign = 'left';
-      offCtx.fillStyle = 'white';
-      offCtx.fillText('RITHYA JAYARAM', 6, H / 2);
-
-      // Sample pixels inside letters
-      const imgData = offCtx.getImageData(0, 0, W, H).data;
-      textPixels = [];
-      for (let y = 0; y < H; y += DOT_GAP) {
-        for (let x = 0; x < W; x += DOT_GAP) {
-          const idx = (y * W + x) * 4;
-          if (imgData[idx + 3] > 128) {
-            textPixels.push({ x, y });
-          }
-        }
-      }
-
-      // Create a particle at every sampled letter pixel
-      particles = textPixels.map(p => ({
-        homeX: p.x,
-        homeY: p.y,
-        x: p.x + (Math.random() - 0.5) * 8,
-        y: p.y + (Math.random() - 0.5) * 8,
-        vx: (Math.random() - 0.5) * DRIFT,
-        vy: (Math.random() - 0.5) * DRIFT,
-        phase: Math.random() * Math.PI * 2, // for opacity pulse
+      // --- One scrolling row per text row ---
+      const numRows = Math.ceil(H / ROW_H);
+      rows = Array.from({ length: numRows }, (_, i) => ({
+        y: i * ROW_H + ROW_H * 0.85,
+        // Stagger starting offsets so all rows aren't in sync
+        offset: Math.random() * W,
+        // Slightly varied speeds per row
+        speed: 0.8 + Math.random() * 0.7,
       }));
     };
+
+    const tile = stream.repeat(Math.ceil((10000) / stream.length)); // long pre-built string
 
     const animate = () => {
       ctx.clearRect(0, 0, W, H);
 
-      const t = Date.now() * 0.002;
+      // --- Draw all horizontal text streams ---
+      ctx.font = `bold ${ROW_H - 2}px 'Courier New', monospace`;
 
-      for (const p of particles) {
-        // Drift around the home pixel
-        p.vx += (Math.random() - 0.5) * 0.4;
-        p.vy += (Math.random() - 0.5) * 0.4;
+      for (const row of rows) {
+        // Scroll left
+        row.offset += row.speed;
+        if (row.offset > W) row.offset -= W;
 
-        // Spring back toward home position
-        p.vx += (p.homeX - p.x) * 0.06;
-        p.vy += (p.homeY - p.y) * 0.06;
-
-        // Dampen
-        p.vx *= 0.82;
-        p.vy *= 0.82;
-
-        p.x += p.vx;
-        p.y += p.vy;
-
-        // Pulse opacity so they shimmer
-        const alpha = 0.55 + 0.45 * Math.sin(t + p.phase);
-
-        ctx.fillStyle = `rgba(219,84,53,${alpha.toFixed(2)})`;
-        ctx.fillRect(Math.round(p.x), Math.round(p.y), DOT_SIZE, DOT_SIZE);
+        // Draw two copies so the seam is never visible
+        const startX = -(row.offset % W);
+        for (let pass = 0; pass < 3; pass++) {
+          const baseX = startX + pass * W;
+          // Render characters across the width
+          for (let ci = 0; ci * CHAR_W + baseX < W + CHAR_W; ci++) {
+            const x = ci * CHAR_W + baseX;
+            if (x < -CHAR_W) continue;
+            const ch = tile[(Math.floor(row.offset / CHAR_W) + ci) % stream.length];
+            // Slight per-char brightness variation for texture
+            const alpha = 0.8 + 0.2 * Math.sin(ci * 1.3 + row.offset * 0.05);
+            ctx.fillStyle = `rgba(219,84,53,${alpha.toFixed(2)})`;
+            ctx.fillText(ch, x, row.y);
+          }
+        }
       }
+
+      // --- Clip everything to the letter shapes ---
+      ctx.globalCompositeOperation = 'destination-in';
+      ctx.drawImage(maskCanvas, 0, 0);
+      ctx.globalCompositeOperation = 'source-over';
 
       animRef.current = requestAnimationFrame(animate);
     };
 
     document.fonts.load("900 100px 'Bebas Neue'").then(() => {
-      buildParticles();
+      build();
       animate();
     });
 
     const onResize = () => {
       cancelAnimationFrame(animRef.current);
-      buildParticles();
+      build();
       animate();
     };
     window.addEventListener('resize', onResize);
-
     return () => {
       cancelAnimationFrame(animRef.current);
       window.removeEventListener('resize', onResize);
