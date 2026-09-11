@@ -72,6 +72,18 @@
     background-color: var(--accent);
     color: var(--bg-primary) !important;
   }
+  .hud-glow {
+    border: 1px solid var(--accent);
+    box-shadow: 0 0 8px rgba(219, 84, 53, 0.4), inset 0 0 8px rgba(219, 84, 53, 0.1);
+  }
+  .text-glow {
+    color: var(--accent);
+    text-shadow: 0 0 6px rgba(219, 84, 53, 0.6);
+  }
+  .hud-divider {
+    border-color: var(--accent);
+    opacity: 0.5;
+  }
 }
 
 body {
