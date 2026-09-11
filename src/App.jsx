@@ -76,37 +76,44 @@ const NetworkStatus = () => {
     const badgeUrl = 'https://api.visitorbadge.io/api/visitors?path=rithyajayaram_portfolio_tracker';
     
     const fetchBadge = async () => {
-       try {
-          // Try fetching via CORS proxy so we can read the raw SVG text
-          const res = await fetch(`https://corsproxy.io/?${encodeURIComponent(badgeUrl)}`);
-          if (!res.ok) throw new Error('Proxy failed');
-          const svg = await res.text();
-          
-          // Parse the text tags from the SVG image
-          const matches = svg.match(/<text[^>]*>([0-9,]+)<\/text>/g);
-          if (matches && matches.length >= 2) {
-             // Usually the second text block is the actual count
-             const countStr = matches[1].replace(/<[^>]+>/g, '').replace(/,/g, '');
-             setTotalVisits(countStr.padStart(5, '0'));
-             return;
-          }
-       } catch (err) {
-          console.warn("Proxy fetch failed, attempting direct fetch...");
-          try {
-             const res2 = await fetch(badgeUrl);
-             const svg2 = await res2.text();
-             const matches2 = svg2.match(/<text[^>]*>([0-9,]+)<\/text>/g);
-             if (matches2 && matches2.length >= 2) {
-                const countStr2 = matches2[1].replace(/<[^>]+>/g, '').replace(/,/g, '');
-                setTotalVisits(countStr2.padStart(5, '0'));
-                return;
-             }
-          } catch (e) {
-             console.error("Direct fetch failed too.");
-          }
+       const proxies = [
+         `https://api.allorigins.win/raw?url=${encodeURIComponent(badgeUrl)}`,
+         `https://corsproxy.io/?${encodeURIComponent(badgeUrl)}`,
+         `https://thingproxy.freeboard.io/fetch/${badgeUrl}`
+       ];
+
+       for (const proxyUrl of proxies) {
+           try {
+              const res = await fetch(proxyUrl);
+              if (!res.ok) continue; // Try next proxy
+              const svg = await res.text();
+              
+              const matches = svg.match(/<text[^>]*>([0-9,]+)<\/text>/g);
+              if (matches && matches.length >= 2) {
+                 const countStr = matches[1].replace(/<[^>]+>/g, '').replace(/,/g, '');
+                 setTotalVisits(countStr.padStart(5, '0'));
+                 return; // Success! Exit loop.
+              }
+           } catch (err) {
+              console.warn("Proxy failed:", proxyUrl);
+           }
        }
        
-       // Absolute fallback to local incrementing if completely offline/blocked
+       // If all proxies fail, attempt direct fetch (might be blocked by CORS but worth a shot)
+       try {
+           const resDirect = await fetch(badgeUrl);
+           const svgDirect = await resDirect.text();
+           const matchesDirect = svgDirect.match(/<text[^>]*>([0-9,]+)<\/text>/g);
+           if (matchesDirect && matchesDirect.length >= 2) {
+              const countStrDirect = matchesDirect[1].replace(/<[^>]+>/g, '').replace(/,/g, '');
+              setTotalVisits(countStrDirect.padStart(5, '0'));
+              return;
+           }
+       } catch (e) {
+           console.error("Direct fetch failed due to CORS.");
+       }
+       
+       // Absolute fallback
        let localVisits = parseInt(localStorage.getItem('site_visits') || '1024');
        localVisits += 1;
        localStorage.setItem('site_visits', localVisits);
