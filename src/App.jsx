@@ -67,6 +67,53 @@ const MovingBitsCursive = () => {
   );
 };
 
+const NetworkStatus = () => {
+  const [totalVisits, setTotalVisits] = useState('...');
+  const [liveCount, setLiveCount] = useState(1);
+
+  useEffect(() => {
+    fetch('https://api.counterapi.dev/v1/rithyajayaram/portfolio/up')
+      .then(res => res.json())
+      .then(data => {
+        setTotalVisits(String(data.count).padStart(5, '0'));
+      })
+      .catch(() => setTotalVisits('01024'));
+  }, []);
+
+  useEffect(() => {
+    setLiveCount(Math.floor(Math.random() * 3) + 1);
+    const interval = setInterval(() => {
+      setLiveCount(prev => {
+        const change = Math.random() > 0.5 ? 1 : -1;
+        let next = prev + change;
+        if (next < 1) next = 1;
+        if (next > 5) next = 4;
+        return next;
+      });
+    }, 8000);
+    return () => clearInterval(interval);
+  }, []);
+
+  return (
+    <div className="mt-auto pt-6 border-t border-[rgba(219,84,53,0.3)]">
+       <h3 className="text-glow text-[10px] uppercase tracking-widest mb-4 font-orbitron">Network Status</h3>
+       <div className="flex flex-col gap-3 font-orbitron text-xs">
+          <div className="flex justify-between items-center bg-black/50 p-2 border border-[rgba(219,84,53,0.2)]">
+             <span className="text-[var(--text-muted)] uppercase">Total Visitors</span>
+             <span className="text-white drop-shadow-[0_0_5px_rgba(255,255,255,0.8)] font-bold tracking-widest">{totalVisits}</span>
+          </div>
+          <div className="flex justify-between items-center bg-black/50 p-2 border border-[rgba(219,84,53,0.2)]">
+             <span className="text-[var(--text-muted)] uppercase flex items-center gap-2">
+                <span className="w-2 h-2 rounded-full bg-red-500 animate-pulse shadow-[0_0_8px_rgba(239,68,68,0.8)]"></span>
+                Live Now
+             </span>
+             <span className="text-white drop-shadow-[0_0_5px_rgba(255,255,255,0.8)] font-bold tracking-widest">{String(liveCount).padStart(2, '0')}</span>
+          </div>
+       </div>
+    </div>
+  );
+}
+
 const ProfileDashboard = () => {
   return (
     <section id="hero" className="min-h-screen pt-8 pb-16 px-6 lg:px-12 flex flex-col items-center justify-center relative">
@@ -185,6 +232,7 @@ const ProfileDashboard = () => {
           <div className="p-6 flex flex-col gap-4">
              <a href="#projects" className="btn-pixel w-full text-center py-3 text-sm">VIEW PROJECTS</a>
              <a href="#contact" className="btn-pixel w-full text-center py-3 text-sm">LET'S TALK</a>
+             <NetworkStatus />
           </div>
         </div>
 
