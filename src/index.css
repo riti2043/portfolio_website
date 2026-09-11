@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=DotGothic16&family=VT323&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=DotGothic16&family=VT323&family=Sacramento&display=swap');
 @import "tailwindcss";
 
 @layer base {
@@ -6,7 +6,7 @@
     /* LIGHT MODE: Cream paper with burnt orange ink */
     --bg-primary: #f5f2eb;
     --bg-secondary: #e8e4db;
-    --text-primary: #db5435;
+    --text-primary: #2c2927;
     --text-muted: #e87e64;
     --border-color: #db5435;
     --card-bg: #f5f2eb;
@@ -16,16 +16,35 @@
   }
 
   .dark {
-    /* DARK MODE: Deep black with burnt orange phosphor */
+    /* DARK MODE: Deep black with off-white text and burnt orange phosphor */
     --bg-primary: #0b0b0b;
     --bg-secondary: #1a1210;
-    --text-primary: #db5435;
+    --text-primary: #E6E3DF;
     --text-muted: #8f3723;
     --border-color: #db5435;
     --card-bg: #0b0b0b;
     --grid-line: rgba(219, 84, 53, 0.15);
     --accent: #db5435;
     --accent-inverse: #0b0b0b;
+  }
+}
+
+@layer utilities {
+  .font-cursive {
+    font-family: 'Sacramento', cursive;
+  }
+  .btn-bitmap {
+    box-shadow: 4px 4px 0px var(--accent);
+    border: 2px solid var(--border-color);
+    transition: all 0.1s ease;
+  }
+  .btn-bitmap:active {
+    box-shadow: 1px 1px 0px var(--accent);
+    transform: translate(3px, 3px);
+  }
+  .btn-bitmap:hover {
+    background-color: var(--accent);
+    color: var(--bg-primary) !important;
   }
 }
 
