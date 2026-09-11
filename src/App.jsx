@@ -48,59 +48,76 @@ const ProfileDashboard = () => {
             {/* STATS & CHARTS SECTION */}
             <div className="md:w-7/12 flex flex-col">
               
-              {/* STATS TABLE */}
-              <div className="flex flex-col font-mono-custom text-xs sm:text-sm border-b hud-divider">
-                <div className="flex border-b hud-divider p-5 uppercase">
-                  <span className="text-glow w-24 sm:w-32">AGE :</span>
-                  <span className="text-[var(--text-primary)] font-bold">20</span>
+              {/* INNER BOX FOR EVERYTHING */}
+              <div className="flex-1 flex flex-col p-4">
+
+                {/* STATS TABLE */}
+                <div className="flex flex-col font-orbitron text-xs sm:text-[13px] border hud-divider mb-4 p-2 shadow-[0_0_8px_rgba(219,84,53,0.1)]">
+                  <div className="flex justify-between items-center border-b hud-divider py-3 px-2">
+                    <span className="text-glow tracking-widest uppercase">AGE</span>
+                    <span className="text-[var(--text-primary)]">20</span>
+                  </div>
+                  <div className="flex justify-between items-center border-b hud-divider py-3 px-2">
+                    <span className="text-glow tracking-widest uppercase">ROLE</span>
+                    <span className="text-[var(--text-primary)]">AI Enthusiast</span>
+                  </div>
+                  <div className="flex justify-between items-center border-b hud-divider py-3 px-2">
+                    <span className="text-glow tracking-widest uppercase">BASE</span>
+                    <span className="text-[var(--text-primary)] text-right">University Visveshwaraiya<br/>College of Engineering</span>
+                  </div>
+                  <div className="flex justify-between items-center py-3 px-2">
+                    <span className="text-glow tracking-widest uppercase">LOCATION</span>
+                    <span className="text-[var(--text-primary)] text-right">Bangalore, Karnataka</span>
+                  </div>
                 </div>
-                <div className="flex border-b hud-divider p-5 uppercase">
-                  <span className="text-glow w-24 sm:w-32">ROLE :</span>
-                  <span className="text-[var(--text-primary)] font-bold">AI Enthusiast</span>
+                
+                {/* CHARTS (Radar + Progress) */}
+                <div className="flex flex-row items-stretch justify-between gap-4 h-48">
+                   {/* Radar Box */}
+                   <div className="relative flex items-center justify-center w-1/2 border hud-divider p-2 shadow-[0_0_8px_rgba(219,84,53,0.1)]">
+                      <div className="absolute inset-0 flex items-center justify-center p-3">
+                         <svg width="100%" height="100%" viewBox="0 0 100 100" className="opacity-90 drop-shadow-[0_0_4px_var(--accent)]">
+                            {/* Inner rings */}
+                            <polygon points="50,15 80.3,32.5 80.3,67.5 50,85 19.7,67.5 19.7,32.5" fill="none" stroke="var(--accent)" strokeWidth="0.5" opacity="0.3" />
+                            <polygon points="50,25 71.6,37.5 71.6,62.5 50,75 28.4,62.5 28.4,37.5" fill="none" stroke="var(--accent)" strokeWidth="0.5" opacity="0.3" />
+                            <polygon points="50,35 63,42.5 63,57.5 50,65 37,57.5 37,42.5" fill="none" stroke="var(--accent)" strokeWidth="0.5" opacity="0.3" />
+                            {/* Outer Hexagon Grid */}
+                            <polygon points="50,5 89,27.5 89,72.5 50,95 11,72.5 11,27.5" fill="none" stroke="var(--accent)" strokeWidth="1" opacity="0.6" />
+                            {/* Spokes */}
+                            <line x1="50" y1="50" x2="50" y2="5" stroke="var(--accent)" strokeWidth="0.5" opacity="0.4" />
+                            <line x1="50" y1="50" x2="89" y2="27.5" stroke="var(--accent)" strokeWidth="0.5" opacity="0.4" />
+                            <line x1="50" y1="50" x2="89" y2="72.5" stroke="var(--accent)" strokeWidth="0.5" opacity="0.4" />
+                            <line x1="50" y1="50" x2="50" y2="95" stroke="var(--accent)" strokeWidth="0.5" opacity="0.4" />
+                            <line x1="50" y1="50" x2="11" y2="72.5" stroke="var(--accent)" strokeWidth="0.5" opacity="0.4" />
+                            <line x1="50" y1="50" x2="11" y2="27.5" stroke="var(--accent)" strokeWidth="0.5" opacity="0.4" />
+                            {/* Data Polygon */}
+                            <polygon points="50,15 71.6,37.5 63,57.5 50,75 28.4,62.5 19.7,32.5" fill="rgba(219,84,53,0.4)" stroke="var(--accent)" strokeWidth="1.5" />
+                         </svg>
+                      </div>
+                      {/* Labels */}
+                      <span className="absolute top-1 text-[8px] text-glow font-orbitron uppercase">problem-solving</span>
+                      <span className="absolute left-1 text-[8px] text-glow font-orbitron uppercase">comms</span>
+                      <span className="absolute right-1 text-[8px] text-glow font-orbitron uppercase">speed</span>
+                      <span className="absolute bottom-1 text-[8px] text-glow font-orbitron uppercase">creativity</span>
+                   </div>
+                   
+                   {/* Progress Bars Box */}
+                   <div className="flex flex-col justify-center gap-6 font-orbitron text-xs w-1/2 border hud-divider p-4 shadow-[0_0_8px_rgba(219,84,53,0.1)]">
+                      <div>
+                         <div className="mb-2 text-glow uppercase tracking-widest text-[10px]">AI / ML</div>
+                         <div className="h-4 w-full border-2 border-[var(--accent)] p-[2px]">
+                            <div className="h-full w-[85%] progress-segmented shadow-[0_0_8px_var(--accent)]"></div>
+                         </div>
+                      </div>
+                      <div>
+                         <div className="mb-2 text-glow uppercase tracking-widest text-[10px]">Development</div>
+                         <div className="h-4 w-full border-2 border-[var(--accent)] p-[2px]">
+                            <div className="h-full w-[75%] progress-segmented shadow-[0_0_8px_var(--accent)]"></div>
+                         </div>
+                      </div>
+                   </div>
                 </div>
-                <div className="flex border-b hud-divider p-5 uppercase">
-                  <span className="text-glow w-24 sm:w-32">BASE :</span>
-                  <span className="text-[var(--text-primary)] font-bold">University Visveshwaraiya<br/>College of Engineering</span>
-                </div>
-                <div className="flex p-5 uppercase">
-                  <span className="text-glow w-24 sm:w-32">LOCATION :</span>
-                  <span className="text-[var(--text-primary)] font-bold">Bangalore, Karnataka</span>
-                </div>
-              </div>
-              
-              {/* CHARTS (Radar + Progress) */}
-              <div className="p-6 flex-1 flex flex-row items-center justify-between gap-4">
-                 {/* Radar SVG */}
-                 <div className="relative flex items-center justify-center w-[140px] h-[140px]">
-                    <div className="absolute inset-0 flex items-center justify-center">
-                       <svg width="100%" height="100%" viewBox="0 0 100 100" className="opacity-80">
-                          <polygon points="50,5 93,25 93,75 50,95 7,75 7,25" fill="none" stroke="var(--accent)" strokeWidth="1" opacity="0.4" />
-                          <polygon points="50,25 73,38 73,62 50,75 27,62 27,38" fill="none" stroke="var(--accent)" strokeWidth="1" opacity="0.4" />
-                          <polygon points="50,15 80,45 60,85 40,70 15,35" fill="rgba(219,84,53,0.3)" stroke="var(--accent)" strokeWidth="1.5" className="drop-shadow-[0_0_4px_var(--accent)]" />
-                       </svg>
-                    </div>
-                    {/* Labels */}
-                    <span className="absolute -top-4 text-[10px] text-glow font-mono-custom">problem-solving</span>
-                    <span className="absolute -left-6 text-[10px] text-glow font-mono-custom">comms</span>
-                    <span className="absolute -right-4 text-[10px] text-glow font-mono-custom">speed</span>
-                    <span className="absolute -bottom-4 text-[10px] text-glow font-mono-custom">creativity</span>
-                 </div>
-                 
-                 {/* Progress Bars */}
-                 <div className="flex flex-col justify-center gap-6 font-mono-custom text-xs w-[160px]">
-                    <div>
-                       <div className="mb-2 text-glow uppercase">AI / ML</div>
-                       <div className="h-4 w-full border-2 border-[var(--accent)] p-[2px]">
-                          <div className="h-full w-[85%] progress-segmented shadow-[0_0_8px_var(--accent)]"></div>
-                       </div>
-                    </div>
-                    <div>
-                       <div className="mb-2 text-glow uppercase">Development</div>
-                       <div className="h-4 w-full border-2 border-[var(--accent)] p-[2px]">
-                          <div className="h-full w-[75%] progress-segmented shadow-[0_0_8px_var(--accent)]"></div>
-                       </div>
-                    </div>
-                 </div>
+                
               </div>
             </div>
           </div>

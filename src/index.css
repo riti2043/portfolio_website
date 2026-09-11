@@ -113,6 +113,10 @@ body {
   letter-spacing: 0.5px;
 }
 
+.font-orbitron {
+  font-family: 'Orbitron', sans-serif;
+}
+
 /* Subtle Film Grain Effect */
 .grain-overlay {
   position: fixed;
