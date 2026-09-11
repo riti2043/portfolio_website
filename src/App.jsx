@@ -22,50 +22,121 @@ const LinkedinIcon = ({ size = 20, className = "" }) => (
   </svg>
 );
 
-const MovingBitsCursive = () => {
-  const [bgSvg, setBgSvg] = useState('');
-  const [isHovered, setIsHovered] = useState(false);
-  
+const AsciiHeroText = () => {
+  const canvasRef = useRef(null);
+  const animRef = useRef(null);
+
   useEffect(() => {
-    const generateSvg = () => {
-      let rects = '';
-      // Create a 24x24 tile with 4x4 squares (3px square, 1px gap)
-      for(let y=0; y<24; y+=4) {
-        for(let x=0; x<24; x+=4) {
-          // Dots twinkle randomly
-          const opacity = Math.random() > 0.15 ? (Math.random() * 0.6 + 0.4).toFixed(2) : 0;
-          if (opacity > 0) {
-            rects += `<rect x='${x}' y='${y}' width='3' height='3' fill='${isHovered ? '%23db5435' : 'white'}' opacity='${opacity}'/>`;
-          }
-        }
-      }
-      return `data:image/svg+xml,${encodeURIComponent(`<svg xmlns='http://www.w3.org/2000/svg' width='24' height='24'>${rects}</svg>`)}`;
+    const canvas = canvasRef.current;
+    if (!canvas) return;
+
+    const ctx = canvas.getContext('2d');
+
+    const setSize = () => {
+      canvas.width = canvas.offsetWidth * window.devicePixelRatio;
+      canvas.height = canvas.offsetHeight * window.devicePixelRatio;
+      ctx.scale(window.devicePixelRatio, window.devicePixelRatio);
     };
-    
-    setBgSvg(generateSvg());
-    const int = setInterval(() => setBgSvg(generateSvg()), 120); // Twinkle speed
-    return () => clearInterval(int);
-  }, [isHovered]);
+
+    setSize();
+    window.addEventListener('resize', setSize);
+
+    // ASCII chars used for the rain
+    const chars = 'RITHYAJAYARAM01アイウエカキクRJ@#$%[]<>?!~`|\\/*&^';
+    const charArr = chars.split('');
+
+    const charSize = 13;
+    const W = () => canvas.offsetWidth;
+    const H = () => canvas.offsetHeight;
+
+    let drops = [];
+    const initDrops = () => {
+      drops = Array.from({ length: Math.ceil(W() / charSize) }, () =>
+        Math.random() * -(H() / charSize)
+      );
+    };
+    initDrops();
+    window.addEventListener('resize', initDrops);
+
+    const animate = () => {
+      const w = W();
+      const h = H();
+
+      // Clear with slight trail effect
+      ctx.fillStyle = 'rgba(11,11,11,0.18)';
+      ctx.fillRect(0, 0, w, h);
+
+      // Draw ASCII rain chars in various orange shades
+      ctx.font = `${charSize}px 'Courier New', monospace`;
+      for (let i = 0; i < drops.length; i++) {
+        const char = charArr[Math.floor(Math.random() * charArr.length)];
+        const x = i * charSize;
+        const y = drops[i] * charSize;
+
+        // Vary brightness for depth: leading char is bright white-orange, trailing chars fade
+        const distFromTop = drops[i] / (h / charSize);
+        const bright = Math.min(1, Math.max(0.15, 1 - distFromTop * 0.5));
+        const r = Math.floor(219 * bright + 36 * (1 - bright));
+        const g = Math.floor(84 * bright * 0.4);
+        const b = Math.floor(53 * bright * 0.3);
+        ctx.fillStyle = `rgb(${r},${g},${b})`;
+        ctx.fillText(char, x, y);
+
+        if (drops[i] * charSize > h && Math.random() > 0.975) {
+          drops[i] = Math.random() * -20;
+        }
+        drops[i] += 0.4;
+      }
+
+      // Mask the rain to the text shape using destination-in
+      ctx.globalCompositeOperation = 'destination-in';
+      const fontSize = Math.min(h * 0.82, w * 0.115);
+      ctx.font = `900 ${fontSize}px 'Bebas Neue', sans-serif`;
+      ctx.textBaseline = 'middle';
+      ctx.textAlign = 'left';
+      ctx.fillStyle = 'rgba(255,255,255,1)';
+      ctx.fillText('RITHYA JAYARAM', 4, h / 2);
+      ctx.globalCompositeOperation = 'source-over';
+
+      animRef.current = requestAnimationFrame(animate);
+    };
+
+    // Ensure Bebas Neue is loaded before starting
+    document.fonts.load("900 100px 'Bebas Neue'").then(() => {
+      animate();
+    });
+
+    return () => {
+      cancelAnimationFrame(animRef.current);
+      window.removeEventListener('resize', setSize);
+      window.removeEventListener('resize', initDrops);
+    };
+  }, []);
 
   return (
-    <h1 
-      onMouseEnter={() => setIsHovered(true)}
-      onMouseLeave={() => setIsHovered(false)}
-      className="text-7xl md:text-8xl lg:text-9xl xl:text-[110px] whitespace-nowrap font-normal mb-6 text-left cursor-crosshair transition-all duration-300" 
-      style={{ 
-        fontFamily: "'Dancing Script', cursive",
-        backgroundImage: `url("${bgSvg}")`,
-        WebkitBackgroundClip: 'text',
-        WebkitTextFillColor: 'transparent',
-        filter: isHovered 
-          ? 'drop-shadow(0px 0px 8px rgba(219,84,53,0.8))' 
-          : 'drop-shadow(2px 2px 0px rgba(255,255,255,0.1))'
+    <div
+      style={{
+        perspective: '1000px',
+        width: '100%',
+        lineHeight: 0,
       }}
     >
-      Rithya Jayaram
-    </h1>
+      <canvas
+        ref={canvasRef}
+        style={{
+          width: '100%',
+          height: '180px',
+          display: 'block',
+          transform: 'rotateX(6deg)',
+          transformOrigin: 'bottom center',
+          filter:
+            'drop-shadow(0 0 18px rgba(219,84,53,0.9)) drop-shadow(0 6px 40px rgba(219,84,53,0.5))',
+        }}
+      />
+    </div>
   );
 };
+
 
 const NetworkStatus = () => {
   const [totalVisits, setTotalVisits] = useState('...');
@@ -129,7 +200,7 @@ const ProfileDashboard = () => {
         
         {/* HEADER (Spans all 12 cols so the boxes below align perfectly) */}
         <div className="lg:col-span-12">
-          <MovingBitsCursive />
+          <AsciiHeroText />
         </div>
 
         {/* LEFT BOX (Now Main Profile): PHOTO + STATS (Spans 9 cols) */}
