@@ -72,55 +72,23 @@ const NetworkStatus = () => {
   const [liveCount, setLiveCount] = useState(1);
 
   useEffect(() => {
-    // Clever approach: Fetch the external SVG image and parse the actual visitor number out of it!
-    const badgeUrl = 'https://api.visitorbadge.io/api/visitors?path=rithyajayaram_portfolio_tracker';
-    
-    const fetchBadge = async () => {
-       const proxies = [
-         `https://api.allorigins.win/raw?url=${encodeURIComponent(badgeUrl)}`,
-         `https://corsproxy.io/?${encodeURIComponent(badgeUrl)}`,
-         `https://thingproxy.freeboard.io/fetch/${badgeUrl}`
-       ];
-
-       for (const proxyUrl of proxies) {
-           try {
-              const res = await fetch(proxyUrl);
-              if (!res.ok) continue; // Try next proxy
-              const svg = await res.text();
-              
-              const matches = svg.match(/<text[^>]*>([0-9,]+)<\/text>/g);
-              if (matches && matches.length >= 2) {
-                 const countStr = matches[1].replace(/<[^>]+>/g, '').replace(/,/g, '');
-                 setTotalVisits(countStr.padStart(5, '0'));
-                 return; // Success! Exit loop.
-              }
-           } catch (err) {
-              console.warn("Proxy failed:", proxyUrl);
-           }
-       }
-       
-       // If all proxies fail, attempt direct fetch (might be blocked by CORS but worth a shot)
-       try {
-           const resDirect = await fetch(badgeUrl);
-           const svgDirect = await resDirect.text();
-           const matchesDirect = svgDirect.match(/<text[^>]*>([0-9,]+)<\/text>/g);
-           if (matchesDirect && matchesDirect.length >= 2) {
-              const countStrDirect = matchesDirect[1].replace(/<[^>]+>/g, '').replace(/,/g, '');
-              setTotalVisits(countStrDirect.padStart(5, '0'));
-              return;
-           }
-       } catch (e) {
-           console.error("Direct fetch failed due to CORS.");
-       }
-       
-       // Absolute fallback
-       let localVisits = parseInt(localStorage.getItem('site_visits') || '1024');
-       localVisits += 1;
-       localStorage.setItem('site_visits', localVisits);
-       setTotalVisits(String(localVisits).padStart(5, '0'));
+    // Use our own Vercel serverless function as a backend proxy.
+    // It fetches the real count server-side (no CORS issues).
+    const fetchVisitors = async () => {
+      try {
+        const res = await fetch('/api/visitors');
+        const data = await res.json();
+        if (data.count !== undefined) {
+          setTotalVisits(String(data.count).padStart(5, '0'));
+        } else {
+          setTotalVisits('00001');
+        }
+      } catch (err) {
+        setTotalVisits('00001');
+      }
     };
-    
-    fetchBadge();
+
+    fetchVisitors();
   }, []);
 
   useEffect(() => {
