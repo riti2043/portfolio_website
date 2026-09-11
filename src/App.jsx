@@ -29,111 +29,113 @@ const AsciiHeroText = () => {
   useEffect(() => {
     const canvas = canvasRef.current;
     if (!canvas) return;
-
     const ctx = canvas.getContext('2d');
 
-    const setSize = () => {
-      canvas.width = canvas.offsetWidth * window.devicePixelRatio;
-      canvas.height = canvas.offsetHeight * window.devicePixelRatio;
-      ctx.scale(window.devicePixelRatio, window.devicePixelRatio);
-    };
+    let particles = [];
+    let textPixels = [];
+    let W = 0, H = 0;
 
-    setSize();
-    window.addEventListener('resize', setSize);
+    const DOT_SIZE = 2;        // px size of each dot
+    const DOT_GAP = 4;         // sample every Nth pixel (controls density)
+    const DRIFT = 1.6;         // max random drift speed
 
-    // ASCII chars used for the rain
-    const chars = 'RITHYAJAYARAM01アイウエカキクRJ@#$%[]<>?!~`|\\/*&^';
-    const charArr = chars.split('');
+    const buildParticles = () => {
+      W = canvas.offsetWidth;
+      H = canvas.offsetHeight;
+      canvas.width = W;
+      canvas.height = H;
 
-    const charSize = 13;
-    const W = () => canvas.offsetWidth;
-    const H = () => canvas.offsetHeight;
+      // Draw text on offscreen canvas to find letter pixels
+      const off = document.createElement('canvas');
+      off.width = W;
+      off.height = H;
+      const offCtx = off.getContext('2d');
 
-    let drops = [];
-    const initDrops = () => {
-      drops = Array.from({ length: Math.ceil(W() / charSize) }, () =>
-        Math.random() * -(H() / charSize)
-      );
-    };
-    initDrops();
-    window.addEventListener('resize', initDrops);
+      const fontSize = Math.min(H * 0.78, W * 0.11);
+      offCtx.font = `900 ${fontSize}px 'Bebas Neue', sans-serif`;
+      offCtx.textBaseline = 'middle';
+      offCtx.textAlign = 'left';
+      offCtx.fillStyle = 'white';
+      offCtx.fillText('RITHYA JAYARAM', 6, H / 2);
 
-    const animate = () => {
-      const w = W();
-      const h = H();
-
-      // Clear with slight trail effect
-      ctx.fillStyle = 'rgba(11,11,11,0.18)';
-      ctx.fillRect(0, 0, w, h);
-
-      // Draw ASCII rain chars in various orange shades
-      ctx.font = `${charSize}px 'Courier New', monospace`;
-      for (let i = 0; i < drops.length; i++) {
-        const char = charArr[Math.floor(Math.random() * charArr.length)];
-        const x = i * charSize;
-        const y = drops[i] * charSize;
-
-        // Vary brightness for depth: leading char is bright white-orange, trailing chars fade
-        const distFromTop = drops[i] / (h / charSize);
-        const bright = Math.min(1, Math.max(0.15, 1 - distFromTop * 0.5));
-        const r = Math.floor(219 * bright + 36 * (1 - bright));
-        const g = Math.floor(84 * bright * 0.4);
-        const b = Math.floor(53 * bright * 0.3);
-        ctx.fillStyle = `rgb(${r},${g},${b})`;
-        ctx.fillText(char, x, y);
-
-        if (drops[i] * charSize > h && Math.random() > 0.975) {
-          drops[i] = Math.random() * -20;
+      // Sample pixels inside letters
+      const imgData = offCtx.getImageData(0, 0, W, H).data;
+      textPixels = [];
+      for (let y = 0; y < H; y += DOT_GAP) {
+        for (let x = 0; x < W; x += DOT_GAP) {
+          const idx = (y * W + x) * 4;
+          if (imgData[idx + 3] > 128) {
+            textPixels.push({ x, y });
+          }
         }
-        drops[i] += 0.4;
       }
 
-      // Mask the rain to the text shape using destination-in
-      ctx.globalCompositeOperation = 'destination-in';
-      const fontSize = Math.min(h * 0.82, w * 0.115);
-      ctx.font = `900 ${fontSize}px 'Bebas Neue', sans-serif`;
-      ctx.textBaseline = 'middle';
-      ctx.textAlign = 'left';
-      ctx.fillStyle = 'rgba(255,255,255,1)';
-      ctx.fillText('RITHYA JAYARAM', 4, h / 2);
-      ctx.globalCompositeOperation = 'source-over';
+      // Create a particle at every sampled letter pixel
+      particles = textPixels.map(p => ({
+        homeX: p.x,
+        homeY: p.y,
+        x: p.x + (Math.random() - 0.5) * 8,
+        y: p.y + (Math.random() - 0.5) * 8,
+        vx: (Math.random() - 0.5) * DRIFT,
+        vy: (Math.random() - 0.5) * DRIFT,
+        phase: Math.random() * Math.PI * 2, // for opacity pulse
+      }));
+    };
+
+    const animate = () => {
+      ctx.clearRect(0, 0, W, H);
+
+      const t = Date.now() * 0.002;
+
+      for (const p of particles) {
+        // Drift around the home pixel
+        p.vx += (Math.random() - 0.5) * 0.4;
+        p.vy += (Math.random() - 0.5) * 0.4;
+
+        // Spring back toward home position
+        p.vx += (p.homeX - p.x) * 0.06;
+        p.vy += (p.homeY - p.y) * 0.06;
+
+        // Dampen
+        p.vx *= 0.82;
+        p.vy *= 0.82;
+
+        p.x += p.vx;
+        p.y += p.vy;
+
+        // Pulse opacity so they shimmer
+        const alpha = 0.55 + 0.45 * Math.sin(t + p.phase);
+
+        ctx.fillStyle = `rgba(219,84,53,${alpha.toFixed(2)})`;
+        ctx.fillRect(Math.round(p.x), Math.round(p.y), DOT_SIZE, DOT_SIZE);
+      }
 
       animRef.current = requestAnimationFrame(animate);
     };
 
-    // Ensure Bebas Neue is loaded before starting
     document.fonts.load("900 100px 'Bebas Neue'").then(() => {
+      buildParticles();
       animate();
     });
 
+    const onResize = () => {
+      cancelAnimationFrame(animRef.current);
+      buildParticles();
+      animate();
+    };
+    window.addEventListener('resize', onResize);
+
     return () => {
       cancelAnimationFrame(animRef.current);
-      window.removeEventListener('resize', setSize);
-      window.removeEventListener('resize', initDrops);
+      window.removeEventListener('resize', onResize);
     };
   }, []);
 
   return (
-    <div
-      style={{
-        perspective: '1000px',
-        width: '100%',
-        lineHeight: 0,
-      }}
-    >
-      <canvas
-        ref={canvasRef}
-        style={{
-          width: '100%',
-          height: '180px',
-          display: 'block',
-          transform: 'rotateX(6deg)',
-          transformOrigin: 'bottom center',
-          filter:
-            'drop-shadow(0 0 18px rgba(219,84,53,0.9)) drop-shadow(0 6px 40px rgba(219,84,53,0.5))',
-        }}
-      />
-    </div>
+    <canvas
+      ref={canvasRef}
+      style={{ width: '100%', height: '180px', display: 'block' }}
+    />
   );
 };
 
