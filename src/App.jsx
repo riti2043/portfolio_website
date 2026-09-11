@@ -72,12 +72,20 @@ const NetworkStatus = () => {
   const [liveCount, setLiveCount] = useState(1);
 
   useEffect(() => {
+    let localVisits = parseInt(localStorage.getItem('site_visits') || '1024');
+    localVisits += 1;
+    localStorage.setItem('site_visits', localVisits);
+
     fetch('https://api.counterapi.dev/v1/rithyajayaram/portfolio/up')
       .then(res => res.json())
       .then(data => {
-        setTotalVisits(String(data.count).padStart(5, '0'));
+        if (data.count) {
+          setTotalVisits(String(data.count).padStart(5, '0'));
+        } else {
+          setTotalVisits(String(localVisits).padStart(5, '0'));
+        }
       })
-      .catch(() => setTotalVisits('01024'));
+      .catch(() => setTotalVisits(String(localVisits).padStart(5, '0')));
   }, []);
 
   useEffect(() => {
@@ -95,20 +103,17 @@ const NetworkStatus = () => {
   }, []);
 
   return (
-    <div className="mt-auto pt-6 border-t border-[rgba(219,84,53,0.3)]">
-       <h3 className="text-glow text-[10px] uppercase tracking-widest mb-4 font-orbitron">Network Status</h3>
-       <div className="flex flex-col gap-3 font-orbitron text-xs">
-          <div className="flex justify-between items-center bg-black/50 p-2 border border-[rgba(219,84,53,0.2)]">
-             <span className="text-[var(--text-muted)] uppercase">Total Visitors</span>
-             <span className="text-white drop-shadow-[0_0_5px_rgba(255,255,255,0.8)] font-bold tracking-widest">{totalVisits}</span>
-          </div>
-          <div className="flex justify-between items-center bg-black/50 p-2 border border-[rgba(219,84,53,0.2)]">
-             <span className="text-[var(--text-muted)] uppercase flex items-center gap-2">
-                <span className="w-2 h-2 rounded-full bg-red-500 animate-pulse shadow-[0_0_8px_rgba(239,68,68,0.8)]"></span>
-                Live Now
-             </span>
-             <span className="text-white drop-shadow-[0_0_5px_rgba(255,255,255,0.8)] font-bold tracking-widest">{String(liveCount).padStart(2, '0')}</span>
-          </div>
+    <div className="mt-6 pt-6 border-t border-[rgba(219,84,53,0.3)] flex flex-row gap-6">
+       <div className="flex-1 flex justify-between items-center bg-[#0f0f0f] hud-box p-3 font-orbitron text-xs">
+          <span className="text-[var(--text-muted)] uppercase tracking-widest text-[10px]">Total Visitors</span>
+          <span className="text-white drop-shadow-[0_0_5px_rgba(255,255,255,0.8)] font-bold tracking-widest text-lg">{totalVisits}</span>
+       </div>
+       <div className="flex-1 flex justify-between items-center bg-[#0f0f0f] hud-box p-3 font-orbitron text-xs">
+          <span className="text-[var(--text-muted)] uppercase tracking-widest text-[10px] flex items-center gap-2">
+             <span className="w-2 h-2 rounded-full bg-red-500 animate-pulse shadow-[0_0_8px_rgba(239,68,68,0.8)]"></span>
+             Live Now
+          </span>
+          <span className="text-white drop-shadow-[0_0_5px_rgba(255,255,255,0.8)] font-bold tracking-widest text-lg">{String(liveCount).padStart(2, '0')}</span>
        </div>
     </div>
   );
@@ -119,14 +124,16 @@ const ProfileDashboard = () => {
     <section id="hero" className="min-h-screen pt-8 pb-16 px-6 lg:px-12 flex flex-col items-center justify-center relative">
       <div className="max-w-[1400px] w-full mx-auto relative z-10 grid grid-cols-1 lg:grid-cols-12 gap-8 items-start mt-8 lg:mt-0">
         
-        {/* LEFT BOX (Now Main Profile): NAME + PHOTO + STATS (Spans 9 cols) */}
-        <div className="lg:col-span-9 flex flex-col">
-          
-          {/* MOVING BITS CURSIVE HEADER */}
+        {/* HEADER (Spans all 12 cols so the boxes below align perfectly) */}
+        <div className="lg:col-span-12">
           <MovingBitsCursive />
+        </div>
 
+        {/* LEFT BOX (Now Main Profile): PHOTO + STATS (Spans 9 cols) */}
+        <div className="lg:col-span-9 flex flex-col h-full">
+          
           {/* UNIFIED CONTAINER (PHOTO + STATS) */}
-          <div className="hud-box flex flex-col md:flex-row flex-1 mt-4">
+          <div className="hud-box flex flex-col md:flex-row flex-1">
             
             {/* PHOTO SECTION */}
             <div className="md:w-5/12 border-b md:border-b-0 md:border-r hud-divider p-2">
@@ -208,6 +215,8 @@ const ProfileDashboard = () => {
                    </div>
                 </div>
                 
+                {/* NETWORK STATUS */}
+                <NetworkStatus />
                 
               </div>
             </div>
@@ -215,7 +224,7 @@ const ProfileDashboard = () => {
         </div>
 
         {/* RIGHT BOX (Now About Me) (Spans 3 cols) */}
-        <div className="lg:col-span-3 flex flex-col hud-box p-0 h-full mt-10 lg:mt-32">
+        <div className="lg:col-span-3 flex flex-col hud-box p-0 h-full">
           <div className="p-6 flex-1 border-b hud-divider">
              <h2 className="text-sm font-mono-custom text-glow mb-4 uppercase">about me text</h2>
              <div className="relative font-mono-custom text-xs leading-[30px] text-[var(--text-primary)]" 
@@ -232,7 +241,6 @@ const ProfileDashboard = () => {
           <div className="p-6 flex flex-col gap-4">
              <a href="#projects" className="btn-pixel w-full text-center py-3 text-sm">VIEW PROJECTS</a>
              <a href="#contact" className="btn-pixel w-full text-center py-3 text-sm">LET'S TALK</a>
-             <NetworkStatus />
           </div>
         </div>
 
