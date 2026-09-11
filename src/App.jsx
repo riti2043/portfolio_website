@@ -24,34 +24,42 @@ const LinkedinIcon = ({ size = 20, className = "" }) => (
 
 const MovingBitsCursive = () => {
   const [bgSvg, setBgSvg] = useState('');
+  const [isHovered, setIsHovered] = useState(false);
   
   useEffect(() => {
-    const chars = '01';
     const generateSvg = () => {
-      let textNodes = '';
-      for(let y=10; y<=100; y+=10) {
-        let row = '';
-        for(let x=0; x<30; x++) row += chars[Math.floor(Math.random()*2)];
-        textNodes += `<text x='0' y='${y}' font-family='monospace' font-size='10' fill='white' font-weight='bold'>${row}</text>`;
+      let rects = '';
+      // Create a 24x24 tile with 4x4 squares (3px square, 1px gap)
+      for(let y=0; y<24; y+=4) {
+        for(let x=0; x<24; x+=4) {
+          // Dots twinkle randomly
+          const opacity = Math.random() > 0.15 ? (Math.random() * 0.6 + 0.4).toFixed(2) : 0;
+          if (opacity > 0) {
+            rects += `<rect x='${x}' y='${y}' width='3' height='3' fill='${isHovered ? '%23db5435' : 'white'}' opacity='${opacity}'/>`;
+          }
+        }
       }
-      return `data:image/svg+xml,${encodeURIComponent(`<svg xmlns='http://www.w3.org/2000/svg' width='100' height='100'>${textNodes}</svg>`)}`;
+      return `data:image/svg+xml,${encodeURIComponent(`<svg xmlns='http://www.w3.org/2000/svg' width='24' height='24'>${rects}</svg>`)}`;
     };
     
     setBgSvg(generateSvg());
-    const int = setInterval(() => setBgSvg(generateSvg()), 150); // Scramble rapidly!
+    const int = setInterval(() => setBgSvg(generateSvg()), 120); // Twinkle speed
     return () => clearInterval(int);
-  }, []);
+  }, [isHovered]);
 
   return (
     <h1 
-      className="text-6xl md:text-7xl lg:text-8xl xl:text-[90px] whitespace-nowrap tracking-tight font-bold mb-6 text-left cursor-crosshair transition-all duration-300 hover:scale-[1.01]" 
+      onMouseEnter={() => setIsHovered(true)}
+      onMouseLeave={() => setIsHovered(false)}
+      className="text-7xl md:text-8xl lg:text-9xl xl:text-[110px] whitespace-nowrap font-normal mb-6 text-left cursor-crosshair transition-all duration-300" 
       style={{ 
         fontFamily: "'Dancing Script', cursive",
         backgroundImage: `url("${bgSvg}")`,
         WebkitBackgroundClip: 'text',
         WebkitTextFillColor: 'transparent',
-        WebkitTextStroke: '1px rgba(255,255,255,0.7)',
-        filter: 'drop-shadow(3px 3px 0px rgba(219,84,53,0.6))'
+        filter: isHovered 
+          ? 'drop-shadow(0px 0px 8px rgba(219,84,53,0.8))' 
+          : 'drop-shadow(2px 2px 0px rgba(255,255,255,0.1))'
       }}
     >
       Rithya Jayaram
