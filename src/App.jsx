@@ -110,13 +110,14 @@ const HeroScrollSequence = () => {
                       <circle cx="200" cy="250" r="80" fill="transparent" stroke="currentColor" strokeWidth="1" strokeDasharray="4 4" className="text-[var(--text-primary)]" />
                    </svg>
                 </div>
-                <div className="relative z-10 self-center text-center space-y-4">
-                  <div className="w-24 h-24 mx-auto bg-zinc-100 dark:bg-zinc-800 rounded-2xl flex items-center justify-center border border-zinc-200 dark:border-zinc-700 shadow-xl">
-                    <span className="font-bold text-3xl tracking-tighter">RJ</span>
-                  </div>
-                  <div className="font-mono-custom font-bold text-sm tracking-widest text-[var(--text-primary)]">
-                    SCROLL TO EXPLORE
-                  </div>
+                <div className="relative z-10 flex items-center gap-4">
+                  <span className="w-8 h-8 rounded-full bg-[var(--text-primary)] text-[var(--bg-primary)] flex items-center justify-center font-bold font-mono-custom text-sm">
+                    RJ
+                  </span>
+                  <span className="font-cursive text-3xl tracking-wider">Rithya Jayaram</span>
+                </div>
+                <div className="relative z-10 font-mono-custom font-bold text-sm tracking-widest text-[var(--text-primary)]">
+                  SCROLL TO EXPLORE
                 </div>
               </div>
             </div>
