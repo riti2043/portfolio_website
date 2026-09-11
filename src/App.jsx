@@ -24,123 +24,133 @@ const LinkedinIcon = ({ size = 20, className = "" }) => (
 
 const AsciiHeroText = () => {
   const containerRef = useRef(null);
-  const textWrapRef = useRef(null);
-  const scanRef = useRef(null);
-  const animRef = useRef(null);
-  const rot = useRef({ x: 0, y: 0, tx: 0, ty: 0 });
-
-  // Build the 3D extruded text-shadow stack once
-  const textShadow = (() => {
-    const layers = [];
-    const depth = 30;
-    for (let i = 1; i <= depth; i++) {
-      const t = i / depth;
-      // Starts bright orange, fades to very dark burnt
-      const r = Math.floor(200 - t * 140);
-      const g = Math.floor(55 - t * 45);
-      const b = Math.floor(30 - t * 22);
-      layers.push(`${i}px ${i * 0.7}px 0 rgb(${r},${g},${b})`);
-    }
-    // Soft ambient shadow at the base
-    layers.push(`${depth + 2}px ${depth * 0.7 + 2}px 14px rgba(0,0,0,0.7)`);
-    return layers.join(', ');
-  })();
+  const canvasRef    = useRef(null);
+  const animRef      = useRef(null);
+  const rot          = useRef({ x: 0, y: 0, tx: 0, ty: 0 });
 
   useEffect(() => {
-    const onMouseMove = (e) => {
-      const el = containerRef.current;
-      if (!el) return;
-      const rect = el.getBoundingClientRect();
-      rot.current.tx = -((e.clientY - rect.top - rect.height / 2) / (rect.height / 2)) * 12;
-      rot.current.ty = ((e.clientX - rect.left - rect.width / 2) / (rect.width / 2)) * 18;
+    const canvas = canvasRef.current;
+    if (!canvas) return;
+    const ctx = canvas.getContext('2d');
+
+    const LED  = 5;   // each bitmap pixel becomes a 5×5 square
+    const GAP  = 2;   // 2px gap between squares (gives the grid/matrix look)
+    const CELL = LED + GAP;
+
+    let leds = [];
+    let W = 0, H = 0;
+
+    const buildLeds = () => {
+      W = canvas.offsetWidth;
+      H = canvas.offsetHeight;
+      canvas.width  = W;
+      canvas.height = H;
+
+      // --- 1. Render Press Start 2P on a hidden canvas ---
+      const off = document.createElement('canvas');
+      off.width  = W;
+      off.height = H;
+      const oCtx = off.getContext('2d');
+
+      // Split into two lines so it always fits any screen width
+      const fSize = Math.min(H * 0.36, W * 0.055);
+      oCtx.font         = `${fSize}px 'Press Start 2P', monospace`;
+      oCtx.textBaseline = 'top';
+      oCtx.textAlign    = 'left';
+      oCtx.fillStyle    = 'white';
+      oCtx.fillText('RITHYA',  8, H * 0.04);
+      oCtx.fillText('JAYARAM', 8, H * 0.52);
+
+      // --- 2. Read every pixel; sample on CELL grid ---
+      const px = oCtx.getImageData(0, 0, W, H).data;
+      leds = [];
+      for (let y = 0; y < H; y += CELL) {
+        for (let x = 0; x < W; x += CELL) {
+          // Sample centre of this cell
+          const cx  = Math.min(W - 1, Math.floor(x + CELL / 2));
+          const cy  = Math.min(H - 1, Math.floor(y + CELL / 2));
+          const idx = (cy * W + cx) * 4;
+          if (px[idx + 3] > 60) {           // alpha threshold → inside a letter
+            leds.push({
+              x,
+              y,
+              phase: Math.random() * Math.PI * 2,   // independent flicker offset
+            });
+          }
+        }
+      }
     };
-    const onMouseLeave = () => { rot.current.tx = 0; rot.current.ty = 0; };
 
+    let scanX = 0;
+
+    const animate = () => {
+      ctx.clearRect(0, 0, W, H);
+      const t = Date.now() * 0.0018;
+      scanX = (scanX + 1.8) % W;
+
+      for (const led of leds) {
+        // Slow independent pulse per LED
+        const pulse     = 0.55 + 0.45 * Math.sin(t * 0.9 + led.phase);
+        // Scanline brightens LEDs it passes over
+        const scanDist  = Math.abs(led.x - scanX);
+        const scanBoost = Math.max(0, 1 - scanDist / 90) * 0.55;
+        const a         = Math.min(1, pulse + scanBoost);
+
+        // Main LED square — orange, brightness driven by a
+        ctx.fillStyle = `rgb(${Math.round(219*a+30*(1-a))},${Math.round(84*a*0.6)},${Math.round(53*a*0.4)})`;
+        ctx.fillRect(led.x, led.y, LED, LED);
+
+        // Hot-spot centre when fully lit
+        if (a > 0.82) {
+          ctx.fillStyle = `rgba(255,200,140,${((a - 0.82) * 3).toFixed(2)})`;
+          ctx.fillRect(led.x + 1, led.y + 1, LED - 2, LED - 2);
+        }
+      }
+
+      animRef.current = requestAnimationFrame(animate);
+    };
+
+    document.fonts.load(`16px 'Press Start 2P'`).then(() => {
+      buildLeds();
+      animate();
+    });
+
+    // Mouse tilt
     const el = containerRef.current;
-    if (el) {
-      el.addEventListener('mousemove', onMouseMove);
-      el.addEventListener('mouseleave', onMouseLeave);
-    }
+    const onMove = (e) => {
+      if (!el) return;
+      const r = el.getBoundingClientRect();
+      rot.current.tx = -((e.clientY - r.top  - r.height / 2) / (r.height / 2)) * 10;
+      rot.current.ty =  ((e.clientX - r.left - r.width  / 2) / (r.width  / 2)) * 16;
+    };
+    const onLeave = () => { rot.current.tx = 0; rot.current.ty = 0; };
+    if (el) { el.addEventListener('mousemove', onMove); el.addEventListener('mouseleave', onLeave); }
 
-    let scanY = -10;
-
-    const loop = () => {
-      // Smooth lerp rotation toward mouse target
+    // Smooth tilt loop
+    const tiltLoop = () => {
       rot.current.x += (rot.current.tx - rot.current.x) * 0.07;
       rot.current.y += (rot.current.ty - rot.current.y) * 0.07;
-      if (textWrapRef.current) {
-        textWrapRef.current.style.transform =
-          `rotateX(${rot.current.x.toFixed(2)}deg) rotateY(${rot.current.y.toFixed(2)}deg)`;
-      }
-
-      // Scanline sweeps down on loop
-      const h = containerRef.current?.offsetHeight ?? 200;
-      scanY += 1.2;
-      if (scanY > h + 10) scanY = -10;
-      if (scanRef.current) scanRef.current.style.top = `${scanY}px`;
-
-      animRef.current = requestAnimationFrame(loop);
+      canvas.style.transform =
+        `perspective(900px) rotateX(${rot.current.x.toFixed(2)}deg) rotateY(${rot.current.y.toFixed(2)}deg)`;
+      requestAnimationFrame(tiltLoop);
     };
+    tiltLoop();
 
-    loop();
+    const onResize = () => { cancelAnimationFrame(animRef.current); buildLeds(); animate(); };
+    window.addEventListener('resize', onResize);
+
     return () => {
       cancelAnimationFrame(animRef.current);
-      if (el) {
-        el.removeEventListener('mousemove', onMouseMove);
-        el.removeEventListener('mouseleave', onMouseLeave);
-      }
+      window.removeEventListener('resize', onResize);
+      if (el) { el.removeEventListener('mousemove', onMove); el.removeEventListener('mouseleave', onLeave); }
     };
   }, []);
 
   return (
-    <div
-      ref={containerRef}
-      style={{
-        width: '100%',
-        position: 'relative',
-        padding: '6px 4px 42px', // bottom padding absorbs the 3D shadow overhang
-        perspective: '900px',
-        perspectiveOrigin: '50% 50%',
-        cursor: 'crosshair',
-        overflow: 'visible',
-      }}
-    >
-      {/* 3D tilt wrapper */}
-      <div
-        ref={textWrapRef}
-        style={{ transformStyle: 'preserve-3d', display: 'inline-block', width: '100%' }}
-      >
-        <h1
-          style={{
-            fontFamily: "'Russo One', sans-serif",
-            fontSize: 'clamp(52px, 9.2vw, 148px)',
-            color: '#db5435',
-            textShadow,
-            margin: 0,
-            lineHeight: 1,
-            letterSpacing: '-0.01em',
-            userSelect: 'none',
-            whiteSpace: 'nowrap',
-          }}
-        >
-          RITHYA JAYARAM
-        </h1>
-      </div>
-
-      {/* Scanline sweep overlay */}
-      <div
-        ref={scanRef}
-        style={{
-          position: 'absolute',
-          left: 0,
-          right: 0,
-          height: '8px',
-          background:
-            'linear-gradient(to bottom, transparent, rgba(255,180,120,0.5), rgba(255,255,220,0.85), rgba(255,180,120,0.5), transparent)',
-          pointerEvents: 'none',
-          mixBlendMode: 'screen',
-          filter: 'blur(1.5px)',
-        }}
+    <div ref={containerRef} style={{ width: '100%', cursor: 'crosshair', paddingBottom: '8px' }}>
+      <canvas
+        ref={canvasRef}
+        style={{ width: '100%', height: '240px', display: 'block' }}
       />
     </div>
   );
