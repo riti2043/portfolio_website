@@ -22,6 +22,55 @@ const LinkedinIcon = ({ size = 20, className = "" }) => (
   </svg>
 );
 
+const ASCII_RITHYA = `██████╗  ██╗ ████████╗ ██╗  ██╗ ██╗   ██╗  █████╗ 
+██╔══██╗ ██║ ╚══██╔══╝ ██║  ██║ ╚██╗ ██╔╝ ██╔══██╗
+██████╔╝ ██║    ██║    ███████║  ╚████╔╝  ███████║
+██╔══██╗ ██║    ██║    ██╔══██║   ╚██╔╝   ██╔══██║
+██║  ██║ ██║    ██║    ██║  ██║    ██║    ██║  ██║
+╚═╝  ╚═╝ ╚═╝    ╚═╝    ╚═╝  ╚═╝    ╚═╝    ╚═╝  ╚═╝`;
+
+const ASCII_JAYARAM = `      ██╗  █████╗  ██╗   ██╗  █████╗  ██████╗  █████╗  ███╗   ███╗
+      ██║ ██╔══██╗ ╚██╗ ██╔╝ ██╔══██╗ ██╔══██╗ ██╔══██╗ ████╗ ████║
+      ██║ ███████║  ╚████╔╝  ███████║ ██████╔╝ ███████║ ██╔████╔██║
+██╗   ██║ ██╔══██║   ╚██╔╝   ██╔══██║ ██╔══██╗ ██╔══██║ ██║╚██╔╝██║
+╚██████╔╝ ██║  ██║    ██║    ██║  ██║ ██║  ██║ ██║  ██║ ██║ ╚═╝ ██║
+ ╚═════╝  ╚═╝  ╚═╝    ╚═╝    ╚═╝  ╚═╝ ╚═╝  ╚═╝ ╚═╝  ╚═╝ ╚═╝     ╚═╝`;
+
+const BoilingAscii = ({ baseText }) => {
+  const [content, setContent] = useState(baseText);
+  const [isHovered, setIsHovered] = useState(false);
+
+  useEffect(() => {
+    const noise = ['▓', '▒', '░', '█', '█', '█']; 
+    const speed = isHovered ? 40 : 120;
+    const volatility = isHovered ? 0.3 : 0.03;
+
+    const interval = setInterval(() => {
+      let newContent = baseText.split('').map(char => {
+        if (char === '█' || char === '═' || char === '║') {
+          return Math.random() < volatility ? noise[Math.floor(Math.random() * noise.length)] : char;
+        }
+        return char;
+      }).join('');
+      setContent(newContent);
+    }, speed);
+
+    return () => clearInterval(interval);
+  }, [baseText, isHovered]);
+
+  return (
+    <pre 
+      onMouseEnter={() => setIsHovered(true)}
+      onMouseLeave={() => setIsHovered(false)}
+      className={\`font-mono text-[8px] sm:text-[10px] md:text-[12px] lg:text-[10px] xl:text-[12px] leading-[1.1] transition-colors duration-300 ease-in-out cursor-crosshair \${
+        isHovered ? 'text-[var(--accent)] drop-shadow-[0_0_12px_var(--accent)]' : 'text-white'
+      }\`}
+    >
+      {content}
+    </pre>
+  );
+};
+
 const ProfileDashboard = () => {
   return (
     <section id="hero" className="min-h-screen pt-8 pb-16 px-6 lg:px-12 flex flex-col items-center justify-center relative">
@@ -31,23 +80,9 @@ const ProfileDashboard = () => {
         <div className="lg:col-span-9 flex flex-col">
           
           {/* BIG ASCII NAME HEADER */}
-          <div className="flex flex-wrap lg:flex-nowrap gap-4 md:gap-6 mb-6 group cursor-crosshair overflow-hidden w-full">
-            <pre className="font-mono text-[8px] sm:text-[10px] md:text-[12px] lg:text-[10px] xl:text-[12px] leading-[1.1] text-white transition-all duration-500 ease-in-out group-hover:text-[var(--accent)] group-hover:drop-shadow-[0_0_12px_var(--accent)]">
-{`██████╗  ██╗ ████████╗ ██╗  ██╗ ██╗   ██╗  █████╗ 
-██╔══██╗ ██║ ╚══██╔══╝ ██║  ██║ ╚██╗ ██╔╝ ██╔══██╗
-██████╔╝ ██║    ██║    ███████║  ╚████╔╝  ███████║
-██╔══██╗ ██║    ██║    ██╔══██║   ╚██╔╝   ██╔══██║
-██║  ██║ ██║    ██║    ██║  ██║    ██║    ██║  ██║
-╚═╝  ╚═╝ ╚═╝    ╚═╝    ╚═╝  ╚═╝    ╚═╝    ╚═╝  ╚═╝`}
-            </pre>
-            <pre className="font-mono text-[8px] sm:text-[10px] md:text-[12px] lg:text-[10px] xl:text-[12px] leading-[1.1] text-white transition-all duration-500 ease-in-out group-hover:text-[var(--accent)] group-hover:drop-shadow-[0_0_12px_var(--accent)]">
-{`      ██╗  █████╗  ██╗   ██╗  █████╗  ██████╗  █████╗  ███╗   ███╗
-      ██║ ██╔══██╗ ╚██╗ ██╔╝ ██╔══██╗ ██╔══██╗ ██╔══██╗ ████╗ ████║
-      ██║ ███████║  ╚████╔╝  ███████║ ██████╔╝ ███████║ ██╔████╔██║
-██╗   ██║ ██╔══██║   ╚██╔╝   ██╔══██║ ██╔══██╗ ██╔══██║ ██║╚██╔╝██║
-╚██████╔╝ ██║  ██║    ██║    ██║  ██║ ██║  ██║ ██║  ██║ ██║ ╚═╝ ██║
- ╚═════╝  ╚═╝  ╚═╝    ╚═╝    ╚═╝  ╚═╝ ╚═╝  ╚═╝ ╚═╝  ╚═╝ ╚═╝     ╚═╝`}
-            </pre>
+          <div className="flex flex-wrap lg:flex-nowrap gap-4 md:gap-6 mb-6 overflow-hidden w-full">
+            <BoilingAscii baseText={ASCII_RITHYA} />
+            <BoilingAscii baseText={ASCII_JAYARAM} />
           </div>
 
           {/* UNIFIED CONTAINER (PHOTO + STATS) */}
