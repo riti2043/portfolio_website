@@ -43,16 +43,18 @@
     border: 2px solid var(--text-primary);
     border-radius: 6px;
     box-shadow: 
-      inset -2px -4px 0px rgba(0,0,0,0.3),
-      inset 2px 2px 0px rgba(255,255,255,0.3);
+      0px 4px 0px rgba(0,0,0,0.8),
+      inset -2px -4px 0px rgba(0,0,0,0.6),
+      inset 2px 2px 0px rgba(255,255,255,0.4);
     transition: all 0.1s;
     cursor: pointer;
   }
   .btn-pixel:active {
-    transform: translateY(2px);
+    transform: translateY(4px);
     box-shadow: 
-      inset -1px -1px 0px rgba(0,0,0,0.3),
-      inset 1px 1px 0px rgba(255,255,255,0.3);
+      0px 0px 0px rgba(0,0,0,0.8),
+      inset -1px -2px 0px rgba(0,0,0,0.6),
+      inset 1px 1px 0px rgba(255,255,255,0.4);
   }
   .btn-pixel:hover {
     filter: brightness(1.1);

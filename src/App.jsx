@@ -264,31 +264,31 @@ export default function App() {
       <nav className="sticky top-0 z-40 bg-transparent transition-colors duration-300 pointer-events-none">
         <div className="max-w-7xl mx-auto px-6 h-24 flex items-center justify-end">
           
-          <div className="flex items-center gap-4">
+          <div className="flex items-center gap-5">
             {/* Desktop Nav Links */}
-            <div className="hidden md:flex items-center gap-3">
-              <a href="#about" className="btn-pixel px-4 py-2 text-[10px] pointer-events-auto">ABOUT</a>
-              <a href="#skills" className="btn-pixel px-4 py-2 text-[10px] pointer-events-auto">SKILLS</a>
-              <a href="#projects" className="btn-pixel px-4 py-2 text-[10px] pointer-events-auto">PROJECTS</a>
-              <a href="#contact" className="btn-pixel px-4 py-2 text-[10px] pointer-events-auto">CONTACT</a>
+            <div className="hidden md:flex items-center gap-4">
+              <a href="#about" className="btn-pixel px-5 py-2.5 text-sm pointer-events-auto">ABOUT</a>
+              <a href="#skills" className="btn-pixel px-5 py-2.5 text-sm pointer-events-auto">SKILLS</a>
+              <a href="#projects" className="btn-pixel px-5 py-2.5 text-sm pointer-events-auto">PROJECTS</a>
+              <a href="#contact" className="btn-pixel px-5 py-2.5 text-sm pointer-events-auto">CONTACT</a>
             </div>
 
             {/* Theme Toggle Button */}
             <button
               onClick={toggleTheme}
-              className="btn-pixel p-2 px-3 pointer-events-auto"
+              className="btn-pixel p-2.5 px-4 pointer-events-auto"
               aria-label="Toggle Theme"
             >
-              {darkMode ? <Sun size={14} /> : <Moon size={14} />}
+              {darkMode ? <Sun size={16} /> : <Moon size={16} />}
             </button>
 
             {/* Download CV CTA Button */}
             <a 
               href="#contact"
-              className="btn-pixel flex items-center gap-2 px-5 py-2 text-[10px] pointer-events-auto"
+              className="btn-pixel flex items-center gap-2 px-6 py-2.5 text-sm pointer-events-auto"
             >
               <span>DOWNLOAD CV</span>
-              <ArrowUpRight size={12} />
+              <ArrowUpRight size={14} />
             </a>
 
             {/* Mobile Toggle Button */}
