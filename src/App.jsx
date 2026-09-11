@@ -261,59 +261,45 @@ export default function App() {
       />
 
       {/* ==================== NAVBAR ==================== */}
-      <nav className="sticky top-0 z-40 backdrop-blur-md bg-white/80 dark:bg-zinc-950/80 border-b border-[var(--border-color)] transition-colors duration-300">
-        <div className="max-w-7xl mx-auto px-6 h-20 flex items-center justify-between">
+      <nav className="sticky top-0 z-40 bg-transparent transition-colors duration-300 pointer-events-none">
+        <div className="max-w-7xl mx-auto px-6 h-24 flex items-center justify-end">
           
-          {/* Logo / Brand Name */}
-          <a href="#hero" className="flex items-center gap-2 group">
-            <div className="w-8 h-8 rounded-full border border-[var(--border-color)] text-[var(--accent)] bg-[var(--bg-secondary)] flex items-center justify-center text-white dark:text-[var(--text-primary)] font-bold text-xs font-mono-custom group-hover:scale-105 transition-transform">
-              RJ
+          <div className="flex items-center gap-4">
+            {/* Desktop Nav Links */}
+            <div className="hidden md:flex items-center gap-3">
+              <a href="#about" className="btn-pixel px-4 py-2 text-[10px] pointer-events-auto">ABOUT</a>
+              <a href="#skills" className="btn-pixel px-4 py-2 text-[10px] pointer-events-auto">SKILLS</a>
+              <a href="#projects" className="btn-pixel px-4 py-2 text-[10px] pointer-events-auto">PROJECTS</a>
+              <a href="#contact" className="btn-pixel px-4 py-2 text-[10px] pointer-events-auto">CONTACT</a>
             </div>
-            <span className="font-bold tracking-tight text-lg group-hover:opacity-80 transition-opacity">
-              Rithya Jayaram
-            </span>
-          </a>
 
-          {/* Desktop Nav Links */}
-          <div className="hidden md:flex items-center gap-8 font-mono-custom text-sm">
-            <a href="#about" className="hover:text-[var(--text-muted)] dark:hover:text-[var(--text-muted)] transition-colors">/about</a>
-            <a href="#skills" className="hover:text-[var(--text-muted)] dark:hover:text-[var(--text-muted)] transition-colors">/skills</a>
-            <a href="#projects" className="hover:text-[var(--text-muted)] dark:hover:text-[var(--text-muted)] transition-colors">/projects</a>
-            <a href="#contact" className="hover:text-[var(--text-muted)] dark:hover:text-[var(--text-muted)] transition-colors">/contact</a>
-            
             {/* Theme Toggle Button */}
             <button
               onClick={toggleTheme}
-              className="p-2 rounded-full border border-[var(--border-color)] hover:bg-zinc-100 dark:hover:bg-zinc-800 transition-colors"
+              className="btn-pixel p-2 px-3 pointer-events-auto"
               aria-label="Toggle Theme"
             >
-              {darkMode ? <Sun size={18} className="text-amber-400" /> : <Moon size={18} className="text-zinc-700" />}
+              {darkMode ? <Sun size={14} /> : <Moon size={14} />}
             </button>
 
             {/* Download CV CTA Button */}
             <a 
               href="#contact"
-              className="btn-bitmap flex items-center gap-2 px-4 py-2 text-xs font-bold"
+              className="btn-pixel flex items-center gap-2 px-5 py-2 text-[10px] pointer-events-auto"
             >
-              <span>Download CV</span>
-              <ArrowUpRight size={14} />
+              <span>DOWNLOAD CV</span>
+              <ArrowUpRight size={12} />
             </a>
-          </div>
 
-          {/* Mobile Toggle Button */}
-          <div className="flex md:hidden items-center gap-3">
-            <button
-              onClick={toggleTheme}
-              className="p-2 rounded-full border border-[var(--border-color)]"
-            >
-              {darkMode ? <Sun size={18} className="text-amber-400" /> : <Moon size={18} className="text-zinc-700" />}
-            </button>
-            <button 
-              onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-              className="p-2 text-[var(--text-primary)]"
-            >
-              {mobileMenuOpen ? <X size={24} /> : <Menu size={24} />}
-            </button>
+            {/* Mobile Toggle Button */}
+            <div className="md:hidden flex items-center">
+              <button 
+                onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+                className="btn-pixel p-2 pointer-events-auto"
+              >
+                {mobileMenuOpen ? <X size={14} /> : <Menu size={14} />}
+              </button>
+            </div>
           </div>
         </div>
 

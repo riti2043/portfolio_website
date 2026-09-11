@@ -35,6 +35,28 @@
     font-style: italic;
     font-weight: 700;
   }
+  .btn-pixel {
+    background-color: var(--accent);
+    color: #ffffff !important;
+    text-transform: uppercase;
+    font-family: 'Silkscreen', cursive;
+    border: 2px solid var(--text-primary);
+    border-radius: 6px;
+    box-shadow: 
+      inset -2px -4px 0px rgba(0,0,0,0.3),
+      inset 2px 2px 0px rgba(255,255,255,0.3);
+    transition: all 0.1s;
+    cursor: pointer;
+  }
+  .btn-pixel:active {
+    transform: translateY(2px);
+    box-shadow: 
+      inset -1px -1px 0px rgba(0,0,0,0.3),
+      inset 1px 1px 0px rgba(255,255,255,0.3);
+  }
+  .btn-pixel:hover {
+    filter: brightness(1.1);
+  }
   .btn-bitmap {
     box-shadow: 4px 4px 0px var(--accent);
     border: 2px solid var(--border-color);
