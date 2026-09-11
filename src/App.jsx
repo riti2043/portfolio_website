@@ -89,10 +89,10 @@ const HeroScrollSequence = () => {
                 </AnimatePresence>
               </div>
               <div className="flex flex-wrap items-center gap-4 pt-4 font-mono-custom text-sm pointer-events-auto">
-                <a href="#projects" className="flex items-center gap-2 px-6 py-3 rounded-full border border-[var(--border-color)] text-[var(--accent)] bg-[var(--bg-secondary)] text-white dark:text-[var(--text-primary)] hover:scale-105 transition-transform duration-300">
+                <a href="#projects" className="btn-bitmap flex items-center gap-2 px-6 py-3 font-mono-custom text-xl">
                   /view projects <ChevronDown size={16} />
                 </a>
-                <a href="#contact" className="flex items-center gap-2 px-6 py-3 rounded-full border border-[var(--border-color)] hover:scale-105 transition-transform duration-300">
+                <a href="#contact" className="btn-bitmap flex items-center gap-2 px-6 py-3 font-mono-custom text-xl">
                   Let's talk <ArrowUpRight size={16} />
                 </a>
               </div>
@@ -315,7 +315,7 @@ export default function App() {
             {/* Download CV CTA Button */}
             <a 
               href="#contact"
-              className="flex items-center gap-2 px-4 py-2 rounded-full border border-[var(--border-color)] text-[var(--accent)] bg-[var(--bg-secondary)] text-white dark:text-[var(--text-primary)] text-xs font-bold hover:scale-105 transition-transform duration-300"
+              className="btn-bitmap flex items-center gap-2 px-4 py-2 text-xs font-bold"
             >
               <span>Download CV</span>
               <ArrowUpRight size={14} />
@@ -355,7 +355,7 @@ export default function App() {
               <a 
                 href="#contact" 
                 onClick={() => setMobileMenuOpen(false)}
-                className="mt-2 flex items-center justify-center gap-2 py-3 rounded-full border border-[var(--border-color)] text-[var(--accent)] bg-[var(--bg-secondary)] text-white dark:text-[var(--text-primary)] font-bold"
+                className="btn-bitmap mt-2 flex items-center justify-center gap-2 py-3 font-bold"
               >
                 <span>Download CV</span>
                 <Download size={16} />
@@ -503,7 +503,7 @@ export default function App() {
                     href={project.demo} 
                     target="_blank" 
                     rel="noreferrer"
-                    className="px-5 py-2.5 rounded-full border border-[var(--border-color)] text-[var(--accent)] bg-[var(--bg-secondary)] text-white dark:text-[var(--text-primary)] font-medium flex items-center gap-1.5 hover:opacity-90 transition-opacity"
+                    className="btn-bitmap px-5 py-2.5 flex items-center gap-1.5 transition-colors font-mono-custom text-sm"
                   >
                     <span>Live Demo</span>
                     <ExternalLink size={14} />
@@ -512,7 +512,7 @@ export default function App() {
                     href={project.github} 
                     target="_blank" 
                     rel="noreferrer"
-                    className="px-5 py-2.5 rounded-full border border-[var(--border-color)] hover:bg-zinc-100 dark:hover:bg-zinc-800 transition-colors flex items-center gap-1.5"
+                    className="btn-bitmap px-5 py-2.5 flex items-center gap-1.5 transition-colors font-mono-custom text-sm"
                   >
                     <span>Source Code</span>
                     <GithubIcon size={14} />
@@ -578,7 +578,7 @@ export default function App() {
           <div className="pt-4">
             <a 
               href="mailto:rithyajayaram@gmail.com"
-              className="inline-flex items-center gap-3 px-8 py-4 rounded-full border border-[var(--border-color)] text-[var(--accent)] bg-[var(--bg-secondary)] text-white dark:text-[var(--text-primary)] text-base sm:text-lg font-bold font-mono-custom hover:scale-105 transition-transform shadow-lg"
+              className="btn-bitmap inline-flex items-center gap-3 px-8 py-4 text-base sm:text-xl font-bold font-mono-custom"
             >
               <Mail size={20} />
               <span>rithyajayaram@gmail.com</span>
