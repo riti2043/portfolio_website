@@ -105,8 +105,7 @@ const HeroScrollSequence = () => {
                     <Sparkles size={16} className="text-[var(--text-muted)]" />
                   </div>
                   <div className="absolute inset-0 pointer-events-none flex items-center justify-center overflow-hidden opacity-90 mix-blend-screen">
-                    <img src="/profile.png" alt="Profile Pixel Art" className="w-full h-full object-cover object-top filter grayscale contrast-125 sepia hue-rotate-15 opacity-40 dark:hidden" />
-                    <img src="/profile.png" alt="Profile Pixel Art" className="hidden dark:block w-full h-full object-cover object-top opacity-80" />
+                    <img src="/profile.jpg" alt="Profile Pixel Art" className="w-full h-full object-cover object-[center_20%] opacity-90" />
                   </div>
                   <div className="relative z-10 flex items-center gap-4 bg-[var(--bg-secondary)]/80 p-3 rounded-lg border border-[var(--border-color)]/30 backdrop-blur-md w-fit">
                     <span className="w-8 h-8 rounded-full bg-[var(--text-primary)] text-[var(--bg-primary)] flex items-center justify-center font-bold font-mono-custom text-sm">
