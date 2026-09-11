@@ -30,10 +30,25 @@ const ProfileDashboard = () => {
         {/* LEFT BOX (Now Main Profile): NAME + PHOTO + STATS (Spans 9 cols) */}
         <div className="lg:col-span-9 flex flex-col">
           
-          {/* BIG NAME HEADER */}
-          <h1 className="text-5xl md:text-6xl lg:text-7xl xl:text-[72px] whitespace-nowrap tracking-tighter font-black text-glow mb-6 uppercase leading-none text-left" style={{ fontFamily: "'Silkscreen', cursive" }}>
-            RITHYA JAYARAM
-          </h1>
+          {/* BIG ASCII NAME HEADER */}
+          <div className="flex flex-wrap lg:flex-nowrap gap-4 md:gap-6 mb-6 group cursor-crosshair overflow-hidden w-full">
+            <pre className="font-mono text-[8px] sm:text-[10px] md:text-[12px] lg:text-[10px] xl:text-[12px] leading-[1.1] text-white transition-all duration-500 ease-in-out group-hover:text-[var(--accent)] group-hover:drop-shadow-[0_0_12px_var(--accent)]">
+{`██████╗  ██╗ ████████╗ ██╗  ██╗ ██╗   ██╗  █████╗ 
+██╔══██╗ ██║ ╚══██╔══╝ ██║  ██║ ╚██╗ ██╔╝ ██╔══██╗
+██████╔╝ ██║    ██║    ███████║  ╚████╔╝  ███████║
+██╔══██╗ ██║    ██║    ██╔══██║   ╚██╔╝   ██╔══██║
+██║  ██║ ██║    ██║    ██║  ██║    ██║    ██║  ██║
+╚═╝  ╚═╝ ╚═╝    ╚═╝    ╚═╝  ╚═╝    ╚═╝    ╚═╝  ╚═╝`}
+            </pre>
+            <pre className="font-mono text-[8px] sm:text-[10px] md:text-[12px] lg:text-[10px] xl:text-[12px] leading-[1.1] text-white transition-all duration-500 ease-in-out group-hover:text-[var(--accent)] group-hover:drop-shadow-[0_0_12px_var(--accent)]">
+{`      ██╗  █████╗  ██╗   ██╗  █████╗  ██████╗  █████╗  ███╗   ███╗
+      ██║ ██╔══██╗ ╚██╗ ██╔╝ ██╔══██╗ ██╔══██╗ ██╔══██╗ ████╗ ████║
+      ██║ ███████║  ╚████╔╝  ███████║ ██████╔╝ ███████║ ██╔████╔██║
+██╗   ██║ ██╔══██║   ╚██╔╝   ██╔══██║ ██╔══██╗ ██╔══██║ ██║╚██╔╝██║
+╚██████╔╝ ██║  ██║    ██║    ██║  ██║ ██║  ██║ ██║  ██║ ██║ ╚═╝ ██║
+ ╚═════╝  ╚═╝  ╚═╝    ╚═╝    ╚═╝  ╚═╝ ╚═╝  ╚═╝ ╚═╝  ╚═╝ ╚═╝     ╚═╝`}
+            </pre>
+          </div>
 
           {/* UNIFIED CONTAINER (PHOTO + STATS) */}
           <div className="hud-glow bg-[#0f0f0f] flex flex-col md:flex-row flex-1">
