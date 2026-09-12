@@ -231,89 +231,85 @@ const InfoSlide = ({ id, tabTitle, heading, bodyLines, skills, extra, onView }) 
 
   return (
     <section id={id} ref={ref}
-      className="min-h-screen flex items-start justify-start px-6 lg:px-16 py-20 relative"
+      className="w-full h-full relative p-2 md:p-6 lg:p-10 flex items-center justify-center pointer-events-none"
     >
       <motion.div
-        initial={{ clipPath: 'inset(0 100% 100% 0 round 4px)' }}
-        animate={seen ? { clipPath: 'inset(0 0% 0% 0 round 4px)' } : {}}
-        transition={{ duration: 0.55, ease: [0.4, 0, 0.2, 1] }}
-        style={{
-          background: '#09090b',
-          border: '1px solid var(--accent)',
-          boxShadow: '0 0 40px rgba(219,84,53,0.18), 4px 4px 0 rgba(219,84,53,0.25)',
-          width: '100%', maxWidth: '820px',
-          fontFamily: "'VT323', monospace",
-        }}
+        initial={{ clipPath: 'inset(0 100% 100% 0)' }}
+        animate={seen ? { clipPath: 'inset(0 0% 0% 0)' } : {}}
+        transition={{ duration: 0.6, ease: [0.4, 0, 0.2, 1] }}
+        className="w-full h-full bg-[#050505] border border-[var(--accent)] pointer-events-auto flex flex-col shadow-[0_0_40px_rgba(219,84,53,0.18),4px_4px_0_rgba(219,84,53,0.25)] relative overflow-hidden"
       >
+        {/* Subtle background grid matching the main theme */}
+        <div className="absolute inset-0 pointer-events-none opacity-20"
+             style={{ backgroundImage: 'linear-gradient(to right, var(--grid-line) 1px, transparent 1px), linear-gradient(to bottom, var(--grid-line) 1px, transparent 1px)', backgroundSize: '8px 8px' }} />
+
         {/* ── Tab title bar ── */}
-        <div style={{
-          borderBottom: '1px solid var(--accent)',
-          padding: '8px 16px',
-          display: 'flex', justifyContent: 'space-between', alignItems: 'center',
-          background: 'rgba(219,84,53,0.06)',
-        }}>
-          <span style={{ color: 'var(--accent)', fontSize: '17px', letterSpacing: '0.12em' }}>
+        <div className="border-b border-[var(--accent)] px-4 py-3 flex justify-between items-center bg-[rgba(219,84,53,0.08)] relative z-10 font-orbitron">
+          <span className="text-[var(--accent)] text-xs md:text-sm tracking-widest uppercase">
             ◆ {tabTitle}
           </span>
-          <span style={{ color: 'var(--accent)', fontSize: '22px', opacity: 0.6, cursor: 'default', userSelect: 'none' }}>×</span>
+          <span className="text-[var(--accent)] text-xl opacity-60 cursor-default select-none">×</span>
         </div>
 
         {/* ── Body ── */}
-        <div style={{ padding: '28px 30px 32px' }}>
-          {/* Heading */}
-          <h2 style={{
-            fontSize: 'clamp(30px, 4.5vw, 52px)',
-            color: 'var(--accent)',
-            letterSpacing: '0.06em',
-            marginBottom: '22px',
-            lineHeight: 1,
-          }}>{scrambled}</h2>
+        <div className="flex-1 overflow-y-auto p-6 md:p-12 relative z-10 flex flex-col items-center custom-scrollbar">
+          <div className="max-w-4xl w-full mt-4 md:mt-8">
+            {/* Heading */}
+            <h2 className="text-3xl md:text-5xl lg:text-6xl text-[var(--accent)] tracking-widest font-orbitron mb-8 uppercase text-shadow-glow font-bold">
+              {scrambled}
+            </h2>
 
-          {/* Body lines — stagger fade-up */}
-          <div style={{ marginBottom: '28px', borderLeft: '2px solid rgba(219,84,53,0.25)', paddingLeft: '16px' }}>
-            {bodyLines.map((line, i) => (
-              <motion.p key={i}
-                initial={{ opacity: 0, y: 14 }}
-                animate={textIn ? { opacity: 1, y: 0 } : {}}
-                transition={{ delay: i * 0.13, duration: 0.38 }}
-                style={{ fontSize: 'clamp(17px, 2vw, 21px)', color: 'var(--text-primary)', lineHeight: 1.65, marginBottom: '6px' }}
-              >{line}</motion.p>
-            ))}
-          </div>
-
-          {/* Skill bars — one by one */}
-          {skills && (
-            <motion.div initial={{ opacity: 0 }} animate={textIn ? { opacity: 1 } : {}} transition={{ delay: 0.3 }}>
-              {skills.map((s, i) => (
-                <div key={i} style={{ marginBottom: '14px' }}>
-                  <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '5px' }}>
-                    <span style={{ color: 'var(--accent)', fontSize: '17px', letterSpacing: '0.08em' }}>{s.label}</span>
-                    <span style={{ color: 'rgba(219,84,53,0.7)', fontSize: '16px' }}>{bWidths[i]}%</span>
-                  </div>
-                  <div style={{ height: '7px', border: '1px solid rgba(219,84,53,0.4)', background: 'rgba(219,84,53,0.04)', padding: '1px' }}>
-                    <div style={{
-                      height: '100%', width: `${bWidths[i]}%`,
-                      background: 'var(--accent)',
-                      boxShadow: '0 0 8px rgba(219,84,53,0.55)',
-                      transition: 'none',
-                    }} />
-                  </div>
-                </div>
+            {/* Body lines — stagger fade-up */}
+            <div className="mb-12 border-l-2 border-[rgba(219,84,53,0.4)] pl-6">
+              {bodyLines.map((line, i) => (
+                <motion.p key={i}
+                  initial={{ opacity: 0, x: -10 }}
+                  animate={textIn ? { opacity: 1, x: 0 } : {}}
+                  transition={{ delay: i * 0.15, duration: 0.4 }}
+                  className="text-base md:text-lg text-[var(--text-primary)] leading-relaxed mb-6 font-mono-custom opacity-90 text-justify"
+                >{line}</motion.p>
               ))}
-            </motion.div>
-          )}
+            </div>
 
-          {/* Extra slot (e.g. button) */}
-          {extra && (
-            <motion.div initial={{ opacity: 0, y: 10 }} animate={textIn ? { opacity: 1, y: 0 } : {}} transition={{ delay: 0.9 }}>
-              {extra}
-            </motion.div>
-          )}
+            {/* Skill bars — grid layout for compactness */}
+            {skills && (
+              <motion.div 
+                initial={{ opacity: 0 }} 
+                animate={textIn ? { opacity: 1 } : {}} 
+                transition={{ delay: 0.5 }}
+                className="grid grid-cols-1 md:grid-cols-2 gap-x-12 gap-y-8 max-w-3xl"
+              >
+                {skills.map((s, i) => (
+                  <div key={i} className="flex flex-col">
+                    <div className="flex justify-between items-center mb-3 font-orbitron">
+                      <span className="text-[var(--accent)] text-sm md:text-base tracking-widest uppercase text-glow">{s.label}</span>
+                      <span className="text-white text-sm opacity-90">{bWidths[i]}%</span>
+                    </div>
+                    {/* Progress Bar (Styled like .progress-segmented) */}
+                    <div className="h-4 w-full border-2 border-[var(--accent)] p-[2px] shadow-[0_0_10px_rgba(219,84,53,0.2)]">
+                      <div 
+                        className="h-full progress-segmented shadow-[0_0_8px_var(--accent)]"
+                        style={{ width: `${bWidths[i]}%`, transition: 'none' }}
+                      />
+                    </div>
+                  </div>
+                ))}
+              </motion.div>
+            )}
+
+            {/* Extra slot (e.g. button) */}
+            {extra && (
+              <motion.div initial={{ opacity: 0, y: 15 }} animate={textIn ? { opacity: 1, y: 0 } : {}} transition={{ delay: 1.0 }} className="mt-12">
+                {extra}
+              </motion.div>
+            )}
+          </div>
         </div>
       </motion.div>
     </section>
   );
 };
+// ────────────────────────────────────────────────────────────────────────────
 
 // ─── StickySlides Container ──────────────────────────────────────────────────
 const StickySlides = ({ onActive }) => {
@@ -362,12 +358,9 @@ const StickySlides = ({ onActive }) => {
                 tabTitle="slide_01.exe"
                 heading="Full Stack in Progress"
                 bodyLines={[
-                  'An engineer uses math, science, and logic to design and build',
-                  'systems that solve real problems. I love turning ideas into',
-                  'practical solutions, and I\'m constantly equipping myself with',
-                  'full stack knowledge to do that better. From backends and',
-                  'databases to interfaces people actually interact with, I like',
-                  'understanding and owning every layer of what I build.',
+                  'An engineer uses math, science, and logic to design and build systems that solve real problems.',
+                  'I love turning ideas into practical solutions, and I\'m constantly equipping myself with full stack knowledge to do that better.',
+                  'From backends and databases to interfaces people actually interact with, I like understanding and owning every layer of what I build.',
                 ]}
                 skills={[
                   { label: 'FastAPI',     pct: 72 },
@@ -392,16 +385,12 @@ const StickySlides = ({ onActive }) => {
                 tabTitle="slide_02.exe"
                 heading="Building with AI"
                 bodyLines={[
-                  'I\'m a curiosity-driven individual who loves learning new things,',
-                  'and that\'s exactly why I find AI to be the perfect field.',
-                  'The technology is constantly evolving, with huge potential to',
-                  'change lives through real-world applications. I love applying',
-                  'what I learn in AI, ML, DL, and Computer Vision by building',
-                  'small but impactful projects.',
+                  'I\'m a curiosity-driven individual who loves learning new things, and that\'s exactly why I find AI to be the perfect field.',
+                  'The technology is constantly evolving, with huge potential to change lives through real-world applications.',
+                  'I love applying what I learn in AI, ML, DL, and Computer Vision by building small but impactful projects.',
                 ]}
                 extra={
-                  <a href="#skills" className="btn-pixel px-6 py-3 text-sm inline-block mt-6"
-                    style={{ fontFamily: "'VT323', monospace", fontSize: '18px', letterSpacing: '0.1em' }}>
+                  <a href="#skills" className="btn-pixel px-6 py-3 text-sm inline-block mt-6 font-orbitron font-bold">
                     EXPLORE KNOWLEDGE GRAPH →
                   </a>
                 }
