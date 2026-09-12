@@ -42,6 +42,280 @@ const AsciiHeroText = () => (
 );
 
 
+// ── Bending Grid Background ─────────────────────────────────────────────────
+const GridBackground = () => {
+  const canvasRef = useRef(null);
+
+  useEffect(() => {
+    const canvas = canvasRef.current;
+    if (!canvas) return;
+    const ctx = canvas.getContext('2d');
+
+    const SPACING = 40;   // px between grid nodes
+    const RADIUS  = 180;  // mouse influence radius (px)
+    const PUSH    = 44;   // max node displacement (px)
+    const SPRING  = 0.07; // spring constant (return speed)
+    const DAMP    = 0.80; // velocity damping
+
+    let W, H, cols, rows, pts;
+    const mouse = { x: -9999, y: -9999 };
+
+    const init = () => {
+      W = window.innerWidth;
+      H = window.innerHeight;
+      canvas.width  = W;
+      canvas.height = H;
+      cols = Math.ceil(W / SPACING) + 2;
+      rows = Math.ceil(H / SPACING) + 2;
+      pts  = [];
+      for (let r = 0; r < rows; r++)
+        for (let c = 0; c < cols; c++) {
+          const hx = c * SPACING, hy = r * SPACING;
+          pts.push({ hx, hy, x: hx, y: hy, vx: 0, vy: 0 });
+        }
+    };
+
+    let rafId;
+    const draw = () => {
+      ctx.clearRect(0, 0, W, H);
+
+      for (const p of pts) {
+        // Spring back to home
+        p.vx += (p.hx - p.x) * SPRING;
+        p.vy += (p.hy - p.y) * SPRING;
+        // Mouse repulsion
+        const dx = p.x - mouse.x, dy = p.y - mouse.y;
+        const d  = Math.hypot(dx, dy);
+        if (d < RADIUS && d > 0) {
+          const f = (1 - d / RADIUS) * PUSH;
+          p.vx += (dx / d) * f * 0.14;
+          p.vy += (dy / d) * f * 0.14;
+        }
+        p.vx *= DAMP; p.vy *= DAMP;
+        p.x  += p.vx; p.y  += p.vy;
+      }
+
+      ctx.lineWidth = 0.7;
+
+      // Horizontal lines
+      for (let r = 0; r < rows; r++) {
+        ctx.beginPath();
+        for (let c = 0; c < cols; c++) {
+          const p = pts[r * cols + c];
+          c === 0 ? ctx.moveTo(p.x, p.y) : ctx.lineTo(p.x, p.y);
+        }
+        ctx.strokeStyle = 'rgba(219,84,53,0.20)';
+        ctx.stroke();
+      }
+
+      // Vertical lines
+      for (let c = 0; c < cols; c++) {
+        ctx.beginPath();
+        for (let r = 0; r < rows; r++) {
+          const p = pts[r * cols + c];
+          r === 0 ? ctx.moveTo(p.x, p.y) : ctx.lineTo(p.x, p.y);
+        }
+        ctx.strokeStyle = 'rgba(219,84,53,0.20)';
+        ctx.stroke();
+      }
+
+      // Glowing dot at each node near cursor
+      for (const p of pts) {
+        const d = Math.hypot(p.x - mouse.x, p.y - mouse.y);
+        if (d < RADIUS) {
+          const a = (1 - d / RADIUS) * 0.75;
+          ctx.fillStyle = `rgba(219,84,53,${a.toFixed(2)})`;
+          ctx.fillRect(p.x - 1.5, p.y - 1.5, 3, 3);
+        }
+      }
+
+      rafId = requestAnimationFrame(draw);
+    };
+
+    const onMove   = (e) => { mouse.x = e.clientX; mouse.y = e.clientY; };
+    const onLeave  = () =>  { mouse.x = -9999; mouse.y = -9999; };
+    const onResize = () =>  { init(); };
+
+    window.addEventListener('mousemove',  onMove);
+    window.addEventListener('mouseleave', onLeave);
+    window.addEventListener('resize',     onResize);
+    init();
+    draw();
+
+    return () => {
+      cancelAnimationFrame(rafId);
+      window.removeEventListener('mousemove',  onMove);
+      window.removeEventListener('mouseleave', onLeave);
+      window.removeEventListener('resize',     onResize);
+    };
+  }, []);
+
+  return (
+    <canvas
+      ref={canvasRef}
+      style={{ position: 'fixed', inset: 0, width: '100%', height: '100%', zIndex: 1, pointerEvents: 'none' }}
+    />
+  );
+};
+// ────────────────────────────────────────────────────────────────────────────
+
+// ─── Scramble hook ───────────────────────────────────────────────────────────
+const SCRAMBLE_CHARS = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!@#$%&*[]<>';
+function useScramble(finalText, trigger, delay = 0) {
+  const [display, setDisplay] = useState('');
+  useEffect(() => {
+    if (!trigger) return;
+    let frame = 0;
+    const FRAMES = 26;
+    let tid, iid;
+    tid = setTimeout(() => {
+      iid = setInterval(() => {
+        frame++;
+        if (frame >= FRAMES) { setDisplay(finalText); clearInterval(iid); }
+        else {
+          const p = frame / FRAMES;
+          setDisplay(finalText.split('').map((ch, i) =>
+            ch === ' ' ? ' ' : i / finalText.length < p
+              ? ch : SCRAMBLE_CHARS[Math.floor(Math.random() * SCRAMBLE_CHARS.length)]
+          ).join(''));
+        }
+      }, 38);
+    }, delay);
+    return () => { clearTimeout(tid); clearInterval(iid); };
+  }, [trigger, finalText, delay]);
+  return display || (trigger ? finalText : '');
+}
+
+// ─── InfoSlide ───────────────────────────────────────────────────────────────
+const InfoSlide = ({ id, tabTitle, heading, bodyLines, skills, extra, onView }) => {
+  const ref       = useRef(null);
+  const [seen, setSeen]     = useState(false);
+  const [textIn, setTextIn] = useState(false);
+  const [barsGo, setBarsGo] = useState(false);
+  const barsFired           = useRef(false);
+  const [bWidths, setBWidths] = useState((skills || []).map(() => 0));
+  const scrambled = useScramble(heading, seen, 560);
+
+  useEffect(() => {
+    const el = ref.current;
+    if (!el) return;
+    const obs = new IntersectionObserver(([entry]) => {
+      if (entry.isIntersecting) {
+        setSeen(true);
+        onView?.(true);
+        setTimeout(() => setTextIn(true), 660);
+        if (!barsFired.current && skills?.length) {
+          barsFired.current = true;
+          setTimeout(() => {
+            setBarsGo(true);
+            skills.forEach((s, i) => {
+              const start = Date.now() + i * 750;
+              const tick = () => {
+                const now   = Date.now();
+                const delay = start - now;
+                if (delay > 0) { setTimeout(tick, delay); return; }
+                const elapsed = now - start;
+                const pct     = Math.min(1, elapsed / 620);
+                setBWidths(prev => { const n=[...prev]; n[i]=Math.round(s.pct*pct); return n; });
+                if (pct < 1) requestAnimationFrame(tick);
+              };
+              setTimeout(tick, i * 750);
+            });
+          }, 1150);
+        }
+      } else { onView?.(false); }
+    }, { threshold: 0.3 });
+    obs.observe(el);
+    return () => obs.disconnect();
+  }, []);
+
+  return (
+    <section id={id} ref={ref}
+      className="min-h-screen flex items-start justify-start px-6 lg:px-16 py-20 relative"
+    >
+      <motion.div
+        initial={{ clipPath: 'inset(0 100% 100% 0 round 4px)' }}
+        animate={seen ? { clipPath: 'inset(0 0% 0% 0 round 4px)' } : {}}
+        transition={{ duration: 0.55, ease: [0.4, 0, 0.2, 1] }}
+        style={{
+          background: '#09090b',
+          border: '1px solid var(--accent)',
+          boxShadow: '0 0 40px rgba(219,84,53,0.18), 4px 4px 0 rgba(219,84,53,0.25)',
+          width: '100%', maxWidth: '820px',
+          fontFamily: "'VT323', monospace",
+        }}
+      >
+        {/* ── Tab title bar ── */}
+        <div style={{
+          borderBottom: '1px solid var(--accent)',
+          padding: '8px 16px',
+          display: 'flex', justifyContent: 'space-between', alignItems: 'center',
+          background: 'rgba(219,84,53,0.06)',
+        }}>
+          <span style={{ color: 'var(--accent)', fontSize: '17px', letterSpacing: '0.12em' }}>
+            ◆ {tabTitle}
+          </span>
+          <span style={{ color: 'var(--accent)', fontSize: '22px', opacity: 0.6, cursor: 'default', userSelect: 'none' }}>×</span>
+        </div>
+
+        {/* ── Body ── */}
+        <div style={{ padding: '28px 30px 32px' }}>
+          {/* Heading */}
+          <h2 style={{
+            fontSize: 'clamp(30px, 4.5vw, 52px)',
+            color: 'var(--accent)',
+            letterSpacing: '0.06em',
+            marginBottom: '22px',
+            lineHeight: 1,
+          }}>{scrambled}</h2>
+
+          {/* Body lines — stagger fade-up */}
+          <div style={{ marginBottom: '28px', borderLeft: '2px solid rgba(219,84,53,0.25)', paddingLeft: '16px' }}>
+            {bodyLines.map((line, i) => (
+              <motion.p key={i}
+                initial={{ opacity: 0, y: 14 }}
+                animate={textIn ? { opacity: 1, y: 0 } : {}}
+                transition={{ delay: i * 0.13, duration: 0.38 }}
+                style={{ fontSize: 'clamp(17px, 2vw, 21px)', color: 'var(--text-primary)', lineHeight: 1.65, marginBottom: '6px' }}
+              >{line}</motion.p>
+            ))}
+          </div>
+
+          {/* Skill bars — one by one */}
+          {skills && (
+            <motion.div initial={{ opacity: 0 }} animate={textIn ? { opacity: 1 } : {}} transition={{ delay: 0.3 }}>
+              {skills.map((s, i) => (
+                <div key={i} style={{ marginBottom: '14px' }}>
+                  <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '5px' }}>
+                    <span style={{ color: 'var(--accent)', fontSize: '17px', letterSpacing: '0.08em' }}>{s.label}</span>
+                    <span style={{ color: 'rgba(219,84,53,0.7)', fontSize: '16px' }}>{bWidths[i]}%</span>
+                  </div>
+                  <div style={{ height: '7px', border: '1px solid rgba(219,84,53,0.4)', background: 'rgba(219,84,53,0.04)', padding: '1px' }}>
+                    <div style={{
+                      height: '100%', width: `${bWidths[i]}%`,
+                      background: 'var(--accent)',
+                      boxShadow: '0 0 8px rgba(219,84,53,0.55)',
+                      transition: 'none',
+                    }} />
+                  </div>
+                </div>
+              ))}
+            </motion.div>
+          )}
+
+          {/* Extra slot (e.g. button) */}
+          {extra && (
+            <motion.div initial={{ opacity: 0, y: 10 }} animate={textIn ? { opacity: 1, y: 0 } : {}} transition={{ delay: 0.9 }}>
+              {extra}
+            </motion.div>
+          )}
+        </div>
+      </motion.div>
+    </section>
+  );
+};
+// ────────────────────────────────────────────────────────────────────────────
+
 const NetworkStatus = () => {
   const [totalVisits, setTotalVisits] = useState('...');
   const [liveCount, setLiveCount] = useState(1);
@@ -204,14 +478,17 @@ const ProfileDashboard = () => {
         {/* RIGHT BOX (Now About Me) (Spans 3 cols) */}
         <div className="lg:col-span-3 flex flex-col hud-box p-0 h-full">
           <div className="p-6 flex-1 border-b hud-divider">
-             <h2 className="text-sm font-mono-custom text-glow mb-4 uppercase">about me text</h2>
+             <h2 className="text-sm font-mono-custom text-glow mb-4 uppercase">About</h2>
              <div className="relative font-mono-custom text-xs leading-[30px] text-[var(--text-primary)]" 
                   style={{ 
                     backgroundImage: 'repeating-linear-gradient(transparent, transparent 29px, rgba(219,84,53,0.3) 30px)',
                     backgroundSize: '100% 30px'
                   }}>
                <p className="pt-1">
-                 A passionate AI & ML developer focused on integrating deep learning with modern generative architecture. I love solving complex problems with robust code.
+                 A 3rd year Information Science Engineering student who loves to untangle problems and build solutions. Striving to get better each day through constant learning and keeping up with evolving tech.
+               </p>
+               <p className="pt-4 text-[var(--accent)] animate-pulse">
+                 Scroll to know more.
                </p>
              </div>
           </div>
@@ -351,6 +628,7 @@ const HeroScrollSequence = () => {
 
 export default function App() {
   const [darkMode, setDarkMode] = useState(false);
+  const [slidesInView, setSlidesInView] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [activeHeroIndex, setActiveHeroIndex] = useState(0);
   const [scrollProgress, setScrollProgress] = useState(0);
@@ -456,6 +734,9 @@ export default function App() {
 
   return (
     <div className={`min-h-screen relative topo-bg ${darkMode ? 'dark' : ''}`}>
+      {/* Bending grid canvas — sits over static CSS grid, behind all content */}
+      <GridBackground />
+
       {/* Subtle Grain Texture Overlay */}
       <div className="grain-overlay" />
 
@@ -466,7 +747,7 @@ export default function App() {
       />
 
       {/* ==================== NAVBAR ==================== */}
-      <nav className="sticky top-0 z-40 bg-transparent transition-colors duration-300 pointer-events-none">
+      <nav className={`sticky top-0 z-40 bg-transparent transition-all duration-500 pointer-events-none ${slidesInView ? 'opacity-0 -translate-y-2 pointer-events-none' : 'opacity-100 translate-y-0'}`}>
         <div className="max-w-7xl mx-auto px-6 h-24 flex items-center justify-end">
           
           <div className="flex items-center gap-5">
@@ -536,7 +817,50 @@ export default function App() {
 
       {/* Profile Dashboard covers the intro now */}
       <ProfileDashboard />
-      
+
+      {/* ── Scroll Info Slides ── */}
+      <InfoSlide
+        id="fullstack"
+        tabTitle="slide_01.exe"
+        heading="Full Stack in Progress"
+        bodyLines={[
+          'An engineer uses math, science, and logic to design and build',
+          'systems that solve real problems. I love turning ideas into',
+          'practical solutions, and I\'m constantly equipping myself with',
+          'full stack knowledge to do that better. From backends and',
+          'databases to interfaces people actually interact with, I like',
+          'understanding and owning every layer of what I build.',
+        ]}
+        skills={[
+          { label: 'FastAPI',     pct: 72 },
+          { label: 'React JS',    pct: 75 },
+          { label: 'MySQL',       pct: 65 },
+          { label: 'PostgreSQL',  pct: 60 },
+        ]}
+        onView={(v) => setSlidesInView(v)}
+      />
+
+      <InfoSlide
+        id="ai"
+        tabTitle="slide_02.exe"
+        heading="Building with AI"
+        bodyLines={[
+          'I\'m a curiosity-driven individual who loves learning new things,',
+          'and that\'s exactly why I find AI to be the perfect field.',
+          'The technology is constantly evolving, with huge potential to',
+          'change lives through real-world applications. I love applying',
+          'what I learn in AI, ML, DL, and Computer Vision by building',
+          'small but impactful projects.',
+        ]}
+        extra={
+          <a href="#skills" className="btn-pixel px-6 py-3 text-sm inline-block mt-6"
+            style={{ fontFamily: "'VT323', monospace", fontSize: '18px', letterSpacing: '0.1em' }}>
+            EXPLORE KNOWLEDGE GRAPH →
+          </a>
+        }
+        onView={(v) => setSlidesInView(v)}
+      />
+
       <Certifications />
 
       {/* ==================== SKILLS & GITHUB ACTIVITY SECTION (UNIFIED) ==================== */}
