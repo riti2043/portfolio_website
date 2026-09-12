@@ -314,6 +314,105 @@ const InfoSlide = ({ id, tabTitle, heading, bodyLines, skills, extra, onView }) 
     </section>
   );
 };
+
+// ─── StickySlides Container ──────────────────────────────────────────────────
+const StickySlides = ({ onActive }) => {
+  const containerRef = useRef(null);
+  const { scrollYProgress } = useScroll({
+    target: containerRef,
+    offset: ["start start", "end end"]
+  });
+
+  const [activeSlide, setActiveSlide] = useState(0);
+
+  useEffect(() => {
+    return scrollYProgress.onChange(v => {
+      // Show navbar or not
+      if (v > 0.05 && v < 0.95) {
+        onActive(true);
+      } else {
+        onActive(false);
+      }
+
+      // Determine which slide to show based on scroll progress
+      if (v > 0.1 && v < 0.45) {
+        setActiveSlide(1);
+      } else if (v >= 0.45 && v < 0.9) {
+        setActiveSlide(2);
+      } else {
+        setActiveSlide(0);
+      }
+    });
+  }, [scrollYProgress, onActive]);
+
+  return (
+    <div ref={containerRef} style={{ height: '300vh', position: 'relative' }}>
+      <div className="sticky top-0 h-screen w-full overflow-hidden" style={{ pointerEvents: activeSlide === 0 ? 'none' : 'auto', zIndex: 30 }}>
+        <AnimatePresence mode="wait">
+          {activeSlide === 1 && (
+            <motion.div
+              key="slide1"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0, transition: { duration: 0.2 } }}
+              className="absolute inset-0 w-full h-full pointer-events-auto bg-[rgba(9,9,11,0.6)] backdrop-blur-sm"
+            >
+              <InfoSlide
+                id="fullstack"
+                tabTitle="slide_01.exe"
+                heading="Full Stack in Progress"
+                bodyLines={[
+                  'An engineer uses math, science, and logic to design and build',
+                  'systems that solve real problems. I love turning ideas into',
+                  'practical solutions, and I\'m constantly equipping myself with',
+                  'full stack knowledge to do that better. From backends and',
+                  'databases to interfaces people actually interact with, I like',
+                  'understanding and owning every layer of what I build.',
+                ]}
+                skills={[
+                  { label: 'FastAPI',     pct: 72 },
+                  { label: 'React JS',    pct: 75 },
+                  { label: 'MySQL',       pct: 65 },
+                  { label: 'PostgreSQL',  pct: 60 },
+                ]}
+              />
+            </motion.div>
+          )}
+
+          {activeSlide === 2 && (
+            <motion.div
+              key="slide2"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0, transition: { duration: 0.2 } }}
+              className="absolute inset-0 w-full h-full pointer-events-auto bg-[rgba(9,9,11,0.6)] backdrop-blur-sm"
+            >
+              <InfoSlide
+                id="ai"
+                tabTitle="slide_02.exe"
+                heading="Building with AI"
+                bodyLines={[
+                  'I\'m a curiosity-driven individual who loves learning new things,',
+                  'and that\'s exactly why I find AI to be the perfect field.',
+                  'The technology is constantly evolving, with huge potential to',
+                  'change lives through real-world applications. I love applying',
+                  'what I learn in AI, ML, DL, and Computer Vision by building',
+                  'small but impactful projects.',
+                ]}
+                extra={
+                  <a href="#skills" className="btn-pixel px-6 py-3 text-sm inline-block mt-6"
+                    style={{ fontFamily: "'VT323', monospace", fontSize: '18px', letterSpacing: '0.1em' }}>
+                    EXPLORE KNOWLEDGE GRAPH →
+                  </a>
+                }
+              />
+            </motion.div>
+          )}
+        </AnimatePresence>
+      </div>
+    </div>
+  );
+};
 // ────────────────────────────────────────────────────────────────────────────
 
 const NetworkStatus = () => {
@@ -818,48 +917,8 @@ export default function App() {
       {/* Profile Dashboard covers the intro now */}
       <ProfileDashboard />
 
-      {/* ── Scroll Info Slides ── */}
-      <InfoSlide
-        id="fullstack"
-        tabTitle="slide_01.exe"
-        heading="Full Stack in Progress"
-        bodyLines={[
-          'An engineer uses math, science, and logic to design and build',
-          'systems that solve real problems. I love turning ideas into',
-          'practical solutions, and I\'m constantly equipping myself with',
-          'full stack knowledge to do that better. From backends and',
-          'databases to interfaces people actually interact with, I like',
-          'understanding and owning every layer of what I build.',
-        ]}
-        skills={[
-          { label: 'FastAPI',     pct: 72 },
-          { label: 'React JS',    pct: 75 },
-          { label: 'MySQL',       pct: 65 },
-          { label: 'PostgreSQL',  pct: 60 },
-        ]}
-        onView={(v) => setSlidesInView(v)}
-      />
-
-      <InfoSlide
-        id="ai"
-        tabTitle="slide_02.exe"
-        heading="Building with AI"
-        bodyLines={[
-          'I\'m a curiosity-driven individual who loves learning new things,',
-          'and that\'s exactly why I find AI to be the perfect field.',
-          'The technology is constantly evolving, with huge potential to',
-          'change lives through real-world applications. I love applying',
-          'what I learn in AI, ML, DL, and Computer Vision by building',
-          'small but impactful projects.',
-        ]}
-        extra={
-          <a href="#skills" className="btn-pixel px-6 py-3 text-sm inline-block mt-6"
-            style={{ fontFamily: "'VT323', monospace", fontSize: '18px', letterSpacing: '0.1em' }}>
-            EXPLORE KNOWLEDGE GRAPH →
-          </a>
-        }
-        onView={(v) => setSlidesInView(v)}
-      />
+      {/* ── Scroll Info Slides (Sticky Overlay Sequence) ── */}
+      <StickySlides onActive={setSlidesInView} />
 
       <Certifications />
 
