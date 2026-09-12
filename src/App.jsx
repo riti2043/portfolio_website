@@ -252,32 +252,32 @@ const InfoSlide = ({ id, tabTitle, heading, bodyLines, skills, extra, onView }) 
         </div>
 
         {/* ── Body ── */}
-        <div className="flex-1 overflow-y-auto p-6 md:p-12 relative z-10 flex flex-col items-center custom-scrollbar">
-          <div className="max-w-4xl w-full mt-4 md:mt-8">
+        <div className="flex-1 overflow-y-auto p-6 md:p-12 relative z-10 flex flex-col items-start custom-scrollbar w-full">
+          <div className="w-full max-w-7xl mx-auto flex flex-col items-start mt-4 md:mt-8">
             {/* Heading */}
-            <h2 className="text-3xl md:text-5xl lg:text-6xl text-[var(--accent)] tracking-widest font-orbitron mb-8 uppercase text-shadow-glow font-bold">
+            <h2 className="text-4xl md:text-6xl lg:text-7xl xl:text-[80px] text-[var(--accent)] tracking-widest font-orbitron mb-10 uppercase text-shadow-glow font-bold text-left w-full whitespace-nowrap">
               {scrambled}
             </h2>
 
             {/* Body lines — stagger fade-up */}
-            <div className="mb-12 border-l-2 border-[rgba(219,84,53,0.4)] pl-6">
+            <div className="mb-12 border-l-4 border-[rgba(219,84,53,0.4)] pl-8 w-full max-w-5xl">
               {bodyLines.map((line, i) => (
                 <motion.p key={i}
                   initial={{ opacity: 0, x: -10 }}
                   animate={textIn ? { opacity: 1, x: 0 } : {}}
                   transition={{ delay: i * 0.15, duration: 0.4 }}
-                  className="text-base md:text-lg text-[var(--text-primary)] leading-relaxed mb-6 font-mono-custom opacity-90 text-justify"
+                  className="text-xl md:text-2xl lg:text-3xl text-[var(--text-primary)] leading-[1.6] mb-8 font-mono-custom opacity-90 text-left"
                 >{line}</motion.p>
               ))}
             </div>
 
-            {/* Skill bars — grid layout for compactness */}
+            {/* Skill bars — stacked vertically on the left */}
             {skills && (
               <motion.div 
                 initial={{ opacity: 0 }} 
                 animate={textIn ? { opacity: 1 } : {}} 
                 transition={{ delay: 0.5 }}
-                className="grid grid-cols-1 md:grid-cols-2 gap-x-12 gap-y-8 max-w-3xl"
+                className="flex flex-col gap-y-8 w-full max-w-2xl"
               >
                 {skills.map((s, i) => (
                   <div key={i} className="flex flex-col">
@@ -324,16 +324,16 @@ const StickySlides = ({ onActive }) => {
   useEffect(() => {
     return scrollYProgress.onChange(v => {
       // Show navbar or not
-      if (v > 0.05 && v < 0.95) {
+      if (v > 0.02 && v < 0.95) {
         onActive(true);
       } else {
         onActive(false);
       }
 
       // Determine which slide to show based on scroll progress
-      if (v > 0.1 && v < 0.45) {
+      if (v > 0.02 && v < 0.48) {
         setActiveSlide(1);
-      } else if (v >= 0.45 && v < 0.9) {
+      } else if (v >= 0.48 && v < 0.95) {
         setActiveSlide(2);
       } else {
         setActiveSlide(0);
@@ -342,7 +342,7 @@ const StickySlides = ({ onActive }) => {
   }, [scrollYProgress, onActive]);
 
   return (
-    <div ref={containerRef} style={{ height: '300vh', position: 'relative' }}>
+    <div ref={containerRef} style={{ height: '300vh', position: 'relative', marginTop: '-15vh' }}>
       <div className="sticky top-0 h-screen w-full overflow-hidden" style={{ pointerEvents: activeSlide === 0 ? 'none' : 'auto', zIndex: 30 }}>
         <AnimatePresence mode="wait">
           {activeSlide === 1 && (
