@@ -866,20 +866,69 @@ export default function App() {
             </button>
           </div>
 
-          {/* Slide-out Menu Popup */}
+          {/* Full-Screen Game Menu Modal */}
           <AnimatePresence>
             {mobileMenuOpen && (
               <motion.div 
-                initial={{ opacity: 0, y: -10 }}
-                animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0, y: -10 }}
-                className="absolute right-6 top-20 pointer-events-auto hud-box p-5 w-56 flex flex-col gap-2 font-mono-custom shadow-2xl z-50 bg-[var(--bg-primary)]"
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                exit={{ opacity: 0 }}
+                className="fixed top-0 left-0 w-screen h-screen z-[100] flex items-center justify-center bg-black/95 backdrop-blur-md pointer-events-auto"
               >
-                <a href="#about" onClick={() => setMobileMenuOpen(false)} className="hover:text-[var(--accent)] hover:bg-[var(--grid-line)] transition-colors uppercase tracking-widest text-sm p-3 border-b border-[var(--grid-line)]">ABOUT</a>
-                <a href="#skills" onClick={() => setMobileMenuOpen(false)} className="hover:text-[var(--accent)] hover:bg-[var(--grid-line)] transition-colors uppercase tracking-widest text-sm p-3 border-b border-[var(--grid-line)]">SKILLS</a>
-                <a href="#learning" onClick={() => setMobileMenuOpen(false)} className="hover:text-[var(--accent)] hover:bg-[var(--grid-line)] transition-colors uppercase tracking-widest text-sm p-3 border-b border-[var(--grid-line)]">LEARNING</a>
-                <a href="#projects" onClick={() => setMobileMenuOpen(false)} className="hover:text-[var(--accent)] hover:bg-[var(--grid-line)] transition-colors uppercase tracking-widest text-sm p-3 border-b border-[var(--grid-line)]">PROJECTS</a>
-                <a href="#submissions" onClick={() => setMobileMenuOpen(false)} className="hover:text-[var(--accent)] hover:bg-[var(--grid-line)] transition-colors uppercase tracking-widest text-sm p-3">SUBMISSIONS</a>
+                {/* Menu Box */}
+                <motion.div 
+                  initial={{ scale: 0.95, opacity: 0 }}
+                  animate={{ scale: 1, opacity: 1 }}
+                  exit={{ scale: 0.95, opacity: 0 }}
+                  className="hud-box bg-black border-2 border-[var(--accent)] p-8 md:p-12 w-[90%] max-w-lg shadow-[0_0_50px_rgba(219,84,53,0.2)] flex flex-col items-center relative"
+                >
+                  {/* Top Right Close */}
+                  <button 
+                    onClick={() => setMobileMenuOpen(false)}
+                    className="absolute top-5 right-5 text-[var(--accent)] hover:text-white transition-colors p-2"
+                  >
+                    <X size={28} />
+                  </button>
+
+                  {/* Menu Title */}
+                  <h2 className="text-3xl md:text-4xl font-orbitron tracking-[0.2em] text-[var(--accent)] mb-10 mt-2 text-shadow-glow uppercase font-bold">
+                    MENU
+                  </h2>
+
+                  {/* Navigation Links */}
+                  <div className="flex flex-col items-center w-full font-mono-custom text-xl md:text-2xl mb-12">
+                    {['ABOUT', 'SKILLS', 'LEARNING', 'PROJECTS', 'SUBMISSIONS'].map((item) => (
+                      <a 
+                        key={item}
+                        href={`#${item.toLowerCase()}`}
+                        onClick={() => setMobileMenuOpen(false)}
+                        className="w-full text-center hover:bg-[var(--accent)] hover:text-black transition-colors py-3 uppercase tracking-[0.15em] text-white relative group"
+                      >
+                        <span className="opacity-0 group-hover:opacity-100 absolute left-6 md:left-12">&gt;</span>
+                        {item}
+                        <span className="opacity-0 group-hover:opacity-100 absolute right-6 md:right-12">&lt;</span>
+                      </a>
+                    ))}
+                  </div>
+
+                  {/* Action Buttons */}
+                  <div className="flex flex-col w-full gap-5">
+                    <a 
+                      href="/cv.pdf" 
+                      onClick={() => setMobileMenuOpen(false)}
+                      className="btn-pixel w-full py-4 flex justify-center items-center gap-3 text-lg tracking-widest bg-[var(--accent)] text-white hover:brightness-110"
+                    >
+                      <Download size={20} />
+                      DOWNLOAD CV
+                    </a>
+                    <button 
+                      onClick={() => setMobileMenuOpen(false)}
+                      className="btn-pixel w-full py-4 text-center text-lg tracking-widest opacity-80 hover:opacity-100"
+                    >
+                      RESUME
+                    </button>
+                  </div>
+                </motion.div>
               </motion.div>
             )}
           </AnimatePresence>
