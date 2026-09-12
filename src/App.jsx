@@ -252,32 +252,32 @@ const InfoSlide = ({ id, tabTitle, heading, bodyLines, skills, extra, onView }) 
         </div>
 
         {/* ── Body ── */}
-        <div className="flex-1 w-full h-full p-8 md:p-12 xl:p-16 relative z-10 flex flex-col items-start overflow-hidden">
+        <div className="flex-1 w-full h-full p-6 md:p-10 xl:p-12 relative z-10 flex flex-col items-start overflow-hidden">
           
-          {/* Top Row: Heading (Spans full width so it doesn't overlap) */}
-          <h2 className="text-4xl md:text-5xl lg:text-[64px] xl:text-[76px] text-[var(--accent)] tracking-widest font-orbitron mb-10 xl:mb-16 uppercase text-shadow-glow font-bold text-left whitespace-nowrap w-full">
+          {/* Top Row: Heading */}
+          <h2 className="text-3xl md:text-5xl lg:text-[56px] xl:text-[64px] text-[var(--accent)] tracking-widest font-orbitron mb-6 xl:mb-8 uppercase text-shadow-glow font-bold text-left whitespace-nowrap w-full">
             {scrambled}
           </h2>
 
           {/* Bottom Row: 2 Columns */}
-          <div className="w-full flex-1 flex flex-row items-start justify-between gap-12 h-full">
+          <div className="w-full flex-1 flex flex-row items-start justify-between gap-8 xl:gap-12 h-full min-h-0">
             
             {/* LEFT COLUMN: Text Content */}
-            <div className={`flex flex-col justify-start h-full ${skills ? 'w-[55%] pr-4' : 'w-full'}`}>
-              <div className="mb-6 border-l-[6px] border-[rgba(219,84,53,0.4)] pl-8">
+            <div className={`flex flex-col justify-start h-full min-h-0 ${skills ? 'w-[55%] pr-4' : 'w-full'}`}>
+              <div className="border-l-[4px] border-[rgba(219,84,53,0.4)] pl-6">
                 {bodyLines.map((line, i) => (
                   <motion.p key={i}
                     initial={{ opacity: 0, x: -10 }}
                     animate={textIn ? { opacity: 1, x: 0 } : {}}
                     transition={{ delay: i * 0.15, duration: 0.4 }}
-                    className="text-2xl md:text-3xl lg:text-[32px] xl:text-[40px] text-[var(--text-primary)] leading-[1.6] mb-12 font-mono-custom opacity-95 text-left"
+                    className="text-lg md:text-xl lg:text-2xl xl:text-[26px] text-[var(--text-primary)] leading-[1.5] mb-5 xl:mb-6 font-mono-custom opacity-95 text-left last:mb-0"
                   >{line}</motion.p>
                 ))}
               </div>
 
               {/* Extra slot (e.g. button) */}
               {extra && (
-                <motion.div initial={{ opacity: 0, y: 15 }} animate={textIn ? { opacity: 1, y: 0 } : {}} transition={{ delay: 1.0 }} className="mt-4">
+                <motion.div initial={{ opacity: 0, y: 15 }} animate={textIn ? { opacity: 1, y: 0 } : {}} transition={{ delay: 1.0 }} className="mt-6">
                   {extra}
                 </motion.div>
               )}
@@ -289,18 +289,18 @@ const InfoSlide = ({ id, tabTitle, heading, bodyLines, skills, extra, onView }) 
                 initial={{ opacity: 0 }} 
                 animate={textIn ? { opacity: 1 } : {}} 
                 transition={{ delay: 0.5 }}
-                className="w-[45%] max-w-[500px] flex flex-col justify-start gap-y-12 border-l-2 border-[rgba(219,84,53,0.15)] pl-10 xl:pl-16 h-full"
+                className="w-[45%] max-w-[500px] flex flex-col justify-start gap-y-6 lg:gap-y-8 border-l-2 border-[rgba(219,84,53,0.15)] pl-8 xl:pl-12 h-full"
               >
                 {skills.map((s, i) => (
                   <div key={i} className="flex flex-col w-full">
-                    <div className="flex justify-between items-center mb-5 font-orbitron">
-                      <span className="text-[var(--accent)] text-xl md:text-2xl tracking-widest uppercase text-glow">{s.label}</span>
-                      <span className="text-white text-lg opacity-90">{bWidths[i]}%</span>
+                    <div className="flex justify-between items-center mb-3 font-orbitron">
+                      <span className="text-[var(--accent)] text-lg md:text-xl tracking-widest uppercase text-glow">{s.label}</span>
+                      <span className="text-white text-base md:text-lg opacity-90">{bWidths[i]}%</span>
                     </div>
-                    {/* Progress Bar (Styled like .progress-segmented) */}
-                    <div className="h-6 w-full border-2 border-[var(--accent)] p-[3px] shadow-[0_0_15px_rgba(219,84,53,0.25)]">
+                    {/* Progress Bar */}
+                    <div className="h-5 lg:h-6 w-full border-2 border-[var(--accent)] p-[2px] shadow-[0_0_12px_rgba(219,84,53,0.25)]">
                       <div 
-                        className="h-full progress-segmented shadow-[0_0_12px_var(--accent)]"
+                        className="h-full progress-segmented shadow-[0_0_10px_var(--accent)]"
                         style={{ width: `${bWidths[i]}%`, transition: 'none' }}
                       />
                     </div>
