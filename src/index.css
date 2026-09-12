@@ -138,8 +138,7 @@ body {
 }
 
 .font-mono-custom {
-  font-family: 'VT323', monospace;
-  font-size: 1.1em; /* Bump size slightly as VT323 runs small */
+  font-family: 'Share Tech Mono', monospace;
   letter-spacing: 0.5px;
 }
 

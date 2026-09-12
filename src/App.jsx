@@ -371,7 +371,6 @@ const StickySlides = ({ onActive }) => {
                   { label: 'FastAPI',     pct: 72 },
                   { label: 'React JS',    pct: 75 },
                   { label: 'MySQL',       pct: 65 },
-                  { label: 'PostgreSQL',  pct: 60 },
                 ]}
               />
             </motion.div>
