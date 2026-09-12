@@ -319,26 +319,30 @@ const InfoSlide = ({ id, tabTitle, heading, bodyLines, skills, extra, onView }) 
 // ─── StickySlides Container ──────────────────────────────────────────────────
 const StickySlides = ({ onActive }) => {
   const containerRef = useRef(null);
+  
+  // By using "start end", `v` starts increasing as soon as the top of the container enters the bottom of the screen.
+  // This ensures the slide is visible while scrolling up, eliminating empty space.
   const { scrollYProgress } = useScroll({
     target: containerRef,
-    offset: ["start start", "end end"]
+    offset: ["start end", "end end"]
   });
 
   const [activeSlide, setActiveSlide] = useState(0);
 
   useEffect(() => {
     return scrollYProgress.onChange(v => {
-      // Show navbar or not
-      if (v > 0.02 && v < 0.95) {
+      // Hide navbar when in the sequence
+      if (v > 0.01 && v < 0.95) {
         onActive(true);
       } else {
         onActive(false);
       }
 
-      // Determine which slide to show based on scroll progress
-      if (v > 0.02 && v < 0.48) {
+      // v > 0 means the container has entered the screen from the bottom.
+      // Slide 1 stays active while it scrolls up, and while it's pinned, up to ~45% progress.
+      if (v > 0.001 && v < 0.50) {
         setActiveSlide(1);
-      } else if (v >= 0.48 && v < 0.95) {
+      } else if (v >= 0.50 && v < 0.95) {
         setActiveSlide(2);
       } else {
         setActiveSlide(0);
@@ -347,7 +351,7 @@ const StickySlides = ({ onActive }) => {
   }, [scrollYProgress, onActive]);
 
   return (
-    <div ref={containerRef} style={{ height: '300vh', position: 'relative', marginTop: '-15vh' }}>
+    <div ref={containerRef} style={{ height: '300vh', position: 'relative' }}>
       <div className="sticky top-0 h-screen w-full overflow-hidden" style={{ pointerEvents: activeSlide === 0 ? 'none' : 'auto', zIndex: 30 }}>
         <AnimatePresence mode="wait">
           {activeSlide === 1 && (
