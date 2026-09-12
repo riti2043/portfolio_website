@@ -843,18 +843,10 @@ export default function App() {
       />
 
       {/* ==================== NAVBAR ==================== */}
-      <nav className={`sticky top-0 z-40 bg-transparent transition-all duration-500 pointer-events-none ${slidesInView ? 'opacity-0 -translate-y-2 pointer-events-none' : 'opacity-100 translate-y-0'}`}>
-        <div className="max-w-7xl mx-auto px-6 h-24 flex items-center justify-end">
+      <nav className={`fixed top-0 w-full z-50 transition-all duration-500 pointer-events-none ${slidesInView ? 'opacity-0 -translate-y-2 pointer-events-none' : 'opacity-100 translate-y-0'}`}>
+        <div className="max-w-7xl mx-auto px-6 h-24 flex flex-col justify-center items-end relative pointer-events-none">
           
-          <div className="flex items-center gap-5">
-            {/* Desktop Nav Links */}
-            <div className="hidden md:flex items-center gap-4">
-              <a href="#about" className="btn-pixel px-5 py-2.5 text-sm pointer-events-auto">ABOUT</a>
-              <a href="#skills" className="btn-pixel px-5 py-2.5 text-sm pointer-events-auto">SKILLS</a>
-              <a href="#projects" className="btn-pixel px-5 py-2.5 text-sm pointer-events-auto">PROJECTS</a>
-              <a href="#contact" className="btn-pixel px-5 py-2.5 text-sm pointer-events-auto">CONTACT</a>
-            </div>
-
+          <div className="flex items-center gap-5 pointer-events-auto">
             {/* Theme Toggle Button */}
             <button
               onClick={toggleTheme}
@@ -864,51 +856,34 @@ export default function App() {
               {darkMode ? <Sun size={16} /> : <Moon size={16} />}
             </button>
 
-            {/* Download CV CTA Button */}
-            <a 
-              href="#contact"
-              className="btn-pixel flex items-center gap-2 px-6 py-2.5 text-sm pointer-events-auto"
+            {/* Menu Toggle Button */}
+            <button 
+              onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+              className="btn-pixel flex items-center gap-2 px-5 py-2.5 text-sm pointer-events-auto"
             >
-              <span>DOWNLOAD CV</span>
-              <ArrowUpRight size={14} />
-            </a>
-
-            {/* Mobile Toggle Button */}
-            <div className="md:hidden flex items-center">
-              <button 
-                onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-                className="btn-pixel p-2 pointer-events-auto"
-              >
-                {mobileMenuOpen ? <X size={14} /> : <Menu size={14} />}
-              </button>
-            </div>
+              <span>MENU</span>
+              {mobileMenuOpen ? <X size={14} /> : <Menu size={14} />}
+            </button>
           </div>
-        </div>
 
-        {/* Mobile Slide-out Menu */}
-        <AnimatePresence>
-          {mobileMenuOpen && (
-            <motion.div 
-              initial={{ opacity: 0, height: 0 }}
-              animate={{ opacity: 1, height: 'auto' }}
-              exit={{ opacity: 0, height: 0 }}
-              className="md:hidden border-b border-[var(--border-color)] bg-white dark:bg-zinc-950 px-6 py-6 font-mono-custom flex flex-col gap-4 text-base"
-            >
-              <a href="#about" onClick={() => setMobileMenuOpen(false)}>/about</a>
-              <a href="#skills" onClick={() => setMobileMenuOpen(false)}>/skills</a>
-              <a href="#projects" onClick={() => setMobileMenuOpen(false)}>/projects</a>
-              <a href="#contact" onClick={() => setMobileMenuOpen(false)}>/contact</a>
-              <a 
-                href="#contact" 
-                onClick={() => setMobileMenuOpen(false)}
-                className="btn-bitmap mt-2 flex items-center justify-center gap-2 py-3 font-bold"
+          {/* Slide-out Menu Popup */}
+          <AnimatePresence>
+            {mobileMenuOpen && (
+              <motion.div 
+                initial={{ opacity: 0, y: -10 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -10 }}
+                className="absolute right-6 top-20 pointer-events-auto hud-box p-5 w-56 flex flex-col gap-2 font-mono-custom shadow-2xl z-50 bg-[var(--bg-primary)]"
               >
-                <span>Download CV</span>
-                <Download size={16} />
-              </a>
-            </motion.div>
-          )}
-        </AnimatePresence>
+                <a href="#about" onClick={() => setMobileMenuOpen(false)} className="hover:text-[var(--accent)] hover:bg-[var(--grid-line)] transition-colors uppercase tracking-widest text-sm p-3 border-b border-[var(--grid-line)]">ABOUT</a>
+                <a href="#skills" onClick={() => setMobileMenuOpen(false)} className="hover:text-[var(--accent)] hover:bg-[var(--grid-line)] transition-colors uppercase tracking-widest text-sm p-3 border-b border-[var(--grid-line)]">SKILLS</a>
+                <a href="#learning" onClick={() => setMobileMenuOpen(false)} className="hover:text-[var(--accent)] hover:bg-[var(--grid-line)] transition-colors uppercase tracking-widest text-sm p-3 border-b border-[var(--grid-line)]">LEARNING</a>
+                <a href="#projects" onClick={() => setMobileMenuOpen(false)} className="hover:text-[var(--accent)] hover:bg-[var(--grid-line)] transition-colors uppercase tracking-widest text-sm p-3 border-b border-[var(--grid-line)]">PROJECTS</a>
+                <a href="#submissions" onClick={() => setMobileMenuOpen(false)} className="hover:text-[var(--accent)] hover:bg-[var(--grid-line)] transition-colors uppercase tracking-widest text-sm p-3">SUBMISSIONS</a>
+              </motion.div>
+            )}
+          </AnimatePresence>
+        </div>
       </nav>
 
       {/* Profile Dashboard covers the intro now */}
