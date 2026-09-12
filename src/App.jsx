@@ -726,6 +726,7 @@ export default function App() {
   const [darkMode, setDarkMode] = useState(false);
   const [slidesInView, setSlidesInView] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [showWelcomeModal, setShowWelcomeModal] = useState(true);
   const [activeHeroIndex, setActiveHeroIndex] = useState(0);
   const [scrollProgress, setScrollProgress] = useState(0);
 
@@ -921,12 +922,6 @@ export default function App() {
                       <Download size={20} />
                       DOWNLOAD CV
                     </a>
-                    <button 
-                      onClick={() => setMobileMenuOpen(false)}
-                      className="btn-pixel w-full py-4 text-center text-lg tracking-widest opacity-80 hover:opacity-100"
-                    >
-                      RESUME
-                    </button>
                   </div>
                 </motion.div>
               </motion.div>
@@ -934,6 +929,71 @@ export default function App() {
           </AnimatePresence>
         </div>
       </nav>
+
+      {/* ==================== WELCOME MODAL ==================== */}
+      <AnimatePresence>
+        {showWelcomeModal && (
+          <motion.div 
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="fixed top-0 left-0 w-screen h-screen z-[200] flex items-center justify-center bg-black/95 backdrop-blur-md pointer-events-auto"
+          >
+            {/* Menu Box */}
+            <motion.div 
+              initial={{ scale: 0.95, opacity: 0 }}
+              animate={{ scale: 1, opacity: 1 }}
+              exit={{ scale: 0.95, opacity: 0 }}
+              className="hud-box bg-black border-2 border-[var(--accent)] p-8 md:p-12 w-[90%] max-w-2xl shadow-[0_0_50px_rgba(219,84,53,0.3)] flex flex-col items-center relative text-center"
+            >
+              {/* Top Right Close */}
+              <button 
+                onClick={() => setShowWelcomeModal(false)}
+                className="absolute top-5 right-5 text-[var(--accent)] hover:text-white transition-colors p-2"
+              >
+                <X size={28} />
+              </button>
+
+              {/* Title */}
+              <h2 className="text-2xl md:text-3xl lg:text-4xl font-orbitron tracking-[0.1em] text-[var(--accent)] mb-10 mt-2 text-shadow-glow uppercase font-bold">
+                WELCOME TO MY PORTFOLIO
+              </h2>
+
+              {/* Options */}
+              <div className="flex flex-col w-full gap-6 font-mono-custom">
+                
+                {/* Option 1 */}
+                <div className="flex flex-col md:flex-row items-center justify-between gap-6 p-6 border border-[rgba(219,84,53,0.2)] bg-black/50 hover:bg-[rgba(219,84,53,0.05)] transition-colors hud-glow">
+                  <p className="text-white text-lg md:text-xl opacity-90 text-left flex-1">
+                    Need a quick grasp of my skills & background?
+                  </p>
+                  <a 
+                    href="/cv.pdf" 
+                    className="btn-pixel w-full md:w-auto px-8 py-4 flex justify-center items-center gap-3 text-lg tracking-widest bg-[var(--accent)] text-white hover:brightness-110 whitespace-nowrap"
+                  >
+                    <Download size={20} />
+                    DOWNLOAD CV
+                  </a>
+                </div>
+
+                {/* Option 2 */}
+                <div className="flex flex-col md:flex-row items-center justify-between gap-6 p-6 border border-[rgba(219,84,53,0.2)] bg-black/50 hover:bg-[rgba(219,84,53,0.05)] transition-colors hud-glow">
+                  <p className="text-white text-lg md:text-xl opacity-90 text-left flex-1">
+                    Ready to explore the full interactive experience?
+                  </p>
+                  <button 
+                    onClick={() => setShowWelcomeModal(false)}
+                    className="btn-pixel w-full md:w-auto px-8 py-4 flex justify-center items-center text-lg tracking-widest whitespace-nowrap"
+                  >
+                    START
+                  </button>
+                </div>
+
+              </div>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
 
       {/* Profile Dashboard covers the intro now */}
       <ProfileDashboard />
