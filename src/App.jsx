@@ -252,58 +252,60 @@ const InfoSlide = ({ id, tabTitle, heading, bodyLines, skills, extra, onView }) 
         </div>
 
         {/* ── Body ── */}
-        <div className="flex-1 overflow-y-auto p-6 md:p-12 relative z-10 flex flex-col items-start custom-scrollbar w-full">
-          <div className="w-full max-w-7xl mx-auto flex flex-col items-start mt-4 md:mt-8">
+        <div className="flex-1 w-full h-full p-8 md:p-16 relative z-10 flex flex-row items-center justify-between gap-12 overflow-hidden">
+          
+          {/* LEFT COLUMN: Text Content */}
+          <div className={`flex flex-col h-full justify-center ${skills ? 'w-2/3 pr-8' : 'w-full max-w-7xl'}`}>
             {/* Heading */}
-            <h2 className="text-4xl md:text-6xl lg:text-7xl xl:text-[80px] text-[var(--accent)] tracking-widest font-orbitron mb-10 uppercase text-shadow-glow font-bold text-left w-full whitespace-nowrap">
+            <h2 className="text-4xl md:text-6xl lg:text-[72px] text-[var(--accent)] tracking-widest font-orbitron mb-10 uppercase text-shadow-glow font-bold text-left whitespace-nowrap">
               {scrambled}
             </h2>
 
             {/* Body lines — stagger fade-up */}
-            <div className="mb-12 border-l-4 border-[rgba(219,84,53,0.4)] pl-8 w-full max-w-5xl">
+            <div className="mb-6 border-l-4 border-[rgba(219,84,53,0.4)] pl-8">
               {bodyLines.map((line, i) => (
                 <motion.p key={i}
                   initial={{ opacity: 0, x: -10 }}
                   animate={textIn ? { opacity: 1, x: 0 } : {}}
                   transition={{ delay: i * 0.15, duration: 0.4 }}
-                  className="text-xl md:text-2xl lg:text-3xl text-[var(--text-primary)] leading-[1.6] mb-8 font-mono-custom opacity-90 text-left"
+                  className={`${skills ? 'text-xl lg:text-2xl' : 'text-2xl lg:text-4xl'} text-[var(--text-primary)] leading-[1.6] mb-8 font-mono-custom opacity-90 text-left`}
                 >{line}</motion.p>
               ))}
             </div>
 
-            {/* Skill bars — stacked vertically on the left */}
-            {skills && (
-              <motion.div 
-                initial={{ opacity: 0 }} 
-                animate={textIn ? { opacity: 1 } : {}} 
-                transition={{ delay: 0.5 }}
-                className="flex flex-col gap-y-8 w-full max-w-2xl"
-              >
-                {skills.map((s, i) => (
-                  <div key={i} className="flex flex-col">
-                    <div className="flex justify-between items-center mb-3 font-orbitron">
-                      <span className="text-[var(--accent)] text-sm md:text-base tracking-widest uppercase text-glow">{s.label}</span>
-                      <span className="text-white text-sm opacity-90">{bWidths[i]}%</span>
-                    </div>
-                    {/* Progress Bar (Styled like .progress-segmented) */}
-                    <div className="h-4 w-full border-2 border-[var(--accent)] p-[2px] shadow-[0_0_10px_rgba(219,84,53,0.2)]">
-                      <div 
-                        className="h-full progress-segmented shadow-[0_0_8px_var(--accent)]"
-                        style={{ width: `${bWidths[i]}%`, transition: 'none' }}
-                      />
-                    </div>
-                  </div>
-                ))}
-              </motion.div>
-            )}
-
             {/* Extra slot (e.g. button) */}
             {extra && (
-              <motion.div initial={{ opacity: 0, y: 15 }} animate={textIn ? { opacity: 1, y: 0 } : {}} transition={{ delay: 1.0 }} className="mt-12">
+              <motion.div initial={{ opacity: 0, y: 15 }} animate={textIn ? { opacity: 1, y: 0 } : {}} transition={{ delay: 1.0 }} className="mt-4">
                 {extra}
               </motion.div>
             )}
           </div>
+
+          {/* RIGHT COLUMN: Skill bars */}
+          {skills && (
+            <motion.div 
+              initial={{ opacity: 0 }} 
+              animate={textIn ? { opacity: 1 } : {}} 
+              transition={{ delay: 0.5 }}
+              className="w-1/3 flex flex-col justify-center gap-y-10 border-l border-[rgba(219,84,53,0.2)] pl-12 h-full"
+            >
+              {skills.map((s, i) => (
+                <div key={i} className="flex flex-col w-full">
+                  <div className="flex justify-between items-center mb-4 font-orbitron">
+                    <span className="text-[var(--accent)] text-lg md:text-xl tracking-widest uppercase text-glow">{s.label}</span>
+                    <span className="text-white text-base opacity-90">{bWidths[i]}%</span>
+                  </div>
+                  {/* Progress Bar (Styled like .progress-segmented) */}
+                  <div className="h-5 w-full border-2 border-[var(--accent)] p-[2px] shadow-[0_0_12px_rgba(219,84,53,0.25)]">
+                    <div 
+                      className="h-full progress-segmented shadow-[0_0_10px_var(--accent)]"
+                      style={{ width: `${bWidths[i]}%`, transition: 'none' }}
+                    />
+                  </div>
+                </div>
+              ))}
+            </motion.div>
+          )}
         </div>
       </motion.div>
     </section>
