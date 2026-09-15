@@ -2,7 +2,6 @@ import React, { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence, useScroll, useTransform } from 'framer-motion';
 import { Sun, Moon, ArrowUpRight, Menu, X, Download, Mail, Code2, Sparkles, ExternalLink, ChevronDown, CheckCircle2 } from 'lucide-react';
 import { GitHubCalendar } from 'react-github-calendar';
-import { Certifications } from './components/Certifications';
 import { KnowledgeGraph } from './components/KnowledgeGraph';
 import { Submissions } from './components/Submissions';
 
@@ -722,6 +721,148 @@ const HeroScrollSequence = () => {
   );
 };
 
+const SkillsAndCertsModule = ({ darkMode }) => {
+  const [activeTab, setActiveTab] = useState('skills');
+
+  const certificates = [
+    { id: 1, title: "AWS Solutions Architect", issuer: "Amazon Web Services", date: "2025" },
+    { id: 2, title: "Deep Learning Specialization", issuer: "Coursera", date: "2024" },
+    { id: 3, title: "UVCE Marvel Level 3", issuer: "UVCE", date: "2026" }
+  ];
+
+  return (
+    <section id="skills" className="h-screen w-full flex flex-col pt-24 pb-6 px-6 max-w-7xl mx-auto gap-6 relative z-10">
+      
+      {/* TOP SECTION: TABS & CONTENT BOX */}
+      <div className="flex-1 flex flex-col min-h-0">
+        
+        {/* TABS */}
+        <div className="flex font-mono-custom text-sm">
+          <button 
+            onClick={() => setActiveTab('skills')}
+            className={`px-6 py-3 border-t border-l border-r border-[var(--border-color)] uppercase tracking-widest transition-colors ${
+              activeTab === 'skills' 
+                ? 'bg-[var(--bg-secondary)] text-[var(--accent)] border-b-transparent relative z-10' 
+                : 'bg-[var(--bg-primary)] text-[var(--text-muted)] border-b-[var(--border-color)] hover:text-[var(--text-primary)]'
+            }`}
+          >
+            SKILLS
+          </button>
+          <button 
+            onClick={() => setActiveTab('certificates')}
+            className={`px-6 py-3 border-t border-l border-r border-[var(--border-color)] uppercase tracking-widest transition-colors ${
+              activeTab === 'certificates' 
+                ? 'bg-[var(--bg-secondary)] text-[var(--accent)] border-b-transparent relative z-10' 
+                : 'bg-[var(--bg-primary)] text-[var(--text-muted)] border-b-[var(--border-color)] hover:text-[var(--text-primary)]'
+            }`}
+          >
+            CERTIFICATES
+          </button>
+          <div className="flex-1 border-b border-[var(--border-color)]"></div>
+        </div>
+
+        {/* CONTENT BOX */}
+        <div className="flex-1 overflow-y-auto bg-[var(--bg-secondary)] border border-[var(--border-color)] border-t-0 p-6 sm:p-10 custom-scrollbar -mt-[1px]">
+          
+          <AnimatePresence mode="wait">
+            {activeTab === 'skills' ? (
+              <motion.div 
+                key="skills"
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -10 }}
+                transition={{ duration: 0.2 }}
+                className="font-mono-custom text-sm md:text-base space-y-10"
+              >
+                <div>
+                  <div className="text-[var(--accent)] mb-4 tracking-widest uppercase">// PRIMARY SLOTS: FRONTEND_CORE</div>
+                  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                    <div className="border border-[var(--border-color)] p-3 bg-[var(--bg-primary)] shadow-sm text-[var(--text-primary)]"> [L-HAND: REACT] </div>
+                    <div className="border border-[var(--border-color)] p-3 bg-[var(--bg-primary)] shadow-sm text-[var(--text-primary)]"> [R-HAND: NEXT.JS] </div>
+                    <div className="border border-[var(--border-color)] p-3 bg-[var(--bg-primary)] shadow-sm text-[var(--text-primary)]"> [ARMOR: TAILWIND] </div>
+                    <div className="border border-[var(--border-color)] p-3 bg-[var(--bg-primary)] shadow-sm text-[var(--text-primary)]"> [HEAD: TYPESCRIPT] </div>
+                    <div className="border border-[var(--border-color)] p-3 bg-[var(--bg-primary)] shadow-sm text-[var(--text-primary)]"> [NECK: JAVASCRIPT] </div>
+                  </div>
+                </div>
+
+                <div>
+                  <div className="text-[var(--accent)] mb-4 tracking-widest uppercase">// SECONDARY SLOTS: BACKEND_MAIN</div>
+                  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                    <div className="border border-[var(--border-color)] p-3 bg-[var(--bg-primary)] shadow-sm text-[var(--text-primary)]"> [BODY: NODE.JS] </div>
+                    <div className="border border-[var(--border-color)] p-3 bg-[var(--bg-primary)] shadow-sm text-[var(--text-primary)]"> [BELT: PYTHON] </div>
+                    <div className="border border-[var(--border-color)] p-3 bg-[var(--bg-primary)] shadow-sm text-[var(--text-primary)]"> [BOOTS: POSTGRES] </div>
+                    <div className="border border-[var(--border-color)] p-3 bg-[var(--bg-primary)] shadow-sm text-[var(--text-primary)]"> [RING_L: DOCKER] </div>
+                    <div className="border border-[var(--border-color)] p-3 bg-[var(--bg-primary)] shadow-sm text-[var(--text-primary)]"> [RING_R: AWS] </div>
+                  </div>
+                </div>
+
+                <div>
+                  <div className="text-[var(--accent)] mb-4 tracking-widest uppercase">// AUXILIARY SLOTS: AI_ML_MODS</div>
+                  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                    <div className="border border-[var(--border-color)] p-3 bg-[var(--bg-primary)] shadow-sm text-[var(--text-primary)]"> [MOD_01: PYTORCH] </div>
+                    <div className="border border-[var(--border-color)] p-3 bg-[var(--bg-primary)] shadow-sm text-[var(--text-primary)]"> [MOD_02: TENSORFLOW] </div>
+                    <div className="border border-[var(--border-color)] p-3 bg-[var(--bg-primary)] shadow-sm text-[var(--text-primary)]"> [MOD_03: NUMPY] </div>
+                  </div>
+                </div>
+              </motion.div>
+            ) : (
+              <motion.div 
+                key="certificates"
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -10 }}
+                transition={{ duration: 0.2 }}
+                className="font-mono-custom text-sm space-y-6"
+              >
+                <div className="text-[var(--accent)] mb-6 tracking-widest uppercase">// ACQUIRED_CERTIFICATES_LOG</div>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                  {certificates.map((cert) => (
+                    <div key={cert.id} className="border border-[var(--border-color)] p-6 bg-[var(--bg-primary)] hover:bg-[var(--accent)] hover:text-black transition-colors group flex flex-col justify-between min-h-[120px] cursor-default shadow-sm text-[var(--text-primary)]">
+                       <h3 className="text-lg font-bold uppercase">{cert.title}</h3>
+                       <div className="flex justify-between items-end mt-4">
+                         <span className="text-xs uppercase group-hover:text-black/70 text-[var(--text-muted)]">ISSUER: {cert.issuer}</span>
+                         <span className="text-xs uppercase group-hover:text-black text-[var(--accent)]">DATE: {cert.date}</span>
+                       </div>
+                    </div>
+                  ))}
+                </div>
+              </motion.div>
+            )}
+          </AnimatePresence>
+
+        </div>
+      </div>
+
+      {/* BOTTOM SECTION: GITHUB ACTIVITY */}
+      <div className="border border-[var(--border-color)] bg-[var(--bg-secondary)] flex flex-col shadow-sm">
+        <div className="border-b border-[var(--border-color)] bg-zinc-100 dark:bg-zinc-900 p-2 sm:p-3 px-4 font-mono-custom text-xs sm:text-sm tracking-widest uppercase flex items-center justify-between">
+          <span className="text-[var(--accent)] line-clamp-1">// SUBSYSTEM_LOG: PERSISTENT_GITHUB_ACTIVITY_STREAM</span>
+          <a href="https://github.com/riti2043" target="_blank" rel="noreferrer" className="flex items-center gap-1 hover:text-[var(--accent)] whitespace-nowrap ml-4 text-[var(--text-primary)]">
+            @riti2043 <ExternalLink size={12} />
+          </a>
+        </div>
+        <div className="overflow-x-auto p-4 sm:p-6 custom-scrollbar flex items-center min-h-[180px]">
+          <div className="min-w-fit mx-auto">
+            <GitHubCalendar 
+              username="riti2043" 
+              colorScheme={darkMode ? 'dark' : 'light'}
+              blockSize={12}
+              blockMargin={4}
+              fontSize={12}
+              showWeekdayLabels={true}
+              theme={{
+                light: ['#e8e4db', '#f0a897', '#e87e64', '#e05b38', '#db5435'],
+                dark: ['#1a1210', '#5e2417', '#8f3723', '#c24a2f', '#db5435']
+              }}
+            />
+          </div>
+        </div>
+      </div>
+
+    </section>
+  );
+};
+
 export default function App() {
   const [darkMode, setDarkMode] = useState(false);
   const [slidesInView, setSlidesInView] = useState(false);
@@ -1001,87 +1142,7 @@ export default function App() {
       {/* ── Scroll Info Slides (Sticky Overlay Sequence) ── */}
       <StickySlides onActive={setSlidesInView} />
 
-      <Certifications />
-
-      {/* ==================== SKILLS & GITHUB ACTIVITY SECTION (UNIFIED) ==================== */}
-      <section id="skills" className="py-24 border-t border-[var(--border-color)] px-6 max-w-7xl mx-auto">
-        <div className="space-y-12">
-          
-          <div>
-            <span className="font-mono-custom text-xs uppercase tracking-widest text-[var(--text-muted)]">02 // SKILLS & ACTIVITY</span>
-            <h2 className="text-3xl sm:text-4xl font-bold mt-2 tracking-tight">Technical Stack & Contribution Log</h2>
-          </div>
-
-          {/* Categorized Skills Grid */}
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            {skillsCategories.map((category, idx) => (
-              <motion.div 
-                key={idx}
-                whileHover={{ y: -4 }}
-                className="p-6 rounded-3xl border border-[var(--border-color)] bg-[var(--bg-secondary)] border border-[var(--border-color)] shadow-sm"
-              >
-                <div className="flex items-center gap-3 mb-6 pb-4 border-b border-[var(--border-color)]">
-                  <Code2 className="text-zinc-700 dark:text-zinc-300" size={20} />
-                  <h3 className="font-bold text-lg">{category.title}</h3>
-                </div>
-
-                <div className="flex flex-wrap gap-2">
-                  {category.skills.map((skill, sIdx) => (
-                    <span 
-                      key={sIdx}
-                      className="px-3 py-1.5 rounded-full text-xs font-mono-custom border border-[var(--border-color)] bg-zinc-100/70 dark:bg-zinc-800/70 text-zinc-800 dark:text-zinc-200 flex items-center gap-1.5"
-                    >
-                      <CheckCircle2 size={12} className="text-[var(--accent)]" />
-                      {skill}
-                    </span>
-                  ))}
-                </div>
-              </motion.div>
-            ))}
-          </div>
-
-          {/* GitHub Live Contribution Heatmap Widget (riti2043) */}
-          <div className="mt-12 p-8 rounded-3xl border border-[var(--border-color)] bg-[var(--bg-secondary)] border border-[var(--border-color)] shadow-sm space-y-6">
-            <div className="flex flex-wrap items-center justify-between gap-4">
-              <div className="flex items-center gap-3">
-                <GithubIcon size={24} />
-                <div>
-                  <h4 className="font-bold font-mono-custom text-base">GitHub Activity Log (@riti2043)</h4>
-                  <p className="text-xs text-[var(--text-muted)]">Live contribution commits grid & public repository activity</p>
-                </div>
-              </div>
-              <a 
-                href="https://github.com/riti2043" 
-                target="_blank" 
-                rel="noreferrer"
-                className="font-mono-custom text-xs px-4 py-2 rounded-full border border-[var(--border-color)] hover:bg-zinc-100 dark:hover:bg-zinc-800 transition-colors flex items-center gap-1"
-              >
-                <span>View Profile</span>
-                <ExternalLink size={12} />
-              </a>
-            </div>
-
-            {/* Heatmap Grid */}
-            <div className="overflow-x-auto pb-4 custom-scrollbar">
-              <div className="min-w-fit">
-                <GitHubCalendar 
-                  username="riti2043" 
-                  colorScheme={darkMode ? 'dark' : 'light'}
-                  blockSize={14}
-                  blockMargin={4}
-                  fontSize={12}
-                  showWeekdayLabels={true}
-                  theme={{
-                    light: ['#e8e4db', '#f0a897', '#e87e64', '#e05b38', '#db5435'],
-                    dark: ['#1a1210', '#5e2417', '#8f3723', '#c24a2f', '#db5435']
-                  }}
-                />
-              </div>
-            </div>
-          </div>
-
-        </div>
-      </section>
+      <SkillsAndCertsModule darkMode={darkMode} />
 
       {/* ==================== PROJECTS SECTION ("SCROLL-TO-SEE" PINNED CARDS) ==================== */}
       <section id="projects" className="py-24 border-t border-[var(--border-color)] px-6 max-w-7xl mx-auto">
