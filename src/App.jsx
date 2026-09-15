@@ -849,20 +849,27 @@ const SkillsAndCertsModule = ({ darkMode }) => {
       </div>
 
       {/* BOTTOM SECTION: GITHUB ACTIVITY */}
-      <div className="flex flex-col mt-2">
-        <div className="font-mono-custom text-xs sm:text-sm tracking-widest uppercase flex items-center justify-between mb-2">
-          <span className="text-[var(--accent)] line-clamp-1">// SUBSYSTEM_LOG: PERSISTENT_GITHUB_ACTIVITY_STREAM</span>
-          <a href="https://github.com/riti2043" target="_blank" rel="noreferrer" className="flex items-center gap-1 hover:text-[var(--accent)] whitespace-nowrap ml-4 text-[var(--text-primary)]">
-            @riti2043 <ExternalLink size={12} />
+      <div className="flex flex-col mt-4 mb-4 md:mt-8 md:mb-6 w-full max-w-6xl mx-auto opacity-90">
+        
+        {/* Terminal Header */}
+        <div className="font-mono-custom text-xs sm:text-sm tracking-[0.2em] uppercase flex items-center gap-4 mb-6">
+          <span className="text-[var(--accent)] font-bold whitespace-nowrap">&gt; SUBSYSTEM_LOG</span>
+          <div className="flex-1 border-b border-dashed border-[var(--text-muted)] opacity-30"></div>
+          <span className="text-[var(--text-muted)] hidden sm:block whitespace-nowrap">PERSISTENT_GITHUB_ACTIVITY_STREAM</span>
+          <div className="flex-1 border-b border-dashed border-[var(--text-muted)] opacity-30 hidden sm:block"></div>
+          <a href="https://github.com/riti2043" target="_blank" rel="noreferrer" className="flex items-center gap-2 hover:text-[var(--accent)] text-[var(--text-primary)] whitespace-nowrap transition-colors">
+            [@riti2043] <ExternalLink size={14} />
           </a>
         </div>
-        <div className="overflow-x-auto custom-scrollbar flex items-center min-h-[160px] pb-4">
-          <div className="min-w-fit mx-auto">
+
+        {/* Graph */}
+        <div className="overflow-x-auto custom-scrollbar flex items-center justify-center">
+          <div className="min-w-fit mx-auto pl-4">
             <GitHubCalendar 
               username="riti2043" 
               colorScheme={darkMode ? 'dark' : 'light'}
-              blockSize={12}
-              blockMargin={4}
+              blockSize={14}
+              blockMargin={5}
               fontSize={12}
               showWeekdayLabels={true}
               theme={{
@@ -1160,7 +1167,7 @@ export default function App() {
       <SkillsAndCertsModule darkMode={darkMode} />
 
       {/* ==================== PROJECTS SECTION ("SCROLL-TO-SEE" PINNED CARDS) ==================== */}
-      <section id="projects" className="py-24 border-t border-[var(--border-color)] px-6 max-w-7xl mx-auto">
+      <section id="projects" className="py-24 px-6 max-w-7xl mx-auto">
         <div className="mb-12">
           <span className="font-mono-custom text-xs uppercase tracking-widest text-[var(--text-muted)]">03 // SELECTED WORK</span>
           <h2 className="text-3xl sm:text-5xl font-bold mt-2 tracking-tight">Scroll to Explore Projects</h2>
