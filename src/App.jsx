@@ -778,43 +778,53 @@ const SkillsAndCertsModule = ({ darkMode }) => {
                   animate={{ opacity: 1, y: 0 }}
                   exit={{ opacity: 0, y: -10 }}
                   transition={{ duration: 0.2 }}
-                  className="font-mono-custom text-sm md:text-base space-y-12"
+                  className="font-mono-custom text-sm md:text-base flex flex-col h-full"
                 >
-                  <div>
-                    <div className="text-[var(--accent)] mb-4 tracking-[0.2em] uppercase font-bold flex items-center gap-2">
-                      <span className="text-xl">^</span> PRIMARY SLOTS: FRONTEND_CORE
+                  <div className="text-[var(--text-muted)] tracking-widest text-xs md:text-sm mb-8 opacity-70">
+                    [▲] NAVIGATE GEAR SLOTS
+                  </div>
+
+                  <div className="space-y-12 flex-1">
+                    <div>
+                      <div className="text-[var(--accent)] mb-4 tracking-[0.2em] uppercase font-bold flex items-center gap-2">
+                        <span className="text-xl">^</span> // PRIMARY SLOTS: FRONTEND_CORE
+                      </div>
+                      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                        <div className="border border-[rgba(219,84,53,0.3)] p-4 bg-black/60 shadow-sm text-[var(--text-primary)] hover:border-[var(--accent)] transition-colors"> [L-HAND: REACT] </div>
+                        <div className="border border-[rgba(219,84,53,0.3)] p-4 bg-black/60 shadow-sm text-[var(--text-primary)] hover:border-[var(--accent)] transition-colors"> [R-HAND: NEXT.JS] </div>
+                        <div className="border border-[rgba(219,84,53,0.3)] p-4 bg-black/60 shadow-sm text-[var(--text-primary)] hover:border-[var(--accent)] transition-colors"> [ARMOR: TAILWIND] </div>
+                        <div className="border border-[rgba(219,84,53,0.3)] p-4 bg-black/60 shadow-sm text-[var(--text-primary)] hover:border-[var(--accent)] transition-colors"> [HEAD: TYPESCRIPT] </div>
+                        <div className="border border-[rgba(219,84,53,0.3)] p-4 bg-black/60 shadow-sm text-[var(--text-primary)] hover:border-[var(--accent)] transition-colors"> [NECK: JAVASCRIPT] </div>
+                      </div>
                     </div>
-                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                      <div className="border border-[rgba(219,84,53,0.3)] p-4 bg-black/60 shadow-sm text-[var(--text-primary)] hover:border-[var(--accent)] transition-colors"> [L-HAND: REACT] </div>
-                      <div className="border border-[rgba(219,84,53,0.3)] p-4 bg-black/60 shadow-sm text-[var(--text-primary)] hover:border-[var(--accent)] transition-colors"> [R-HAND: NEXT.JS] </div>
-                      <div className="border border-[rgba(219,84,53,0.3)] p-4 bg-black/60 shadow-sm text-[var(--text-primary)] hover:border-[var(--accent)] transition-colors"> [ARMOR: TAILWIND] </div>
-                      <div className="border border-[rgba(219,84,53,0.3)] p-4 bg-black/60 shadow-sm text-[var(--text-primary)] hover:border-[var(--accent)] transition-colors"> [HEAD: TYPESCRIPT] </div>
-                      <div className="border border-[rgba(219,84,53,0.3)] p-4 bg-black/60 shadow-sm text-[var(--text-primary)] hover:border-[var(--accent)] transition-colors"> [NECK: JAVASCRIPT] </div>
+
+                    <div>
+                      <div className="text-[var(--accent)] mb-4 tracking-[0.2em] uppercase font-bold flex items-center gap-2">
+                        <span className="text-xl">^</span> // SECONDARY SLOTS: BACKEND_MAIN
+                      </div>
+                      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                        <div className="border border-[rgba(219,84,53,0.3)] p-4 bg-black/60 shadow-sm text-[var(--text-primary)] hover:border-[var(--accent)] transition-colors"> [BODY: NODE.JS] </div>
+                        <div className="border border-[rgba(219,84,53,0.3)] p-4 bg-black/60 shadow-sm text-[var(--text-primary)] hover:border-[var(--accent)] transition-colors"> [BELT: PYTHON] </div>
+                        <div className="border border-[rgba(219,84,53,0.3)] p-4 bg-black/60 shadow-sm text-[var(--text-primary)] hover:border-[var(--accent)] transition-colors"> [BOOTS: POSTGRES] </div>
+                        <div className="border border-[rgba(219,84,53,0.3)] p-4 bg-black/60 shadow-sm text-[var(--text-primary)] hover:border-[var(--accent)] transition-colors"> [RING_L: DOCKER] </div>
+                        <div className="border border-[rgba(219,84,53,0.3)] p-4 bg-black/60 shadow-sm text-[var(--text-primary)] hover:border-[var(--accent)] transition-colors"> [RING_R: AWS] </div>
+                      </div>
+                    </div>
+
+                    <div>
+                      <div className="text-[var(--accent)] mb-4 tracking-[0.2em] uppercase font-bold flex items-center gap-2">
+                        <span className="text-xl">^</span> // AUXILIARY SLOTS: AI_ML_MODS
+                      </div>
+                      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                        <div className="border border-[rgba(219,84,53,0.3)] p-4 bg-black/60 shadow-sm text-[var(--text-primary)] hover:border-[var(--accent)] transition-colors"> [MOD_01: PYTORCH] </div>
+                        <div className="border border-[rgba(219,84,53,0.3)] p-4 bg-black/60 shadow-sm text-[var(--text-primary)] hover:border-[var(--accent)] transition-colors"> [MOD_02: TENSORFLOW] </div>
+                        <div className="border border-[rgba(219,84,53,0.3)] p-4 bg-black/60 shadow-sm text-[var(--text-primary)] hover:border-[var(--accent)] transition-colors"> [MOD_03: NUMPY] </div>
+                      </div>
                     </div>
                   </div>
 
-                  <div>
-                    <div className="text-[var(--accent)] mb-4 tracking-[0.2em] uppercase font-bold flex items-center gap-2">
-                      <span className="text-xl">^</span> SECONDARY SLOTS: BACKEND_MAIN
-                    </div>
-                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                      <div className="border border-[rgba(219,84,53,0.3)] p-4 bg-black/60 shadow-sm text-[var(--text-primary)] hover:border-[var(--accent)] transition-colors"> [BODY: NODE.JS] </div>
-                      <div className="border border-[rgba(219,84,53,0.3)] p-4 bg-black/60 shadow-sm text-[var(--text-primary)] hover:border-[var(--accent)] transition-colors"> [BELT: PYTHON] </div>
-                      <div className="border border-[rgba(219,84,53,0.3)] p-4 bg-black/60 shadow-sm text-[var(--text-primary)] hover:border-[var(--accent)] transition-colors"> [BOOTS: POSTGRES] </div>
-                      <div className="border border-[rgba(219,84,53,0.3)] p-4 bg-black/60 shadow-sm text-[var(--text-primary)] hover:border-[var(--accent)] transition-colors"> [RING_L: DOCKER] </div>
-                      <div className="border border-[rgba(219,84,53,0.3)] p-4 bg-black/60 shadow-sm text-[var(--text-primary)] hover:border-[var(--accent)] transition-colors"> [RING_R: AWS] </div>
-                    </div>
-                  </div>
-
-                  <div>
-                    <div className="text-[var(--accent)] mb-4 tracking-[0.2em] uppercase font-bold flex items-center gap-2">
-                      <span className="text-xl">^</span> AUXILIARY SLOTS: AI_ML_MODS
-                    </div>
-                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                      <div className="border border-[rgba(219,84,53,0.3)] p-4 bg-black/60 shadow-sm text-[var(--text-primary)] hover:border-[var(--accent)] transition-colors"> [MOD_01: PYTORCH] </div>
-                      <div className="border border-[rgba(219,84,53,0.3)] p-4 bg-black/60 shadow-sm text-[var(--text-primary)] hover:border-[var(--accent)] transition-colors"> [MOD_02: TENSORFLOW] </div>
-                      <div className="border border-[rgba(219,84,53,0.3)] p-4 bg-black/60 shadow-sm text-[var(--text-primary)] hover:border-[var(--accent)] transition-colors"> [MOD_03: NUMPY] </div>
-                    </div>
+                  <div className="text-[var(--text-muted)] tracking-widest text-xs md:text-sm mt-12 opacity-70">
+                    [▼] NAVIGATE GEAR SLOTS
                   </div>
                 </motion.div>
               ) : (
@@ -824,22 +834,31 @@ const SkillsAndCertsModule = ({ darkMode }) => {
                   animate={{ opacity: 1, y: 0 }}
                   exit={{ opacity: 0, y: -10 }}
                   transition={{ duration: 0.2 }}
-                  className="font-mono-custom text-sm md:text-base space-y-8"
+                  className="font-mono-custom text-sm md:text-base flex flex-col h-full"
                 >
-                  <div className="text-[var(--accent)] mb-6 tracking-[0.2em] uppercase font-bold flex items-center gap-2">
-                    <span className="text-xl">^</span> ACQUIRED_CERTIFICATES_LOG
+                  <div className="text-[var(--text-muted)] tracking-widest text-xs md:text-sm mb-8 opacity-70">
+                    [▲] NAVIGATE GEAR SLOTS
                   </div>
-                  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-                    {certificates.map((cert) => (
-                      <div key={cert.id} className="border border-[rgba(219,84,53,0.3)] p-8 bg-black/60 hover:border-[var(--accent)] transition-colors group flex flex-col justify-between min-h-[140px] cursor-default shadow-sm text-[var(--text-primary)] relative">
-                         <div className="absolute top-0 left-0 w-2 h-full bg-[var(--accent)] opacity-0 group-hover:opacity-100 transition-opacity"></div>
-                         <h3 className="text-lg md:text-xl font-bold uppercase ml-2">{cert.title}</h3>
-                         <div className="flex justify-between items-end mt-6 ml-2">
-                           <span className="text-xs uppercase text-[var(--text-muted)]">ISSUER: {cert.issuer}</span>
-                           <span className="text-xs uppercase text-[var(--accent)]">DATE: {cert.date}</span>
-                         </div>
-                      </div>
-                    ))}
+
+                  <div className="flex-1">
+                    <div className="text-[var(--accent)] mb-4 tracking-[0.2em] uppercase font-bold flex items-center gap-2">
+                      <span className="text-xl">^</span> // ACQUIRED_CERTIFICATES_LOG
+                    </div>
+                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                      {certificates.map((cert, index) => (
+                        <div key={cert.id} className="border border-[rgba(219,84,53,0.3)] p-4 bg-black/60 shadow-sm text-[var(--text-primary)] hover:border-[var(--accent)] transition-colors flex flex-col justify-between">
+                           <div>[CERT_0{index + 1}: {cert.title}]</div>
+                           <div className="text-xs text-[var(--text-muted)] mt-6 flex flex-col sm:flex-row justify-between uppercase gap-2">
+                             <span>ISSUER: {cert.issuer}</span>
+                             <span className="text-[var(--accent)]">DATE: {cert.date}</span>
+                           </div>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+
+                  <div className="text-[var(--text-muted)] tracking-widest text-xs md:text-sm mt-12 opacity-70">
+                    [▼] NAVIGATE GEAR SLOTS
                   </div>
                 </motion.div>
               )}
