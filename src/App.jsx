@@ -962,6 +962,15 @@ export default function App() {
     soundEngine.setMuted(!soundEnabled);
   }, [soundEnabled]);
 
+  // Enforce dark mode class on mount and when toggled
+  useEffect(() => {
+    if (darkMode) {
+      document.documentElement.classList.add('dark');
+    } else {
+      document.documentElement.classList.remove('dark');
+    }
+  }, [darkMode]);
+
   // Cycling titles for Hero section
   const heroTitles = [
     "Rithya Jayaram",
@@ -989,12 +998,8 @@ export default function App() {
 
   // Theme toggle
   const toggleTheme = () => {
+    soundEngine.playTab();
     setDarkMode(!darkMode);
-    if (!darkMode) {
-      document.documentElement.classList.add('dark');
-    } else {
-      document.documentElement.classList.remove('dark');
-    }
   };
 
   // 4 Featured Projects
@@ -1103,7 +1108,7 @@ export default function App() {
 
             {/* Menu Toggle Button */}
             <button 
-              onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+              onClick={() => { soundEngine.playTab(); setMobileMenuOpen(!mobileMenuOpen); }}
               className="btn-pixel flex items-center gap-2 px-5 py-2.5 text-sm pointer-events-auto"
             >
               <span>MENU</span>
@@ -1129,7 +1134,7 @@ export default function App() {
                 >
                   {/* Top Right Close */}
                   <button 
-                    onClick={() => setMobileMenuOpen(false)}
+                    onClick={() => { soundEngine.playTab(); setMobileMenuOpen(false); }}
                     className="absolute top-5 right-5 text-[var(--accent)] hover:text-white transition-colors p-2"
                   >
                     <X size={28} />
@@ -1146,7 +1151,7 @@ export default function App() {
                       <a 
                         key={item}
                         href={`#${item.toLowerCase()}`}
-                        onClick={() => setMobileMenuOpen(false)}
+                        onClick={() => { soundEngine.playTab(); setMobileMenuOpen(false); }}
                         className="w-full text-center hover:bg-[var(--accent)] hover:text-black transition-colors py-3 uppercase tracking-[0.15em] text-white relative group"
                       >
                         <span className="opacity-0 group-hover:opacity-100 absolute left-6 md:left-12">&gt;</span>
@@ -1160,7 +1165,7 @@ export default function App() {
                   <div className="flex flex-col w-full gap-5">
                     <a 
                       href="/cv.pdf" 
-                      onClick={() => setMobileMenuOpen(false)}
+                      onClick={() => { soundEngine.playTab(); setMobileMenuOpen(false); }}
                       className="btn-pixel w-full py-4 flex justify-center items-center gap-3 text-lg tracking-widest bg-[var(--accent)] text-white hover:brightness-110"
                     >
                       <Download size={20} />
@@ -1192,7 +1197,7 @@ export default function App() {
             >
               {/* Top Right Close */}
               <button 
-                onClick={() => setShowWelcomeModal(false)}
+                onClick={() => { soundEngine.playTab(); setShowWelcomeModal(false); }}
                 className="absolute top-5 right-5 text-[var(--accent)] hover:text-white transition-colors p-2"
               >
                 <X size={28} />
@@ -1213,6 +1218,7 @@ export default function App() {
                   </p>
                   <a 
                     href="/cv.pdf" 
+                    onClick={() => soundEngine.playTab()}
                     className="btn-pixel w-full md:w-auto px-8 py-4 flex justify-center items-center gap-3 text-lg tracking-widest bg-[var(--accent)] text-white hover:brightness-110 whitespace-nowrap"
                   >
                     <Download size={20} />
@@ -1303,6 +1309,7 @@ export default function App() {
                     href={project.demo} 
                     target="_blank" 
                     rel="noreferrer"
+                    onClick={() => soundEngine.playTab()}
                     className="btn-bitmap px-5 py-2.5 flex items-center gap-1.5 transition-colors font-mono-custom text-sm"
                   >
                     <span>Live Demo</span>
@@ -1312,6 +1319,7 @@ export default function App() {
                     href={project.github} 
                     target="_blank" 
                     rel="noreferrer"
+                    onClick={() => soundEngine.playTab()}
                     className="btn-bitmap px-5 py-2.5 flex items-center gap-1.5 transition-colors font-mono-custom text-sm"
                   >
                     <span>Source Code</span>
@@ -1378,6 +1386,7 @@ export default function App() {
           <div className="pt-4">
             <a 
               href="mailto:rithyajayaram@gmail.com"
+              onClick={() => soundEngine.playTab()}
               className="btn-bitmap inline-flex items-center gap-3 px-8 py-4 text-base sm:text-xl font-bold font-mono-custom"
             >
               <Mail size={20} />
@@ -1392,6 +1401,7 @@ export default function App() {
               href="https://github.com/riti2043" 
               target="_blank" 
               rel="noreferrer"
+              onClick={() => soundEngine.playTab()}
               className="flex items-center gap-1.5 hover:text-[var(--text-muted)] transition-colors"
             >
               <GithubIcon size={16} />
@@ -1401,6 +1411,7 @@ export default function App() {
               href="https://linkedin.com" 
               target="_blank" 
               rel="noreferrer"
+              onClick={() => soundEngine.playTab()}
               className="flex items-center gap-1.5 hover:text-[var(--text-muted)] transition-colors"
             >
               <LinkedinIcon size={16} />
