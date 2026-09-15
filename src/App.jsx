@@ -723,12 +723,16 @@ const HeroScrollSequence = () => {
 
 const SkillsAndCertsModule = ({ darkMode }) => {
   const [activeTab, setActiveTab] = useState('skills');
+  const [certIndex, setCertIndex] = useState(0);
 
   const certificates = [
     { id: 1, title: "AWS Solutions Architect", issuer: "Amazon Web Services", date: "2025" },
     { id: 2, title: "Deep Learning Specialization", issuer: "Coursera", date: "2024" },
     { id: 3, title: "UVCE Marvel Level 3", issuer: "UVCE", date: "2026" }
   ];
+
+  const nextCert = () => setCertIndex((prev) => (prev + 1) % certificates.length);
+  const prevCert = () => setCertIndex((prev) => (prev - 1 + certificates.length) % certificates.length);
 
   return (
     <section id="skills" className="min-h-screen w-full flex flex-col pt-24 pb-12 px-2 md:px-8 mx-auto gap-12 relative z-10">
@@ -834,31 +838,57 @@ const SkillsAndCertsModule = ({ darkMode }) => {
                   animate={{ opacity: 1, y: 0 }}
                   exit={{ opacity: 0, y: -10 }}
                   transition={{ duration: 0.2 }}
-                  className="font-mono-custom text-sm md:text-base flex flex-col h-full"
+                  className="font-mono-custom text-sm md:text-base flex flex-col h-full items-center justify-center min-h-[400px]"
                 >
-                  <div className="text-[var(--text-muted)] tracking-widest text-xs md:text-sm mb-8 opacity-70">
-                    [▲] NAVIGATE GEAR SLOTS
-                  </div>
+                  <div className="flex w-full items-center justify-between gap-4 max-w-4xl mx-auto">
+                    
+                    {/* Left Nav */}
+                    <button onClick={prevCert} className="flex flex-col items-center justify-center text-[var(--accent)] hover:text-white transition-colors p-4 group">
+                      <span className="text-3xl font-bold group-hover:-translate-x-1 transition-transform">[◀]</span>
+                      <span className="text-xs mt-2 tracking-widest opacity-70">NAV</span>
+                    </button>
 
-                  <div className="flex-1">
-                    <div className="text-[var(--accent)] mb-4 tracking-[0.2em] uppercase font-bold flex items-center gap-2">
-                      <span className="text-xl">^</span> // ACQUIRED_CERTIFICATES_LOG
-                    </div>
-                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                      {certificates.map((cert, index) => (
-                        <div key={cert.id} className="border border-[rgba(219,84,53,0.3)] p-4 bg-black/60 shadow-sm text-[var(--text-primary)] hover:border-[var(--accent)] transition-colors flex flex-col justify-between">
-                           <div>[CERT_0{index + 1}: {cert.title}]</div>
-                           <div className="text-xs text-[var(--text-muted)] mt-6 flex flex-col sm:flex-row justify-between uppercase gap-2">
-                             <span>ISSUER: {cert.issuer}</span>
-                             <span className="text-[var(--accent)]">DATE: {cert.date}</span>
-                           </div>
-                        </div>
-                      ))}
-                    </div>
-                  </div>
+                    {/* Center Card */}
+                    <motion.div 
+                      key={certIndex}
+                      initial={{ opacity: 0, scale: 0.95 }}
+                      animate={{ opacity: 1, scale: 1 }}
+                      transition={{ duration: 0.2 }}
+                      className="flex-1 border border-[rgba(219,84,53,0.5)] p-6 md:p-8 bg-black/80 shadow-[0_0_15px_rgba(219,84,53,0.1)] text-[var(--text-primary)] relative"
+                    >
+                       <div className="absolute top-0 left-0 w-1 h-full bg-[var(--accent)]"></div>
+                       
+                       <div className="text-[var(--accent)] mb-3 tracking-[0.1em] uppercase font-bold text-lg md:text-xl">
+                         // LOOT_DECRYPT: SECURE_LOG_ENTRY_0{certIndex + 1}_OF_0{certificates.length}
+                       </div>
+                       
+                       <div className="border-b border-dashed border-[rgba(219,84,53,0.4)] mb-6 w-full"></div>
+                       
+                       <div className="space-y-4 font-mono-custom text-sm md:text-lg tracking-wide pl-2 md:pl-4">
+                          <div className="grid grid-cols-[100px_1fr] md:grid-cols-[160px_1fr] gap-4">
+                             <span className="text-[var(--text-muted)]">ITEM TYPE</span>
+                             <span>: EPIC QUEST REWARD</span>
+                          </div>
+                          <div className="grid grid-cols-[100px_1fr] md:grid-cols-[160px_1fr] gap-4">
+                             <span className="text-[var(--text-muted)]">CREDENTIAL</span>
+                             <span className="text-[var(--accent)] font-bold">: {certificates[certIndex].title}</span>
+                          </div>
+                          <div className="grid grid-cols-[100px_1fr] md:grid-cols-[160px_1fr] gap-4">
+                             <span className="text-[var(--text-muted)]">ISSUER</span>
+                             <span>: {certificates[certIndex].issuer}</span>
+                          </div>
+                          <div className="grid grid-cols-[100px_1fr] md:grid-cols-[160px_1fr] gap-4">
+                             <span className="text-[var(--text-muted)]">KEY_ID</span>
+                             <span>: {certificates[certIndex].issuer.substring(0,3).toUpperCase()}-99{certificates[certIndex].id}81X-FE</span>
+                          </div>
+                       </div>
+                    </motion.div>
 
-                  <div className="text-[var(--text-muted)] tracking-widest text-xs md:text-sm mt-12 opacity-70">
-                    [▼] NAVIGATE GEAR SLOTS
+                    {/* Right Nav */}
+                    <button onClick={nextCert} className="flex flex-col items-center justify-center text-[var(--accent)] hover:text-white transition-colors p-4 group">
+                      <span className="text-3xl font-bold group-hover:translate-x-1 transition-transform">[▶]</span>
+                      <span className="text-xs mt-2 tracking-widest opacity-70">NAV</span>
+                    </button>
                   </div>
                 </motion.div>
               )}
