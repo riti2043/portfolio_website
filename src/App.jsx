@@ -731,105 +731,120 @@ const SkillsAndCertsModule = ({ darkMode }) => {
   ];
 
   return (
-    <section id="skills" className="h-screen w-full flex flex-col pt-24 pb-6 px-6 max-w-7xl mx-auto gap-6 relative z-10">
+    <section id="skills" className="h-screen w-full flex flex-col pt-24 pb-6 px-2 md:px-8 mx-auto gap-4 relative z-10">
       
       {/* TOP SECTION: TABS & CONTENT BOX */}
-      <div className="flex-1 flex flex-col min-h-0">
+      <div className="flex-1 flex flex-col min-h-0 relative">
         
         {/* TABS */}
-        <div className="flex font-mono-custom text-sm">
+        <div className="flex font-mono-custom text-sm md:text-base -mb-[3px] z-20 relative">
           <button 
             onClick={() => setActiveTab('skills')}
-            className={`px-6 py-3 border-t border-l border-r border-[var(--border-color)] uppercase tracking-widest transition-colors ${
+            className={`px-8 md:px-16 py-3 md:py-4 uppercase tracking-widest transition-all font-bold ${
               activeTab === 'skills' 
-                ? 'bg-[var(--bg-secondary)] text-[var(--accent)] border-b-transparent relative z-10' 
-                : 'bg-[var(--bg-primary)] text-[var(--text-muted)] border-b-[var(--border-color)] hover:text-[var(--text-primary)]'
+                ? 'bg-[var(--bg-secondary)] text-[var(--accent)] border-t-[3px] border-l-[3px] border-r-[3px] border-[var(--accent)]' 
+                : 'bg-black/40 text-[var(--text-muted)] border-b-[3px] border-[var(--accent)] hover:bg-[var(--bg-secondary)]'
             }`}
+            style={{ borderTopLeftRadius: '12px', borderTopRightRadius: '24px' }}
           >
             SKILLS
           </button>
           <button 
             onClick={() => setActiveTab('certificates')}
-            className={`px-6 py-3 border-t border-l border-r border-[var(--border-color)] uppercase tracking-widest transition-colors ${
+            className={`px-8 md:px-16 py-3 md:py-4 uppercase tracking-widest transition-all font-bold ${
               activeTab === 'certificates' 
-                ? 'bg-[var(--bg-secondary)] text-[var(--accent)] border-b-transparent relative z-10' 
-                : 'bg-[var(--bg-primary)] text-[var(--text-muted)] border-b-[var(--border-color)] hover:text-[var(--text-primary)]'
+                ? 'bg-[var(--bg-secondary)] text-[var(--accent)] border-t-[3px] border-l-[3px] border-r-[3px] border-[var(--accent)]' 
+                : 'bg-black/40 text-[var(--text-muted)] border-b-[3px] border-[var(--accent)] hover:bg-[var(--bg-secondary)]'
             }`}
+            style={{ borderTopLeftRadius: '24px', borderTopRightRadius: '12px' }}
           >
             CERTIFICATES
           </button>
-          <div className="flex-1 border-b border-[var(--border-color)]"></div>
+          <div className="flex-1 border-b-[3px] border-[var(--accent)]"></div>
         </div>
 
         {/* CONTENT BOX */}
-        <div className="flex-1 overflow-y-auto bg-[var(--bg-secondary)] border border-[var(--border-color)] border-t-0 p-6 sm:p-10 custom-scrollbar -mt-[1px]">
+        <div className="flex-1 flex flex-col bg-[var(--bg-secondary)] border-[3px] border-[var(--accent)] rounded-tr-xl rounded-b-xl shadow-[0_0_20px_rgba(219,84,53,0.15)] relative overflow-hidden">
           
-          <AnimatePresence mode="wait">
-            {activeTab === 'skills' ? (
-              <motion.div 
-                key="skills"
-                initial={{ opacity: 0, y: 10 }}
-                animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0, y: -10 }}
-                transition={{ duration: 0.2 }}
-                className="font-mono-custom text-sm md:text-base space-y-10"
-              >
-                <div>
-                  <div className="text-[var(--accent)] mb-4 tracking-widest uppercase">// PRIMARY SLOTS: FRONTEND_CORE</div>
-                  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-                    <div className="border border-[var(--border-color)] p-3 bg-[var(--bg-primary)] shadow-sm text-[var(--text-primary)]"> [L-HAND: REACT] </div>
-                    <div className="border border-[var(--border-color)] p-3 bg-[var(--bg-primary)] shadow-sm text-[var(--text-primary)]"> [R-HAND: NEXT.JS] </div>
-                    <div className="border border-[var(--border-color)] p-3 bg-[var(--bg-primary)] shadow-sm text-[var(--text-primary)]"> [ARMOR: TAILWIND] </div>
-                    <div className="border border-[var(--border-color)] p-3 bg-[var(--bg-primary)] shadow-sm text-[var(--text-primary)]"> [HEAD: TYPESCRIPT] </div>
-                    <div className="border border-[var(--border-color)] p-3 bg-[var(--bg-primary)] shadow-sm text-[var(--text-primary)]"> [NECK: JAVASCRIPT] </div>
-                  </div>
-                </div>
+          {/* Inner Decorative Border */}
+          <div className="absolute inset-2 border border-[rgba(219,84,53,0.2)] pointer-events-none rounded-lg"></div>
 
-                <div>
-                  <div className="text-[var(--accent)] mb-4 tracking-widest uppercase">// SECONDARY SLOTS: BACKEND_MAIN</div>
-                  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-                    <div className="border border-[var(--border-color)] p-3 bg-[var(--bg-primary)] shadow-sm text-[var(--text-primary)]"> [BODY: NODE.JS] </div>
-                    <div className="border border-[var(--border-color)] p-3 bg-[var(--bg-primary)] shadow-sm text-[var(--text-primary)]"> [BELT: PYTHON] </div>
-                    <div className="border border-[var(--border-color)] p-3 bg-[var(--bg-primary)] shadow-sm text-[var(--text-primary)]"> [BOOTS: POSTGRES] </div>
-                    <div className="border border-[var(--border-color)] p-3 bg-[var(--bg-primary)] shadow-sm text-[var(--text-primary)]"> [RING_L: DOCKER] </div>
-                    <div className="border border-[var(--border-color)] p-3 bg-[var(--bg-primary)] shadow-sm text-[var(--text-primary)]"> [RING_R: AWS] </div>
-                  </div>
-                </div>
-
-                <div>
-                  <div className="text-[var(--accent)] mb-4 tracking-widest uppercase">// AUXILIARY SLOTS: AI_ML_MODS</div>
-                  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-                    <div className="border border-[var(--border-color)] p-3 bg-[var(--bg-primary)] shadow-sm text-[var(--text-primary)]"> [MOD_01: PYTORCH] </div>
-                    <div className="border border-[var(--border-color)] p-3 bg-[var(--bg-primary)] shadow-sm text-[var(--text-primary)]"> [MOD_02: TENSORFLOW] </div>
-                    <div className="border border-[var(--border-color)] p-3 bg-[var(--bg-primary)] shadow-sm text-[var(--text-primary)]"> [MOD_03: NUMPY] </div>
-                  </div>
-                </div>
-              </motion.div>
-            ) : (
-              <motion.div 
-                key="certificates"
-                initial={{ opacity: 0, y: 10 }}
-                animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0, y: -10 }}
-                transition={{ duration: 0.2 }}
-                className="font-mono-custom text-sm space-y-6"
-              >
-                <div className="text-[var(--accent)] mb-6 tracking-widest uppercase">// ACQUIRED_CERTIFICATES_LOG</div>
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                  {certificates.map((cert) => (
-                    <div key={cert.id} className="border border-[var(--border-color)] p-6 bg-[var(--bg-primary)] hover:bg-[var(--accent)] hover:text-black transition-colors group flex flex-col justify-between min-h-[120px] cursor-default shadow-sm text-[var(--text-primary)]">
-                       <h3 className="text-lg font-bold uppercase">{cert.title}</h3>
-                       <div className="flex justify-between items-end mt-4">
-                         <span className="text-xs uppercase group-hover:text-black/70 text-[var(--text-muted)]">ISSUER: {cert.issuer}</span>
-                         <span className="text-xs uppercase group-hover:text-black text-[var(--accent)]">DATE: {cert.date}</span>
-                       </div>
+          <div className="flex-1 overflow-y-auto p-6 md:p-12 custom-scrollbar relative z-10">
+            <AnimatePresence mode="wait">
+              {activeTab === 'skills' ? (
+                <motion.div 
+                  key="skills"
+                  initial={{ opacity: 0, y: 10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: -10 }}
+                  transition={{ duration: 0.2 }}
+                  className="font-mono-custom text-sm md:text-base space-y-12"
+                >
+                  <div>
+                    <div className="text-[var(--accent)] mb-4 tracking-[0.2em] uppercase font-bold flex items-center gap-2">
+                      <span className="text-xl">^</span> PRIMARY SLOTS: FRONTEND_CORE
                     </div>
-                  ))}
-                </div>
-              </motion.div>
-            )}
-          </AnimatePresence>
+                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                      <div className="border border-[rgba(219,84,53,0.3)] p-4 bg-black/60 shadow-sm text-[var(--text-primary)] hover:border-[var(--accent)] transition-colors"> [L-HAND: REACT] </div>
+                      <div className="border border-[rgba(219,84,53,0.3)] p-4 bg-black/60 shadow-sm text-[var(--text-primary)] hover:border-[var(--accent)] transition-colors"> [R-HAND: NEXT.JS] </div>
+                      <div className="border border-[rgba(219,84,53,0.3)] p-4 bg-black/60 shadow-sm text-[var(--text-primary)] hover:border-[var(--accent)] transition-colors"> [ARMOR: TAILWIND] </div>
+                      <div className="border border-[rgba(219,84,53,0.3)] p-4 bg-black/60 shadow-sm text-[var(--text-primary)] hover:border-[var(--accent)] transition-colors"> [HEAD: TYPESCRIPT] </div>
+                      <div className="border border-[rgba(219,84,53,0.3)] p-4 bg-black/60 shadow-sm text-[var(--text-primary)] hover:border-[var(--accent)] transition-colors"> [NECK: JAVASCRIPT] </div>
+                    </div>
+                  </div>
 
+                  <div>
+                    <div className="text-[var(--accent)] mb-4 tracking-[0.2em] uppercase font-bold flex items-center gap-2">
+                      <span className="text-xl">^</span> SECONDARY SLOTS: BACKEND_MAIN
+                    </div>
+                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                      <div className="border border-[rgba(219,84,53,0.3)] p-4 bg-black/60 shadow-sm text-[var(--text-primary)] hover:border-[var(--accent)] transition-colors"> [BODY: NODE.JS] </div>
+                      <div className="border border-[rgba(219,84,53,0.3)] p-4 bg-black/60 shadow-sm text-[var(--text-primary)] hover:border-[var(--accent)] transition-colors"> [BELT: PYTHON] </div>
+                      <div className="border border-[rgba(219,84,53,0.3)] p-4 bg-black/60 shadow-sm text-[var(--text-primary)] hover:border-[var(--accent)] transition-colors"> [BOOTS: POSTGRES] </div>
+                      <div className="border border-[rgba(219,84,53,0.3)] p-4 bg-black/60 shadow-sm text-[var(--text-primary)] hover:border-[var(--accent)] transition-colors"> [RING_L: DOCKER] </div>
+                      <div className="border border-[rgba(219,84,53,0.3)] p-4 bg-black/60 shadow-sm text-[var(--text-primary)] hover:border-[var(--accent)] transition-colors"> [RING_R: AWS] </div>
+                    </div>
+                  </div>
+
+                  <div>
+                    <div className="text-[var(--accent)] mb-4 tracking-[0.2em] uppercase font-bold flex items-center gap-2">
+                      <span className="text-xl">^</span> AUXILIARY SLOTS: AI_ML_MODS
+                    </div>
+                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                      <div className="border border-[rgba(219,84,53,0.3)] p-4 bg-black/60 shadow-sm text-[var(--text-primary)] hover:border-[var(--accent)] transition-colors"> [MOD_01: PYTORCH] </div>
+                      <div className="border border-[rgba(219,84,53,0.3)] p-4 bg-black/60 shadow-sm text-[var(--text-primary)] hover:border-[var(--accent)] transition-colors"> [MOD_02: TENSORFLOW] </div>
+                      <div className="border border-[rgba(219,84,53,0.3)] p-4 bg-black/60 shadow-sm text-[var(--text-primary)] hover:border-[var(--accent)] transition-colors"> [MOD_03: NUMPY] </div>
+                    </div>
+                  </div>
+                </motion.div>
+              ) : (
+                <motion.div 
+                  key="certificates"
+                  initial={{ opacity: 0, y: 10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: -10 }}
+                  transition={{ duration: 0.2 }}
+                  className="font-mono-custom text-sm md:text-base space-y-8"
+                >
+                  <div className="text-[var(--accent)] mb-6 tracking-[0.2em] uppercase font-bold flex items-center gap-2">
+                    <span className="text-xl">^</span> ACQUIRED_CERTIFICATES_LOG
+                  </div>
+                  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                    {certificates.map((cert) => (
+                      <div key={cert.id} className="border border-[rgba(219,84,53,0.3)] p-8 bg-black/60 hover:border-[var(--accent)] transition-colors group flex flex-col justify-between min-h-[140px] cursor-default shadow-sm text-[var(--text-primary)] relative">
+                         <div className="absolute top-0 left-0 w-2 h-full bg-[var(--accent)] opacity-0 group-hover:opacity-100 transition-opacity"></div>
+                         <h3 className="text-lg md:text-xl font-bold uppercase ml-2">{cert.title}</h3>
+                         <div className="flex justify-between items-end mt-6 ml-2">
+                           <span className="text-xs uppercase text-[var(--text-muted)]">ISSUER: {cert.issuer}</span>
+                           <span className="text-xs uppercase text-[var(--accent)]">DATE: {cert.date}</span>
+                         </div>
+                      </div>
+                    ))}
+                  </div>
+                </motion.div>
+              )}
+            </AnimatePresence>
+          </div>
         </div>
       </div>
 
