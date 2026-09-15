@@ -849,28 +849,28 @@ const SkillsAndCertsModule = ({ darkMode }) => {
       </div>
 
       {/* BOTTOM SECTION: GITHUB ACTIVITY */}
-      <div className="flex flex-col mt-4 mb-4 md:mt-8 md:mb-6 w-full max-w-6xl mx-auto opacity-90">
+      <div className="flex flex-col mt-4 mb-4 md:mt-8 md:mb-6 w-full px-2 md:px-8 mx-auto opacity-90">
         
         {/* Terminal Header */}
-        <div className="font-mono-custom text-xs sm:text-sm tracking-[0.2em] uppercase flex items-center gap-4 mb-6">
+        <div className="font-mono-custom text-xs sm:text-sm md:text-base tracking-[0.2em] uppercase flex items-center gap-4 mb-8">
           <span className="text-[var(--accent)] font-bold whitespace-nowrap">&gt; SUBSYSTEM_LOG</span>
-          <div className="flex-1 border-b border-dashed border-[var(--text-muted)] opacity-30"></div>
+          <div className="flex-1 border-b-[2px] border-dashed border-[var(--text-muted)] opacity-30"></div>
           <span className="text-[var(--text-muted)] hidden sm:block whitespace-nowrap">PERSISTENT_GITHUB_ACTIVITY_STREAM</span>
-          <div className="flex-1 border-b border-dashed border-[var(--text-muted)] opacity-30 hidden sm:block"></div>
+          <div className="flex-1 border-b-[2px] border-dashed border-[var(--text-muted)] opacity-30 hidden sm:block"></div>
           <a href="https://github.com/riti2043" target="_blank" rel="noreferrer" className="flex items-center gap-2 hover:text-[var(--accent)] text-[var(--text-primary)] whitespace-nowrap transition-colors">
-            [@riti2043] <ExternalLink size={14} />
+            [@riti2043] <ExternalLink size={16} />
           </a>
         </div>
 
         {/* Graph */}
-        <div className="overflow-x-auto custom-scrollbar flex items-center justify-center">
-          <div className="min-w-fit mx-auto pl-4">
+        <div className="overflow-x-auto custom-scrollbar flex items-center justify-center w-full">
+          <div className="min-w-fit mx-auto pb-4 pr-2 pl-2">
             <GitHubCalendar 
               username="riti2043" 
               colorScheme={darkMode ? 'dark' : 'light'}
-              blockSize={14}
-              blockMargin={5}
-              fontSize={12}
+              blockSize={22}
+              blockMargin={6}
+              fontSize={16}
               showWeekdayLabels={true}
               theme={{
                 light: ['#e8e4db', '#f0a897', '#e87e64', '#e05b38', '#db5435'],
