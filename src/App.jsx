@@ -1079,7 +1079,7 @@ export default function App() {
       <nav className={`fixed top-0 w-full z-50 transition-all duration-500 pointer-events-none ${slidesInView ? 'opacity-0 -translate-y-2 pointer-events-none' : 'opacity-100 translate-y-0'}`}>
         <div className="max-w-7xl mx-auto px-6 h-24 flex flex-col justify-center items-end relative pointer-events-none">
           
-          <div className="flex items-center gap-5 pointer-events-auto">
+          <div className="flex items-center gap-3 md:gap-5 pointer-events-auto">
             {/* Theme Toggle Button */}
             <button
               onClick={toggleTheme}
@@ -1087,6 +1087,18 @@ export default function App() {
               aria-label="Toggle Theme"
             >
               {darkMode ? <Sun size={16} /> : <Moon size={16} />}
+            </button>
+
+            {/* Sound Toggle Button */}
+            <button
+              onClick={() => {
+                setSoundEnabled(!soundEnabled);
+                if (!soundEnabled) soundEngine.init();
+              }}
+              className="btn-pixel p-2.5 px-4 pointer-events-auto"
+              aria-label="Toggle Sound"
+            >
+              {soundEnabled ? <Volume2 size={16} /> : <VolumeX size={16} />}
             </button>
 
             {/* Menu Toggle Button */}
@@ -1214,7 +1226,10 @@ export default function App() {
                     Ready to explore the full interactive experience?
                   </p>
                   <button 
-                    onClick={() => setShowWelcomeModal(false)}
+                    onClick={() => {
+                      soundEngine.playBoot();
+                      setShowWelcomeModal(false);
+                    }}
                     className="btn-pixel w-full md:w-auto px-8 py-4 flex justify-center items-center text-lg tracking-widest whitespace-nowrap"
                   >
                     START
