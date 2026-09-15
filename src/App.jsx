@@ -834,14 +834,14 @@ const SkillsAndCertsModule = ({ darkMode }) => {
       </div>
 
       {/* BOTTOM SECTION: GITHUB ACTIVITY */}
-      <div className="border border-[var(--border-color)] bg-[var(--bg-secondary)] flex flex-col shadow-sm">
-        <div className="border-b border-[var(--border-color)] bg-zinc-100 dark:bg-zinc-900 p-2 sm:p-3 px-4 font-mono-custom text-xs sm:text-sm tracking-widest uppercase flex items-center justify-between">
+      <div className="flex flex-col mt-2">
+        <div className="font-mono-custom text-xs sm:text-sm tracking-widest uppercase flex items-center justify-between mb-2">
           <span className="text-[var(--accent)] line-clamp-1">// SUBSYSTEM_LOG: PERSISTENT_GITHUB_ACTIVITY_STREAM</span>
           <a href="https://github.com/riti2043" target="_blank" rel="noreferrer" className="flex items-center gap-1 hover:text-[var(--accent)] whitespace-nowrap ml-4 text-[var(--text-primary)]">
             @riti2043 <ExternalLink size={12} />
           </a>
         </div>
-        <div className="overflow-x-auto p-4 sm:p-6 custom-scrollbar flex items-center min-h-[180px]">
+        <div className="overflow-x-auto custom-scrollbar flex items-center min-h-[160px] pb-4">
           <div className="min-w-fit mx-auto">
             <GitHubCalendar 
               username="riti2043" 
