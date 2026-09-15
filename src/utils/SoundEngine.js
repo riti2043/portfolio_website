@@ -66,18 +66,18 @@ class RetroAudioEngine {
       const osc = this.ctx.createOscillator();
       const gain = this.ctx.createGain();
       
-      osc.type = 'sawtooth';
-      osc.frequency.setValueAtTime(150, this.ctx.currentTime);
-      osc.frequency.exponentialRampToValueAtTime(40, this.ctx.currentTime + 0.1);
+      osc.type = 'square';
+      osc.frequency.setValueAtTime(400, this.ctx.currentTime);
+      osc.frequency.exponentialRampToValueAtTime(600, this.ctx.currentTime + 0.03);
       
-      gain.gain.setValueAtTime(0.1, this.ctx.currentTime);
-      gain.gain.exponentialRampToValueAtTime(0.001, this.ctx.currentTime + 0.15);
+      gain.gain.setValueAtTime(0.04, this.ctx.currentTime);
+      gain.gain.exponentialRampToValueAtTime(0.001, this.ctx.currentTime + 0.08);
       
       osc.connect(gain);
       gain.connect(this.ctx.destination);
       
       osc.start();
-      osc.stop(this.ctx.currentTime + 0.15);
+      osc.stop(this.ctx.currentTime + 0.1);
     } catch (e) {
       console.warn("Audio playback failed", e);
     }
@@ -120,58 +120,25 @@ class RetroAudioEngine {
     
     try {
       const t = this.ctx.currentTime;
-      
-      // 1. Low hum
-      const hum = this.ctx.createOscillator();
-      const humGain = this.ctx.createGain();
-      hum.type = 'sawtooth';
-      hum.frequency.value = 50;
-      humGain.gain.setValueAtTime(0, t);
-      humGain.gain.linearRampToValueAtTime(0.05, t + 0.2);
-      humGain.gain.linearRampToValueAtTime(0, t + 1.2);
-      hum.connect(humGain);
-      humGain.connect(this.ctx.destination);
-      hum.start(t);
-      hum.stop(t + 1.2);
-
-      // 2. Crackle (white noise)
-      const buffer = this.createWhiteNoise(1);
-      if (buffer) {
-        const noiseSrc = this.ctx.createBufferSource();
-        noiseSrc.buffer = buffer;
-        const noiseFilter = this.ctx.createBiquadFilter();
-        noiseFilter.type = 'highpass';
-        noiseFilter.frequency.value = 2000;
-        const noiseGain = this.ctx.createGain();
-        noiseGain.gain.setValueAtTime(0, t);
-        noiseGain.gain.linearRampToValueAtTime(0.02, t + 0.1);
-        noiseGain.gain.exponentialRampToValueAtTime(0.001, t + 0.5);
-        noiseSrc.connect(noiseFilter);
-        noiseFilter.connect(noiseGain);
-        noiseGain.connect(this.ctx.destination);
-        noiseSrc.start(t);
-        noiseSrc.stop(t + 0.5);
-      }
-
-      // 3. Diagnostic beeps
-      const playBeep = (f, st, dur) => {
-        const o = this.ctx.createOscillator();
-        const g = this.ctx.createGain();
-        o.type = 'square';
-        o.frequency.value = f;
-        g.gain.setValueAtTime(0, st);
-        g.gain.linearRampToValueAtTime(0.03, st + 0.01);
-        g.gain.setValueAtTime(0.03, st + dur - 0.02);
-        g.gain.linearRampToValueAtTime(0, st + dur);
-        o.connect(g);
-        g.connect(this.ctx.destination);
-        o.start(st);
-        o.stop(st + dur);
+      const playNote = (freq, startTime, dur) => {
+        const osc = this.ctx.createOscillator();
+        const gain = this.ctx.createGain();
+        osc.type = 'square';
+        osc.frequency.value = freq;
+        gain.gain.setValueAtTime(0, startTime);
+        gain.gain.linearRampToValueAtTime(0.04, startTime + 0.02); // attack
+        gain.gain.exponentialRampToValueAtTime(0.001, startTime + dur); // fade out
+        osc.connect(gain);
+        gain.connect(this.ctx.destination);
+        osc.start(startTime);
+        osc.stop(startTime + dur);
       };
-      
-      playBeep(1200, t + 0.6, 0.1);
-      playBeep(1200, t + 0.75, 0.1);
-      playBeep(1600, t + 0.9, 0.2);
+
+      // Classic Game "Start" / Power-up Arpeggio (C Major)
+      playNote(523.25, t, 0.15);         // C5
+      playNote(659.25, t + 0.08, 0.15);  // E5
+      playNote(783.99, t + 0.16, 0.15);  // G5
+      playNote(1046.50, t + 0.24, 0.4);  // C6 (held slightly longer)
     } catch (e) {
       console.warn("Audio playback failed", e);
     }
