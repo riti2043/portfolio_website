@@ -731,10 +731,10 @@ const SkillsAndCertsModule = ({ darkMode }) => {
   ];
 
   return (
-    <section id="skills" className="h-screen w-full flex flex-col pt-24 pb-6 px-2 md:px-8 mx-auto gap-4 relative z-10">
+    <section id="skills" className="min-h-screen w-full flex flex-col pt-24 pb-12 px-2 md:px-8 mx-auto gap-12 relative z-10">
       
       {/* TOP SECTION: TABS & CONTENT BOX */}
-      <div className="flex-1 flex flex-col min-h-0 relative">
+      <div className="flex-1 flex flex-col min-h-[60vh] md:min-h-[70vh] relative">
         
         {/* TABS */}
         <div className="flex font-mono-custom text-sm md:text-base -mb-[3px] z-20 relative">
