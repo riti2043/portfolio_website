@@ -1,9 +1,10 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence, useScroll, useTransform } from 'framer-motion';
-import { Sun, Moon, ArrowUpRight, Menu, X, Download, Mail, Code2, Sparkles, ExternalLink, ChevronDown, CheckCircle2 } from 'lucide-react';
+import { Sun, Moon, ArrowUpRight, Menu, X, Download, Mail, Code2, Sparkles, ExternalLink, ChevronDown, CheckCircle2, Volume2, VolumeX } from 'lucide-react';
 import { GitHubCalendar } from 'react-github-calendar';
 import { KnowledgeGraph } from './components/KnowledgeGraph';
 import { Submissions } from './components/Submissions';
+import { soundEngine } from './utils/SoundEngine';
 
 // Custom SVG Icons for Github & Linkedin
 const GithubIcon = ({ size = 20, className = "" }) => (
@@ -731,8 +732,22 @@ const SkillsAndCertsModule = ({ darkMode }) => {
     { id: 3, title: "UVCE Marvel Level 3", issuer: "UVCE", date: "2026" }
   ];
 
-  const nextCert = () => setCertIndex((prev) => (prev + 1) % certificates.length);
-  const prevCert = () => setCertIndex((prev) => (prev - 1 + certificates.length) % certificates.length);
+  const nextCert = () => {
+    soundEngine.playDecrypt();
+    setCertIndex((prev) => (prev + 1) % certificates.length);
+  };
+  
+  const prevCert = () => {
+    soundEngine.playDecrypt();
+    setCertIndex((prev) => (prev - 1 + certificates.length) % certificates.length);
+  };
+
+  const handleTabSwitch = (tab) => {
+    if (activeTab !== tab) {
+      soundEngine.playTab();
+      setActiveTab(tab);
+    }
+  };
 
   return (
     <section id="skills" className="min-h-screen w-full flex flex-col pt-24 pb-12 px-2 md:px-8 mx-auto gap-12 relative z-10">
@@ -743,7 +758,7 @@ const SkillsAndCertsModule = ({ darkMode }) => {
         {/* TABS */}
         <div className="flex font-mono-custom text-sm md:text-base -mb-[3px] z-20 relative">
           <button 
-            onClick={() => setActiveTab('skills')}
+            onClick={() => handleTabSwitch('skills')}
             className={`px-8 md:px-16 py-3 md:py-4 uppercase tracking-widest transition-all font-bold ${
               activeTab === 'skills' 
                 ? 'bg-[var(--bg-secondary)] text-[var(--accent)] border-t-[3px] border-l-[3px] border-r-[3px] border-[var(--accent)]' 
@@ -754,7 +769,7 @@ const SkillsAndCertsModule = ({ darkMode }) => {
             SKILLS
           </button>
           <button 
-            onClick={() => setActiveTab('certificates')}
+            onClick={() => handleTabSwitch('certificates')}
             className={`px-8 md:px-16 py-3 md:py-4 uppercase tracking-widest transition-all font-bold ${
               activeTab === 'certificates' 
                 ? 'bg-[var(--bg-secondary)] text-[var(--accent)] border-t-[3px] border-l-[3px] border-r-[3px] border-[var(--accent)]' 
@@ -794,11 +809,11 @@ const SkillsAndCertsModule = ({ darkMode }) => {
                         <span className="text-xl">^</span> // PRIMARY SLOTS: FRONTEND_CORE
                       </div>
                       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                        <div className="border border-[rgba(219,84,53,0.3)] p-4 bg-black/60 shadow-sm text-[var(--text-primary)] hover:border-[var(--accent)] transition-colors"> [L-HAND: REACT] </div>
-                        <div className="border border-[rgba(219,84,53,0.3)] p-4 bg-black/60 shadow-sm text-[var(--text-primary)] hover:border-[var(--accent)] transition-colors"> [R-HAND: NEXT.JS] </div>
-                        <div className="border border-[rgba(219,84,53,0.3)] p-4 bg-black/60 shadow-sm text-[var(--text-primary)] hover:border-[var(--accent)] transition-colors"> [ARMOR: TAILWIND] </div>
-                        <div className="border border-[rgba(219,84,53,0.3)] p-4 bg-black/60 shadow-sm text-[var(--text-primary)] hover:border-[var(--accent)] transition-colors"> [HEAD: TYPESCRIPT] </div>
-                        <div className="border border-[rgba(219,84,53,0.3)] p-4 bg-black/60 shadow-sm text-[var(--text-primary)] hover:border-[var(--accent)] transition-colors"> [NECK: JAVASCRIPT] </div>
+                        <div onMouseEnter={() => soundEngine.playHover()} className="border border-[rgba(219,84,53,0.3)] p-4 bg-black/60 shadow-sm text-[var(--text-primary)] hover:border-[var(--accent)] transition-colors cursor-crosshair"> [L-HAND: REACT] </div>
+                        <div onMouseEnter={() => soundEngine.playHover()} className="border border-[rgba(219,84,53,0.3)] p-4 bg-black/60 shadow-sm text-[var(--text-primary)] hover:border-[var(--accent)] transition-colors cursor-crosshair"> [R-HAND: NEXT.JS] </div>
+                        <div onMouseEnter={() => soundEngine.playHover()} className="border border-[rgba(219,84,53,0.3)] p-4 bg-black/60 shadow-sm text-[var(--text-primary)] hover:border-[var(--accent)] transition-colors cursor-crosshair"> [ARMOR: TAILWIND] </div>
+                        <div onMouseEnter={() => soundEngine.playHover()} className="border border-[rgba(219,84,53,0.3)] p-4 bg-black/60 shadow-sm text-[var(--text-primary)] hover:border-[var(--accent)] transition-colors cursor-crosshair"> [HEAD: TYPESCRIPT] </div>
+                        <div onMouseEnter={() => soundEngine.playHover()} className="border border-[rgba(219,84,53,0.3)] p-4 bg-black/60 shadow-sm text-[var(--text-primary)] hover:border-[var(--accent)] transition-colors cursor-crosshair"> [NECK: JAVASCRIPT] </div>
                       </div>
                     </div>
 
@@ -807,11 +822,11 @@ const SkillsAndCertsModule = ({ darkMode }) => {
                         <span className="text-xl">^</span> // SECONDARY SLOTS: BACKEND_MAIN
                       </div>
                       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                        <div className="border border-[rgba(219,84,53,0.3)] p-4 bg-black/60 shadow-sm text-[var(--text-primary)] hover:border-[var(--accent)] transition-colors"> [BODY: NODE.JS] </div>
-                        <div className="border border-[rgba(219,84,53,0.3)] p-4 bg-black/60 shadow-sm text-[var(--text-primary)] hover:border-[var(--accent)] transition-colors"> [BELT: PYTHON] </div>
-                        <div className="border border-[rgba(219,84,53,0.3)] p-4 bg-black/60 shadow-sm text-[var(--text-primary)] hover:border-[var(--accent)] transition-colors"> [BOOTS: POSTGRES] </div>
-                        <div className="border border-[rgba(219,84,53,0.3)] p-4 bg-black/60 shadow-sm text-[var(--text-primary)] hover:border-[var(--accent)] transition-colors"> [RING_L: DOCKER] </div>
-                        <div className="border border-[rgba(219,84,53,0.3)] p-4 bg-black/60 shadow-sm text-[var(--text-primary)] hover:border-[var(--accent)] transition-colors"> [RING_R: AWS] </div>
+                        <div onMouseEnter={() => soundEngine.playHover()} className="border border-[rgba(219,84,53,0.3)] p-4 bg-black/60 shadow-sm text-[var(--text-primary)] hover:border-[var(--accent)] transition-colors cursor-crosshair"> [BODY: NODE.JS] </div>
+                        <div onMouseEnter={() => soundEngine.playHover()} className="border border-[rgba(219,84,53,0.3)] p-4 bg-black/60 shadow-sm text-[var(--text-primary)] hover:border-[var(--accent)] transition-colors cursor-crosshair"> [BELT: PYTHON] </div>
+                        <div onMouseEnter={() => soundEngine.playHover()} className="border border-[rgba(219,84,53,0.3)] p-4 bg-black/60 shadow-sm text-[var(--text-primary)] hover:border-[var(--accent)] transition-colors cursor-crosshair"> [BOOTS: POSTGRES] </div>
+                        <div onMouseEnter={() => soundEngine.playHover()} className="border border-[rgba(219,84,53,0.3)] p-4 bg-black/60 shadow-sm text-[var(--text-primary)] hover:border-[var(--accent)] transition-colors cursor-crosshair"> [RING_L: DOCKER] </div>
+                        <div onMouseEnter={() => soundEngine.playHover()} className="border border-[rgba(219,84,53,0.3)] p-4 bg-black/60 shadow-sm text-[var(--text-primary)] hover:border-[var(--accent)] transition-colors cursor-crosshair"> [RING_R: AWS] </div>
                       </div>
                     </div>
 
@@ -820,9 +835,9 @@ const SkillsAndCertsModule = ({ darkMode }) => {
                         <span className="text-xl">^</span> // AUXILIARY SLOTS: AI_ML_MODS
                       </div>
                       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                        <div className="border border-[rgba(219,84,53,0.3)] p-4 bg-black/60 shadow-sm text-[var(--text-primary)] hover:border-[var(--accent)] transition-colors"> [MOD_01: PYTORCH] </div>
-                        <div className="border border-[rgba(219,84,53,0.3)] p-4 bg-black/60 shadow-sm text-[var(--text-primary)] hover:border-[var(--accent)] transition-colors"> [MOD_02: TENSORFLOW] </div>
-                        <div className="border border-[rgba(219,84,53,0.3)] p-4 bg-black/60 shadow-sm text-[var(--text-primary)] hover:border-[var(--accent)] transition-colors"> [MOD_03: NUMPY] </div>
+                        <div onMouseEnter={() => soundEngine.playHover()} className="border border-[rgba(219,84,53,0.3)] p-4 bg-black/60 shadow-sm text-[var(--text-primary)] hover:border-[var(--accent)] transition-colors cursor-crosshair"> [MOD_01: PYTORCH] </div>
+                        <div onMouseEnter={() => soundEngine.playHover()} className="border border-[rgba(219,84,53,0.3)] p-4 bg-black/60 shadow-sm text-[var(--text-primary)] hover:border-[var(--accent)] transition-colors cursor-crosshair"> [MOD_02: TENSORFLOW] </div>
+                        <div onMouseEnter={() => soundEngine.playHover()} className="border border-[rgba(219,84,53,0.3)] p-4 bg-black/60 shadow-sm text-[var(--text-primary)] hover:border-[var(--accent)] transition-colors cursor-crosshair"> [MOD_03: NUMPY] </div>
                       </div>
                     </div>
                   </div>
@@ -935,12 +950,17 @@ const SkillsAndCertsModule = ({ darkMode }) => {
 };
 
 export default function App() {
-  const [darkMode, setDarkMode] = useState(false);
+  const [darkMode, setDarkMode] = useState(true);
+  const [soundEnabled, setSoundEnabled] = useState(true);
   const [slidesInView, setSlidesInView] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [showWelcomeModal, setShowWelcomeModal] = useState(true);
   const [activeHeroIndex, setActiveHeroIndex] = useState(0);
   const [scrollProgress, setScrollProgress] = useState(0);
+
+  useEffect(() => {
+    soundEngine.setMuted(!soundEnabled);
+  }, [soundEnabled]);
 
   // Cycling titles for Hero section
   const heroTitles = [
