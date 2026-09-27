@@ -2,7 +2,6 @@ import React, { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence, useScroll, useTransform } from 'framer-motion';
 import { Sun, Moon, ArrowUpRight, Menu, X, Download, Mail, Code2, Sparkles, ExternalLink, ChevronDown, CheckCircle2, Volume2, VolumeX } from 'lucide-react';
 import { GitHubCalendar } from 'react-github-calendar';
-import { KnowledgeGraph } from './components/KnowledgeGraph';
 import { Submissions } from './components/Submissions';
 import { soundEngine } from './utils/SoundEngine';
 import AIJourneyModule from './ai-ml-journey/AIJourney';
@@ -1376,7 +1375,6 @@ export default function App() {
         </div>
       </section>
 
-      <KnowledgeGraph />
       <Submissions />
 
       {/* ==================== CONTACT & FOOTER SECTION ==================== */}
