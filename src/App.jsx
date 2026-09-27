@@ -5,6 +5,7 @@ import { GitHubCalendar } from 'react-github-calendar';
 import { KnowledgeGraph } from './components/KnowledgeGraph';
 import { Submissions } from './components/Submissions';
 import { soundEngine } from './utils/SoundEngine';
+import AIJourneyModule from './ai-ml-journey/AIJourney';
 
 // Custom SVG Icons for Github & Linkedin
 const GithubIcon = ({ size = 20, className = "" }) => (
@@ -1255,6 +1256,16 @@ export default function App() {
       <StickySlides onActive={setSlidesInView} />
 
       <SkillsAndCertsModule darkMode={darkMode} />
+
+      {/* ==================== AI/ML JOURNEY SECTION ==================== */}
+      <section id="ai-journey" className="py-12 px-6 max-w-[95rem] mx-auto w-full">
+        <div className="mb-8 px-2 md:px-8">
+          <span className="font-mono-custom text-xs uppercase tracking-widest text-[var(--text-muted)]">05 // AI_LEARNING_ATLAS</span>
+          <h2 className="text-3xl sm:text-5xl font-bold mt-2 tracking-tight">AI / ML Journey</h2>
+          <p className="text-[var(--text-muted)] font-mono-custom text-xs mt-2">Interactive node-based skill progression map ↓</p>
+        </div>
+        <AIJourneyModule />
+      </section>
 
       {/* ==================== PROJECTS SECTION ("SCROLL-TO-SEE" PINNED CARDS) ==================== */}
       <section id="projects" className="py-24 px-6 max-w-7xl mx-auto">
