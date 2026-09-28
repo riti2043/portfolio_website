@@ -268,7 +268,7 @@ export function JourneyGraph({ nodes, links, selectedId, hoveredId, exitingIds, 
   const graphRef = useRef<any>(null);
   const hostRef = useRef<HTMLDivElement>(null);
   const initialFitDoneRef = useRef(false);
-  const [webglAvailable] = useState(supportsWebGL);
+  const [webglAvailable] = useState(true);
   const [viewport, setViewport] = useState({ width: 0, height: 0 });
   const focusIds = useMemo(() => lineage(nodes.find((node) => node.id === hoveredId) ?? null, nodes), [hoveredId, nodes]);
 
@@ -357,10 +357,7 @@ export function JourneyGraph({ nodes, links, selectedId, hoveredId, exitingIds, 
           graphData={{ nodes, links }}
           backgroundColor="#050505"
           showNavInfo={false}
-          // Keep orbit gestures reliable; the briefing panel controls expansion,
-          // so node dragging is unnecessary and can trigger a stale pointer
-          // cancellation path inside react-force-graph's DragControls.
-          enableNodeDrag={false}
+          enableNodeDrag={true}
           enableNavigationControls
           controlType="orbit"
           nodeThreeObject={nodeObject}
