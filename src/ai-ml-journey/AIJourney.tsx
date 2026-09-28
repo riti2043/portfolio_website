@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
-import { CircleHelp, ChevronDown, ChevronRight, Volume2, VolumeX, Crosshair, Pause, Play, ZoomIn, ZoomOut } from 'lucide-react';
+import { CircleHelp, ChevronDown, ChevronRight, Volume2, VolumeX, Crosshair } from 'lucide-react';
 import { descendants, childIds, journeyById, journeyNodes, rootNode, type JourneyNode } from './journey-data';
 import { JourneyGraph, type JourneyLink } from './JourneyGraph';
 import './ai-journey.css';
@@ -40,8 +40,6 @@ function App() {
   const [viewResetToken, setViewResetToken] = useState(0);
   const [soundEnabled, setSoundEnabled] = useState(false);
   const [helpOpen, setHelpOpen] = useState(false);
-  const [isPaused, setIsPaused] = useState(false);
-  const [zoomToken, setZoomToken] = useState<{ action: 'in' | 'out' | null; ts: number } | undefined>();
   const signal = useSignal();
   const collapseTimers = useRef<number[]>([]);
 
@@ -124,17 +122,7 @@ function App() {
             <p className="wordmark">AI/ML JOURNEY</p>
             <div className="stage-coordinates">LEARNING ATLAS / 01</div>
           </div>
-          <div className="stage-readout flex gap-2">
-            <button className="control-button" type="button" onClick={() => setZoomToken({ action: 'in', ts: Date.now() })} aria-label="Zoom in">
-              <ZoomIn size={14} strokeWidth={1.5} />
-            </button>
-            <button className="control-button" type="button" onClick={() => setZoomToken({ action: 'out', ts: Date.now() })} aria-label="Zoom out">
-              <ZoomOut size={14} strokeWidth={1.5} />
-            </button>
-            <button className={`control-button ${isPaused ? 'is-on' : ''}`} type="button" onClick={() => setIsPaused(!isPaused)} aria-label={isPaused ? 'Resume animation' : 'Pause animation'}>
-              {isPaused ? <Play size={14} strokeWidth={1.5} /> : <Pause size={14} strokeWidth={1.5} />}
-            </button>
-          </div>
+          <div className="stage-readout"><span className="status-dot" /> <span>{visibleNodes.length} NODES ONLINE</span></div>
         </div>
         <div className="graph-canvas" data-testid="graph-canvas">
           <JourneyGraph
@@ -144,8 +132,6 @@ function App() {
             hoveredId={hoveredId}
             exitingIds={exitingIds}
             resetViewToken={viewResetToken}
-            isPaused={isPaused}
-            zoomToken={zoomToken}
             onSelect={(node) => selectNode(node, true)}
             onHover={(node) => setHoveredId(node?.id ?? null)}
           />
