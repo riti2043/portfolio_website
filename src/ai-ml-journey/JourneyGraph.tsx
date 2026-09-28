@@ -357,7 +357,10 @@ export function JourneyGraph({ nodes, links, selectedId, hoveredId, exitingIds, 
           graphData={{ nodes, links }}
           backgroundColor="#050505"
           showNavInfo={false}
-          enableNodeDrag={true}
+          // Keep orbit gestures reliable; the briefing panel controls expansion,
+          // so node dragging is unnecessary and can trigger a stale pointer
+          // cancellation path inside react-force-graph's DragControls.
+          enableNodeDrag={false}
           enableNavigationControls
           controlType="orbit"
           nodeThreeObject={nodeObject}
