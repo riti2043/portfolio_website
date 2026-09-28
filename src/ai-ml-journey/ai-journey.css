@@ -3,8 +3,24 @@
 
 
 :root {
+  --background: 0 0% 2%;
+  --foreground: 33 35% 90%;
+  --muted-foreground: 31 11% 57%;
+  --border: 28 22% 16%;
+  --card: 0 0% 4%;
+  --card-foreground: 33 35% 90%;
+  --primary: 25 85% 59%;
+  --primary-foreground: 0 0% 3%;
+  --secondary: 28 20% 10%;
+  --secondary-foreground: 33 35% 90%;
+  --accent: 27 90% 64%;
+  --accent-foreground: 0 0% 3%;
+  --destructive: 0 60% 55%;
+  --input: 28 22% 16%;
+  --ring: 25 85% 59%;
   --app-font-sans: 'IBM Plex Mono', monospace;
   --app-font-mono: 'Space Mono', monospace;
+  --radius: 0px;
 }
 
 .journey-container-wrapper {
