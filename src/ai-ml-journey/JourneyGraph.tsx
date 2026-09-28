@@ -15,6 +15,8 @@ interface JourneyGraphProps {
   hoveredId: string | null;
   exitingIds?: Set<string>;
   resetViewToken?: number;
+  isPaused?: boolean;
+  zoomToken?: { action: 'in' | 'out' | null; ts: number };
   onSelect: (node: JourneyNode) => void;
   onHover: (node: JourneyNode | null) => void;
 }
@@ -26,7 +28,7 @@ const palette = {
   3: { core: '#E0A868', glow: '#9C4A18', radius: 2.4 },
 } as const;
 
-const DEFAULT_CAMERA_DISTANCE = 300;
+const DEFAULT_CAMERA_DISTANCE = 150;
 const DEFAULT_CAMERA_DURATION = 0;
 
 const endpointId = (endpoint: string | JourneyNode): string =>
@@ -196,7 +198,7 @@ const makeLabel = (node: JourneyNode, visible: boolean, emphasized: boolean): TH
   const canvas = document.createElement('canvas');
   const context = canvas.getContext('2d');
   if (!context) return null;
-  const fontSize = node.tier === 0 ? 24 : node.tier === 1 ? 17 : 13;
+  const fontSize = node.tier === 0 ? 32 : node.tier === 1 ? 26 : 20;
   const font = `${node.tier === 0 ? '700' : '600'} ${fontSize}px "Space Mono", monospace`;
   context.font = font;
   const textWidth = context.measureText(node.name).width;
@@ -218,9 +220,9 @@ const makeLabel = (node: JourneyNode, visible: boolean, emphasized: boolean): TH
     depthWrite: false,
       opacity: emphasized || node.tier < 2 ? 1 : .92,
   }));
-  const width = node.tier === 0 ? 30 : node.tier === 1 ? 22 : 17;
+  const width = node.tier === 0 ? 50 : node.tier === 1 ? 38 : 30;
   sprite.scale.set(width, width * (canvas.height / canvas.width), 1);
-  sprite.position.set(0, palette[node.tier].radius + (node.tier === 0 ? 3 : 2), 0);
+  sprite.position.set(0, palette[node.tier].radius + (node.tier === 0 ? 5 : 3), 0);
   return sprite;
 };
 
@@ -264,7 +266,7 @@ function makeNodeObject(node: JourneyNode, selectedId: string, hoveredId: string
   return group;
 }
 
-export function JourneyGraph({ nodes, links, selectedId, hoveredId, exitingIds, resetViewToken, onSelect, onHover }: JourneyGraphProps) {
+export function JourneyGraph({ nodes, links, selectedId, hoveredId, exitingIds, resetViewToken, isPaused, zoomToken, onSelect, onHover }: JourneyGraphProps) {
   const graphRef = useRef<any>(null);
   const hostRef = useRef<HTMLDivElement>(null);
   const initialFitDoneRef = useRef(false);
@@ -296,9 +298,19 @@ export function JourneyGraph({ nodes, links, selectedId, hoveredId, exitingIds, 
       const source = nodes.find((node) => node.id === endpointId(link.source));
       return source?.tier === 0 ? 125 : source?.tier === 1 ? 72 : 44;
     });
+    
+    // Auto-set the camera immediately for a zoomed-in look right away
+    if (!initialFitDoneRef.current) {
+       graph.cameraPosition?.(
+         { x: 0, y: 0, z: DEFAULT_CAMERA_DISTANCE },
+         { x: 0, y: 0, z: 0 },
+         0
+       );
+    }
+    
     const controls = graph.controls?.();
     if (controls) {
-      controls.autoRotate = true;
+      controls.autoRotate = !isPaused;
       controls.autoRotateSpeed = 0.28;
       controls.enableDamping = true;
       controls.dampingFactor = 0.06;
@@ -306,7 +318,19 @@ export function JourneyGraph({ nodes, links, selectedId, hoveredId, exitingIds, 
     return () => {
       if (controls) controls.autoRotate = false;
     };
-  }, [nodes]);
+  }, [nodes, isPaused]);
+
+  useEffect(() => {
+    const graph = graphRef.current;
+    if (!graph || !zoomToken) return;
+    if (zoomToken.action === 'in') {
+      const p = graph.cameraPosition();
+      graph.cameraPosition({ x: p.x * 0.8, y: p.y * 0.8, z: p.z * 0.8 }, undefined, 300);
+    } else if (zoomToken.action === 'out') {
+      const p = graph.cameraPosition();
+      graph.cameraPosition({ x: p.x * 1.25, y: p.y * 1.25, z: p.z * 1.25 }, undefined, 300);
+    }
+  }, [zoomToken]);
 
   useEffect(() => {
     const graph = graphRef.current;
