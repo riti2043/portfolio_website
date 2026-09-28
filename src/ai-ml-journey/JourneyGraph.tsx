@@ -268,7 +268,7 @@ export function JourneyGraph({ nodes, links, selectedId, hoveredId, exitingIds, 
   const graphRef = useRef<any>(null);
   const hostRef = useRef<HTMLDivElement>(null);
   const initialFitDoneRef = useRef(false);
-  const [webglAvailable] = useState(true);
+  const [webglAvailable] = useState(supportsWebGL);
   const [viewport, setViewport] = useState({ width: 0, height: 0 });
   const focusIds = useMemo(() => lineage(nodes.find((node) => node.id === hoveredId) ?? null, nodes), [hoveredId, nodes]);
 
