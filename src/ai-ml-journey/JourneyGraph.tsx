@@ -298,16 +298,8 @@ export function JourneyGraph({ nodes, links, selectedId, hoveredId, exitingIds, 
       const source = nodes.find((node) => node.id === endpointId(link.source));
       return source?.tier === 0 ? 125 : source?.tier === 1 ? 72 : 44;
     });
-    
-    // Auto-set the camera immediately for a zoomed-in look right away
-    if (!initialFitDoneRef.current) {
-       graph.cameraPosition?.(
-         { x: 0, y: 0, z: DEFAULT_CAMERA_DISTANCE },
-         { x: 0, y: 0, z: 0 },
-         0
-       );
-    }
-    
+
+    // We apply controls here if they exist, else we let onEngineStop handle the initial setup.
     const controls = graph.controls?.();
     if (controls) {
       controls.autoRotate = !isPaused;
@@ -315,31 +307,31 @@ export function JourneyGraph({ nodes, links, selectedId, hoveredId, exitingIds, 
       controls.enableDamping = true;
       controls.dampingFactor = 0.06;
     }
-    return () => {
-      if (controls) controls.autoRotate = false;
-    };
   }, [nodes, isPaused]);
 
   useEffect(() => {
     const graph = graphRef.current;
     if (!graph || !zoomToken) return;
-    if (zoomToken.action === 'in') {
+    try {
       const p = graph.cameraPosition();
-      graph.cameraPosition({ x: p.x * 0.8, y: p.y * 0.8, z: p.z * 0.8 }, undefined, 300);
-    } else if (zoomToken.action === 'out') {
-      const p = graph.cameraPosition();
-      graph.cameraPosition({ x: p.x * 1.25, y: p.y * 1.25, z: p.z * 1.25 }, undefined, 300);
+      if (zoomToken.action === 'in') {
+        graph.cameraPosition({ x: p.x * 0.7, y: p.y * 0.7, z: p.z * 0.7 }, { x: 0, y: 0, z: 0 }, 300);
+      } else if (zoomToken.action === 'out') {
+        graph.cameraPosition({ x: p.x * 1.4, y: p.y * 1.4, z: p.z * 1.4 }, { x: 0, y: 0, z: 0 }, 300);
+      }
+    } catch (err) {
+      console.warn('Zoom failed:', err);
     }
   }, [zoomToken]);
 
   useEffect(() => {
     const graph = graphRef.current;
     if (!graph || !resetViewToken) return;
-    graph.centerAt?.(0, 0, 0, 0);
+    graph.centerAt?.(0, 0, 0, 300);
     graph.cameraPosition?.(
       { x: 0, y: 0, z: DEFAULT_CAMERA_DISTANCE },
       { x: 0, y: 0, z: 0 },
-      DEFAULT_CAMERA_DURATION,
+      800,
     );
   }, [resetViewToken]);
 
@@ -381,9 +373,6 @@ export function JourneyGraph({ nodes, links, selectedId, hoveredId, exitingIds, 
           graphData={{ nodes, links }}
           backgroundColor="#050505"
           showNavInfo={false}
-          // Keep orbit gestures reliable; the briefing panel controls expansion,
-          // so node dragging is unnecessary and can trigger a stale pointer
-          // cancellation path inside react-force-graph's DragControls.
           enableNodeDrag={false}
           enableNavigationControls
           controlType="orbit"
@@ -396,17 +385,27 @@ export function JourneyGraph({ nodes, links, selectedId, hoveredId, exitingIds, 
           linkDirectionalParticles={0}
           d3AlphaDecay={0.018}
           d3VelocityDecay={0.88}
-          cooldownTicks={140}
-          warmupTicks={80}
+          cooldownTicks={0}
+          warmupTicks={220}
           onEngineStop={() => {
             if (initialFitDoneRef.current) return;
             initialFitDoneRef.current = true;
-            graphRef.current?.centerAt?.(0, 0, 0, 0);
-            graphRef.current?.cameraPosition?.(
-              { x: 0, y: 0, z: DEFAULT_CAMERA_DISTANCE },
-              { x: 0, y: 0, z: 0 },
-              DEFAULT_CAMERA_DURATION,
-            );
+            const graph = graphRef.current;
+            if (graph) {
+               graph.centerAt?.(0, 0, 0, 0);
+               graph.cameraPosition?.(
+                 { x: 0, y: 0, z: DEFAULT_CAMERA_DISTANCE },
+                 { x: 0, y: 0, z: 0 },
+                 DEFAULT_CAMERA_DURATION,
+               );
+               const controls = graph.controls?.();
+               if (controls) {
+                 controls.autoRotate = !isPaused;
+                 controls.autoRotateSpeed = 0.28;
+                 controls.enableDamping = true;
+                 controls.dampingFactor = 0.06;
+               }
+            }
           }}
           onNodeClick={(node: JourneyNode) => onSelect(node)}
           onNodeHover={(node: JourneyNode | null) => onHover(node)}
