@@ -220,8 +220,8 @@ const makeLabel = (node: JourneyNode, visible: boolean, emphasized: boolean): TH
     depthWrite: false,
       opacity: emphasized || node.tier < 2 ? 1 : .92,
   }));
-  const width = node.tier === 0 ? 75 : node.tier === 1 ? 55 : 45;
-  sprite.scale.set(width, width * (canvas.height / canvas.width), 1);
+  const scaleFactor = 0.35;
+  sprite.scale.set(canvas.width * scaleFactor, canvas.height * scaleFactor, 1);
   sprite.position.set(0, palette[node.tier].radius + (node.tier === 0 ? 7 : 5), 0);
   return sprite;
 };
