@@ -198,12 +198,12 @@ const makeLabel = (node: JourneyNode, visible: boolean, emphasized: boolean): TH
   const canvas = document.createElement('canvas');
   const context = canvas.getContext('2d');
   if (!context) return null;
-  const fontSize = node.tier === 0 ? 52 : node.tier === 1 ? 40 : 30;
+  const fontSize = node.tier === 0 ? 36 : node.tier === 1 ? 28 : 21;
   const font = `${node.tier === 0 ? '700' : '600'} ${fontSize}px "Space Mono", monospace`;
   context.font = font;
   const textWidth = context.measureText(node.name).width;
-  canvas.width = Math.ceil(textWidth + 60);
-  canvas.height = fontSize + 50;
+  canvas.width = Math.ceil(textWidth + 48);
+  canvas.height = fontSize + 40;
   context.font = font;
   context.textAlign = 'center';
   context.textBaseline = 'middle';
