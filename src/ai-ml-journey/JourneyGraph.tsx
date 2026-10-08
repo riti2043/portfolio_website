@@ -28,7 +28,7 @@ const palette = {
   3: { core: '#E0A868', glow: '#9C4A18', radius: 2.4 },
 } as const;
 
-const DEFAULT_CAMERA_DISTANCE = 150;
+const DEFAULT_CAMERA_DISTANCE = 300;
 const DEFAULT_CAMERA_DURATION = 0;
 
 const endpointId = (endpoint: string | JourneyNode): string =>
@@ -198,12 +198,12 @@ const makeLabel = (node: JourneyNode, visible: boolean, emphasized: boolean): TH
   const canvas = document.createElement('canvas');
   const context = canvas.getContext('2d');
   if (!context) return null;
-  const fontSize = node.tier === 0 ? 32 : node.tier === 1 ? 26 : 20;
+  const fontSize = node.tier === 0 ? 52 : node.tier === 1 ? 40 : 30;
   const font = `${node.tier === 0 ? '700' : '600'} ${fontSize}px "Space Mono", monospace`;
   context.font = font;
   const textWidth = context.measureText(node.name).width;
-  canvas.width = Math.ceil(textWidth + 40);
-  canvas.height = fontSize + 36;
+  canvas.width = Math.ceil(textWidth + 60);
+  canvas.height = fontSize + 50;
   context.font = font;
   context.textAlign = 'center';
   context.textBaseline = 'middle';
@@ -220,9 +220,9 @@ const makeLabel = (node: JourneyNode, visible: boolean, emphasized: boolean): TH
     depthWrite: false,
       opacity: emphasized || node.tier < 2 ? 1 : .92,
   }));
-  const width = node.tier === 0 ? 45 : node.tier === 1 ? 35 : 28;
+  const width = node.tier === 0 ? 75 : node.tier === 1 ? 55 : 45;
   sprite.scale.set(width, width * (canvas.height / canvas.width), 1);
-  sprite.position.set(0, palette[node.tier].radius + (node.tier === 0 ? 4 : 3), 0);
+  sprite.position.set(0, palette[node.tier].radius + (node.tier === 0 ? 7 : 5), 0);
   return sprite;
 };
 
