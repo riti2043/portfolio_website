@@ -1,6 +1,6 @@
 import React, { useRef } from 'react';
 import HTMLFlipBook from 'react-pageflip';
-import { ArrowLeft, ArrowRight, ExternalLink, Github } from 'lucide-react';
+import { ArrowLeft, ArrowRight, ExternalLink, } from 'lucide-react';
 
 const submissions = [
   { 
@@ -165,7 +165,7 @@ export const Submissions = () => {
                     <div className="mt-auto flex flex-wrap gap-2 pt-4 border-t border-[var(--border-color)]">
                         {sub.github && (
                             <a href={sub.github} target="_blank" rel="noreferrer" className="flex items-center gap-1 text-xs font-mono-custom border border-[var(--border-color)] px-2 py-1 hover:bg-[var(--accent)] hover:text-[#000] transition-colors">
-                                <Github size={12} /> REPOSITORY
+                                [GitHub] REPOSITORY
                             </a>
                         )}
                         {sub.demo && (

@@ -1,3 +1,4 @@
+import { SpaceCarousel } from './components/SpaceCarousel';
 import React, { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence, useScroll, useTransform } from 'framer-motion';
 import { Sun, Moon, ArrowUpRight, Menu, X, Download, Mail, Code2, Sparkles, ExternalLink, ChevronDown, CheckCircle2, Volume2, VolumeX } from 'lucide-react';
@@ -1267,111 +1268,9 @@ export default function App() {
       </section>
 
       {/* ==================== PROJECTS SECTION ("SCROLL-TO-SEE" PINNED CARDS) ==================== */}
-      <section id="projects" className="py-24 px-6 max-w-7xl mx-auto">
-        <div className="mb-12">
-          <span className="font-mono-custom text-xs uppercase tracking-widest text-[var(--text-muted)]">03 // SELECTED WORK</span>
-          <h2 className="text-3xl sm:text-5xl font-bold mt-2 tracking-tight">Scroll to Explore Projects</h2>
-          <p className="text-[var(--text-muted)] font-mono-custom text-xs mt-2">Sticky scroll card stacking experience ↓</p>
-        </div>
+      <SpaceCarousel />
 
-        {/* Stacked Sticky Project Showcase Cards */}
-        <div className="space-y-16">
-          {projects.map((project, index) => (
-            <motion.div
-              key={project.id}
-              className={`sticky top-28 rounded-3xl border ${project.accentColor} bg-[var(--bg-primary)] shadow-xl overflow-hidden p-8 sm:p-12 grid grid-cols-1 lg:grid-cols-12 gap-8 items-center border-[var(--border-color)]`}
-            >
-              {/* Project Details Left */}
-              <div className="lg:col-span-6 space-y-6">
-                <div className="flex items-center justify-between font-mono-custom text-xs text-[var(--text-muted)] border-b border-[var(--border-color)] pb-3">
-                  <span>PROJECT // {project.id}</span>
-                  <span>04 TOTAL</span>
-                </div>
-
-                <div>
-                  <h3 className="text-2xl sm:text-4xl font-bold tracking-tight">{project.title}</h3>
-                  <p className="font-mono-custom text-sm text-[var(--text-muted)] mt-1">{project.subtitle}</p>
-                </div>
-
-                <p className="text-[var(--text-muted)] text-sm sm:text-base leading-relaxed">
-                  {project.description}
-                </p>
-
-                {/* Tech Chips */}
-                <div className="flex flex-wrap gap-2 pt-2">
-                  {project.tags.map((tag, tIdx) => (
-                    <span 
-                      key={tIdx}
-                      className="px-3 py-1 rounded-full text-xs font-mono-custom border border-[var(--border-color)] bg-zinc-100 dark:bg-zinc-800"
-                    >
-                      {tag}
-                    </span>
-                  ))}
-                </div>
-
-                {/* Links */}
-                <div className="flex items-center gap-4 pt-4 font-mono-custom text-xs">
-                  <a 
-                    href={project.demo} 
-                    target="_blank" 
-                    rel="noreferrer"
-                    onClick={() => soundEngine.playTab()}
-                    className="btn-bitmap px-5 py-2.5 flex items-center gap-1.5 transition-colors font-mono-custom text-sm"
-                  >
-                    <span>Live Demo</span>
-                    <ExternalLink size={14} />
-                  </a>
-                  <a 
-                    href={project.github} 
-                    target="_blank" 
-                    rel="noreferrer"
-                    onClick={() => soundEngine.playTab()}
-                    className="btn-bitmap px-5 py-2.5 flex items-center gap-1.5 transition-colors font-mono-custom text-sm"
-                  >
-                    <span>Source Code</span>
-                    <GithubIcon size={14} />
-                  </a>
-                </div>
-              </div>
-
-              {/* Project Card Right Preview Mockup */}
-              <div className="lg:col-span-6">
-                <div className={`w-full aspect-video rounded-2xl bg-gradient-to-br ${project.imageBg} border border-zinc-700/50 p-6 flex flex-col justify-between relative shadow-inner text-white overflow-hidden group`}>
-                  
-                  {/* Wireframe Mockup Top Bar */}
-                  <div className="flex items-center justify-between border-b border-white/10 pb-3">
-                    <div className="flex items-center gap-1.5">
-                      <div className="w-2.5 h-2.5 rounded-full bg-red-500/80" />
-                      <div className="w-2.5 h-2.5 rounded-full bg-yellow-500/80" />
-                      <div className="w-2.5 h-2.5 rounded-full bg-green-500/80" />
-                    </div>
-                    <span className="font-mono-custom text-[10px] text-white/50">{project.title.toLowerCase().replace(/\s+/g, '-')}.app</span>
-                  </div>
-
-                  {/* Wireframe Graphics */}
-                  <div className="my-auto space-y-3 font-mono-custom">
-                    <div className="h-4 w-3/4 bg-white/20 rounded animate-pulse" />
-                    <div className="h-3 w-1/2 bg-white/10 rounded" />
-                    <div className="grid grid-cols-3 gap-2 pt-2">
-                      <div className="h-12 rounded bg-white/10 border border-white/5" />
-                      <div className="h-12 rounded bg-white/10 border border-white/5" />
-                      <div className="h-12 rounded bg-white/10 border border-white/5" />
-                    </div>
-                  </div>
-
-                  <div className="flex justify-between items-center text-[10px] font-mono-custom text-white/40">
-                    <span>BUILD // OK</span>
-                    <span>v1.0.4</span>
-                  </div>
-                </div>
-              </div>
-
-            </motion.div>
-          ))}
-        </div>
-      </section>
-
-      <Submissions />
+        <Submissions />
 
       {/* ==================== CONTACT & FOOTER SECTION ==================== */}
       <section id="contact" className="py-24 border-t border-[var(--border-color)] px-6 max-w-7xl mx-auto">
