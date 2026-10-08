@@ -1,4 +1,3 @@
-import { SpaceCarousel } from './components/SpaceCarousel';
 import React, { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence, useScroll, useTransform } from 'framer-motion';
 import { Sun, Moon, ArrowUpRight, Menu, X, Download, Mail, Code2, Sparkles, ExternalLink, ChevronDown, CheckCircle2, Volume2, VolumeX } from 'lucide-react';
@@ -1007,34 +1006,34 @@ export default function App() {
   const projects = [
     {
       id: "01",
-      title: "AI Settlement Auditor",
-      subtitle: "Automated Financial & Document Intelligence Platform",
-      description: "An AI-powered auditing platform that parses complex settlement agreements, detects discrepancies using LLM logic, and flags compliance risks automatically.",
-      tags: ["React", "Python", "FastAPI", "OpenAI", "Tailwind CSS"],
-      github: "https://github.com/riti2043",
-      demo: "https://github.com/riti2043",
+      title: "Rune AI",
+      subtitle: "Agentic AI Assistant",
+      description: "A personal AI assistant powered by a local Ollama model and a Gradio web UI. Rune runs entirely on your machine — no API keys, no data leaks — offering a fast, private, conversational experience with memory and tool-calling capabilities.",
+      tags: ["Python", "Gradio", "Ollama", "LLM", "Agentic AI"],
+      github: "https://github.com/riti2043/Personal-AI-assistant",
+      demo: "https://huggingface.co/spaces/riti2043/Rune",
       imageBg: "from-zinc-900 to-zinc-800",
       accentColor: "border-emerald-500/50"
     },
     {
       id: "02",
-      title: "Neural Vision Assistant",
-      subtitle: "Multimodal AI Agent for Code & UI Generation",
-      description: "An agentic system capable of taking rough wireframe sketches and transforming them into accessible, production-ready React components with animated previews.",
-      tags: ["TypeScript", "Next.js", "LangChain", "Claude API", "Framer Motion"],
-      github: "https://github.com/riti2043",
-      demo: "https://github.com/riti2043",
+      title: "Sanketa Touch",
+      subtitle: "Computer Vision Medical Interface",
+      description: "A fully touchless, sterile medical imaging system for operating theatres. Using a webcam and MediaPipe hand tracking, surgeons control DICOM X-Ray viewers and 3D CT reconstructions through natural gestures — no mouse, no keyboard, no infection risk.",
+      tags: ["Python", "MediaPipe", "PyQt6", "VTK", "DICOM"],
+      github: "https://github.com/riti2043/Marvel-GPP",
+      demo: "#",
       imageBg: "from-zinc-800 to-zinc-900",
       accentColor: "border-blue-500/50"
     },
     {
       id: "03",
-      title: "Sublime Cloud Architecture",
-      subtitle: "Distributed Microservices & Analytics Engine",
-      description: "High-throughput real-time web telemetry and analytics pipeline designed with containerized Go services, Redis caching, and interactive WebGL dashboarding.",
-      tags: ["Go", "Docker", "Redis", "PostgreSQL", "React"],
-      github: "https://github.com/riti2043",
-      demo: "https://github.com/riti2043",
+      title: "Peer Learn",
+      subtitle: "Collaborative Learning Platform",
+      description: "A collaborative peer-to-peer learning platform currently in development. Stay tuned — links and details will be added once the project launches.",
+      tags: ["Coming Soon", "Development"],
+      github: "#",
+      demo: "#",
       imageBg: "from-zinc-900 to-zinc-950",
       accentColor: "border-purple-500/50"
     },
@@ -1268,9 +1267,111 @@ export default function App() {
       </section>
 
       {/* ==================== PROJECTS SECTION ("SCROLL-TO-SEE" PINNED CARDS) ==================== */}
-      <SpaceCarousel />
+      <section id="projects" className="py-24 px-6 max-w-7xl mx-auto">
+        <div className="mb-12">
+          <span className="font-mono-custom text-xs uppercase tracking-widest text-[var(--text-muted)]">03 // SELECTED WORK</span>
+          <h2 className="text-3xl sm:text-5xl font-bold mt-2 tracking-tight">Scroll to Explore Projects</h2>
+          <p className="text-[var(--text-muted)] font-mono-custom text-xs mt-2">Sticky scroll card stacking experience ↓</p>
+        </div>
 
-        <Submissions />
+        {/* Stacked Sticky Project Showcase Cards */}
+        <div className="space-y-16">
+          {projects.map((project, index) => (
+            <motion.div
+              key={project.id}
+              className={`sticky top-28 rounded-3xl border ${project.accentColor} bg-[var(--bg-primary)] shadow-xl overflow-hidden p-8 sm:p-12 grid grid-cols-1 lg:grid-cols-12 gap-8 items-center border-[var(--border-color)]`}
+            >
+              {/* Project Details Left */}
+              <div className="lg:col-span-6 space-y-6">
+                <div className="flex items-center justify-between font-mono-custom text-xs text-[var(--text-muted)] border-b border-[var(--border-color)] pb-3">
+                  <span>PROJECT // {project.id}</span>
+                  <span>04 TOTAL</span>
+                </div>
+
+                <div>
+                  <h3 className="text-2xl sm:text-4xl font-bold tracking-tight">{project.title}</h3>
+                  <p className="font-mono-custom text-sm text-[var(--text-muted)] mt-1">{project.subtitle}</p>
+                </div>
+
+                <p className="text-[var(--text-muted)] text-sm sm:text-base leading-relaxed">
+                  {project.description}
+                </p>
+
+                {/* Tech Chips */}
+                <div className="flex flex-wrap gap-2 pt-2">
+                  {project.tags.map((tag, tIdx) => (
+                    <span 
+                      key={tIdx}
+                      className="px-3 py-1 rounded-full text-xs font-mono-custom border border-[var(--border-color)] bg-zinc-100 dark:bg-zinc-800"
+                    >
+                      {tag}
+                    </span>
+                  ))}
+                </div>
+
+                {/* Links */}
+                <div className="flex items-center gap-4 pt-4 font-mono-custom text-xs">
+                  <a 
+                    href={project.demo} 
+                    target="_blank" 
+                    rel="noreferrer"
+                    onClick={() => soundEngine.playTab()}
+                    className="btn-bitmap px-5 py-2.5 flex items-center gap-1.5 transition-colors font-mono-custom text-sm"
+                  >
+                    <span>Live Demo</span>
+                    <ExternalLink size={14} />
+                  </a>
+                  <a 
+                    href={project.github} 
+                    target="_blank" 
+                    rel="noreferrer"
+                    onClick={() => soundEngine.playTab()}
+                    className="btn-bitmap px-5 py-2.5 flex items-center gap-1.5 transition-colors font-mono-custom text-sm"
+                  >
+                    <span>Source Code</span>
+                    <GithubIcon size={14} />
+                  </a>
+                </div>
+              </div>
+
+              {/* Project Card Right Preview Mockup */}
+              <div className="lg:col-span-6">
+                <div className={`w-full aspect-video rounded-2xl bg-gradient-to-br ${project.imageBg} border border-zinc-700/50 p-6 flex flex-col justify-between relative shadow-inner text-white overflow-hidden group`}>
+                  
+                  {/* Wireframe Mockup Top Bar */}
+                  <div className="flex items-center justify-between border-b border-white/10 pb-3">
+                    <div className="flex items-center gap-1.5">
+                      <div className="w-2.5 h-2.5 rounded-full bg-red-500/80" />
+                      <div className="w-2.5 h-2.5 rounded-full bg-yellow-500/80" />
+                      <div className="w-2.5 h-2.5 rounded-full bg-green-500/80" />
+                    </div>
+                    <span className="font-mono-custom text-[10px] text-white/50">{project.title.toLowerCase().replace(/\s+/g, '-')}.app</span>
+                  </div>
+
+                  {/* Wireframe Graphics */}
+                  <div className="my-auto space-y-3 font-mono-custom">
+                    <div className="h-4 w-3/4 bg-white/20 rounded animate-pulse" />
+                    <div className="h-3 w-1/2 bg-white/10 rounded" />
+                    <div className="grid grid-cols-3 gap-2 pt-2">
+                      <div className="h-12 rounded bg-white/10 border border-white/5" />
+                      <div className="h-12 rounded bg-white/10 border border-white/5" />
+                      <div className="h-12 rounded bg-white/10 border border-white/5" />
+                    </div>
+                  </div>
+
+                  <div className="flex justify-between items-center text-[10px] font-mono-custom text-white/40">
+                    <span>BUILD // OK</span>
+                    <span>v1.0.4</span>
+                  </div>
+                </div>
+              </div>
+
+            </motion.div>
+          ))}
+        </div>
+      </section>
+
+      <Submissions />
 
       {/* ==================== CONTACT & FOOTER SECTION ==================== */}
       <section id="contact" className="py-24 border-t border-[var(--border-color)] px-6 max-w-7xl mx-auto">
