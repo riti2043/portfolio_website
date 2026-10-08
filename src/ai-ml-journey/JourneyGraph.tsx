@@ -15,6 +15,8 @@ interface JourneyGraphProps {
   hoveredId: string | null;
   exitingIds?: Set<string>;
   resetViewToken?: number;
+  isPaused?: boolean;
+  zoomToken?: { action: 'in' | 'out' | null; ts: number };
   onSelect: (node: JourneyNode) => void;
   onHover: (node: JourneyNode | null) => void;
 }
@@ -26,7 +28,7 @@ const palette = {
   3: { core: '#E0A868', glow: '#9C4A18', radius: 2.4 },
 } as const;
 
-const DEFAULT_CAMERA_DISTANCE = 300;
+const DEFAULT_CAMERA_DISTANCE = 150;
 const DEFAULT_CAMERA_DURATION = 0;
 
 const endpointId = (endpoint: string | JourneyNode): string =>
@@ -196,12 +198,12 @@ const makeLabel = (node: JourneyNode, visible: boolean, emphasized: boolean): TH
   const canvas = document.createElement('canvas');
   const context = canvas.getContext('2d');
   if (!context) return null;
-  const fontSize = node.tier === 0 ? 24 : node.tier === 1 ? 17 : 13;
+  const fontSize = node.tier === 0 ? 32 : node.tier === 1 ? 26 : 20;
   const font = `${node.tier === 0 ? '700' : '600'} ${fontSize}px "Space Mono", monospace`;
   context.font = font;
   const textWidth = context.measureText(node.name).width;
-  canvas.width = Math.ceil(textWidth + 30);
-  canvas.height = fontSize + 28;
+  canvas.width = Math.ceil(textWidth + 40);
+  canvas.height = fontSize + 36;
   context.font = font;
   context.textAlign = 'center';
   context.textBaseline = 'middle';
@@ -218,9 +220,9 @@ const makeLabel = (node: JourneyNode, visible: boolean, emphasized: boolean): TH
     depthWrite: false,
       opacity: emphasized || node.tier < 2 ? 1 : .92,
   }));
-  const width = node.tier === 0 ? 30 : node.tier === 1 ? 22 : 17;
+  const width = node.tier === 0 ? 45 : node.tier === 1 ? 35 : 28;
   sprite.scale.set(width, width * (canvas.height / canvas.width), 1);
-  sprite.position.set(0, palette[node.tier].radius + (node.tier === 0 ? 3 : 2), 0);
+  sprite.position.set(0, palette[node.tier].radius + (node.tier === 0 ? 4 : 3), 0);
   return sprite;
 };
 
@@ -264,7 +266,7 @@ function makeNodeObject(node: JourneyNode, selectedId: string, hoveredId: string
   return group;
 }
 
-export function JourneyGraph({ nodes, links, selectedId, hoveredId, exitingIds, resetViewToken, onSelect, onHover }: JourneyGraphProps) {
+export function JourneyGraph({ nodes, links, selectedId, hoveredId, exitingIds, resetViewToken, isPaused, zoomToken, onSelect, onHover }: JourneyGraphProps) {
   const graphRef = useRef<any>(null);
   const hostRef = useRef<HTMLDivElement>(null);
   const initialFitDoneRef = useRef(false);
@@ -319,6 +321,30 @@ export function JourneyGraph({ nodes, links, selectedId, hoveredId, exitingIds, 
     );
   }, [resetViewToken]);
 
+  useEffect(() => {
+    const graph = graphRef.current;
+    const controls = graph?.controls?.();
+    if (controls) {
+      controls.autoRotate = !isPaused;
+      controls.autoRotateSpeed = 0.28;
+    }
+  }, [isPaused, nodes]);
+
+  useEffect(() => {
+    const graph = graphRef.current;
+    if (!graph || !zoomToken) return;
+    try {
+      const p = graph.cameraPosition();
+      if (zoomToken.action === 'in') {
+        graph.cameraPosition({ x: p.x * 0.7, y: p.y * 0.7, z: p.z * 0.7 }, { x: 0, y: 0, z: 0 }, 300);
+      } else if (zoomToken.action === 'out') {
+        graph.cameraPosition({ x: p.x * 1.4, y: p.y * 1.4, z: p.z * 1.4 }, { x: 0, y: 0, z: 0 }, 300);
+      }
+    } catch (err) {
+      console.warn('Zoom failed:', err);
+    }
+  }, [zoomToken]);
+
   const nodeObject = useCallback((node: JourneyNode) => makeNodeObject(node, selectedId, hoveredId, nodes), [selectedId, hoveredId, nodes]);
   const linkColor = useCallback((link: JourneyLink) => {
     const sourceId = endpointId(link.source);
@@ -372,17 +398,22 @@ export function JourneyGraph({ nodes, links, selectedId, hoveredId, exitingIds, 
           linkDirectionalParticles={0}
           d3AlphaDecay={0.018}
           d3VelocityDecay={0.88}
-          cooldownTicks={140}
-          warmupTicks={80}
+          cooldownTicks={0}
+          warmupTicks={220}
           onEngineStop={() => {
             if (initialFitDoneRef.current) return;
             initialFitDoneRef.current = true;
-            graphRef.current?.centerAt?.(0, 0, 0, 0);
-            graphRef.current?.cameraPosition?.(
-              { x: 0, y: 0, z: DEFAULT_CAMERA_DISTANCE },
-              { x: 0, y: 0, z: 0 },
-              DEFAULT_CAMERA_DURATION,
-            );
+            const graph = graphRef.current;
+            if (graph) {
+              graph.centerAt?.(0, 0, 0, 0);
+              graph.cameraPosition?.(
+                { x: 0, y: 0, z: DEFAULT_CAMERA_DISTANCE },
+                { x: 0, y: 0, z: 0 },
+                DEFAULT_CAMERA_DURATION,
+              );
+              const controls = graph.controls?.();
+              if (controls) controls.autoRotate = !isPaused;
+            }
           }}
           onNodeClick={(node: JourneyNode) => onSelect(node)}
           onNodeHover={(node: JourneyNode | null) => onHover(node)}
