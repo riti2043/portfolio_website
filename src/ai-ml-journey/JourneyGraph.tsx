@@ -322,12 +322,23 @@ export function JourneyGraph({ nodes, links, selectedId, hoveredId, exitingIds, 
   }, [resetViewToken]);
 
   useEffect(() => {
-    const graph = graphRef.current;
-    const controls = graph?.controls?.();
-    if (controls) {
-      controls.autoRotate = !isPaused;
-      controls.autoRotateSpeed = 0.28;
-    }
+    let frameId: number;
+    const applyControls = () => {
+      const graph = graphRef.current;
+      const controls = graph?.controls?.();
+      if (controls) {
+        controls.autoRotate = !isPaused;
+        controls.autoRotateSpeed = 0.28;
+        if (!initialFitDoneRef.current) {
+          initialFitDoneRef.current = true;
+          graph.cameraPosition?.({ z: DEFAULT_CAMERA_DISTANCE }, undefined, 0);
+        }
+      } else {
+        frameId = requestAnimationFrame(applyControls);
+      }
+    };
+    applyControls();
+    return () => cancelAnimationFrame(frameId);
   }, [isPaused, nodes]);
 
   useEffect(() => {
@@ -398,23 +409,7 @@ export function JourneyGraph({ nodes, links, selectedId, hoveredId, exitingIds, 
           linkDirectionalParticles={0}
           d3AlphaDecay={0.018}
           d3VelocityDecay={0.88}
-          cooldownTicks={0}
-          warmupTicks={220}
-          onEngineStop={() => {
-            if (initialFitDoneRef.current) return;
-            initialFitDoneRef.current = true;
-            const graph = graphRef.current;
-            if (graph) {
-              graph.centerAt?.(0, 0, 0, 0);
-              graph.cameraPosition?.(
-                { x: 0, y: 0, z: DEFAULT_CAMERA_DISTANCE },
-                { x: 0, y: 0, z: 0 },
-                DEFAULT_CAMERA_DURATION,
-              );
-              const controls = graph.controls?.();
-              if (controls) controls.autoRotate = !isPaused;
-            }
-          }}
+          cooldownTicks={140}
           onNodeClick={(node: JourneyNode) => onSelect(node)}
           onNodeHover={(node: JourneyNode | null) => onHover(node)}
         />

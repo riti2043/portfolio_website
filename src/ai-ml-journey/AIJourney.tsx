@@ -124,7 +124,7 @@ function App() {
             <p className="wordmark">AI/ML JOURNEY</p>
             <div className="stage-coordinates">LEARNING ATLAS / 01</div>
           </div>
-          <div className="stage-readout flex gap-2">
+          <div className="stage-readout flex gap-2" style={{ pointerEvents: 'auto' }}>
             <button className="control-button" type="button" onClick={() => setZoomToken({ action: 'in', ts: Date.now() })} aria-label="Zoom in">
               <ZoomIn size={14} strokeWidth={1.5} />
             </button>
