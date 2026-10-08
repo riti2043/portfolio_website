@@ -327,6 +327,11 @@ export function JourneyGraph({ nodes, links, selectedId, hoveredId, exitingIds, 
       const graph = graphRef.current;
       const controls = graph?.controls?.();
       if (controls) {
+        graph.d3Force('charge')?.strength(-105);
+        graph.d3Force('link')?.distance((link: JourneyLink) => {
+          const source = nodes.find((node) => node.id === endpointId(link.source));
+          return source?.tier === 0 ? 125 : source?.tier === 1 ? 72 : 44;
+        });
         controls.autoRotate = !isPaused;
         controls.autoRotateSpeed = 0.28;
         if (!initialFitDoneRef.current) {
