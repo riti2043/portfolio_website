@@ -1,4 +1,4 @@
-﻿import React, { useRef } from 'react';
+import React, { useRef } from 'react';
 import HTMLFlipBook from 'react-pageflip';
 import { ArrowLeft, ArrowRight, ExternalLink, Github } from 'lucide-react';
 
@@ -7,7 +7,7 @@ const submissions = [
     id: 1, 
     type: "COVER", 
     title: "HACKATHON & BUILDATHON ARCHIVES", 
-    subtitle: "RITHYA JAYARAM // DOSSIER" 
+    subtitle: "RITHYA JAYARAM" 
   },
   { 
     id: 2, 
@@ -20,7 +20,7 @@ const submissions = [
     desc: "An AI-powered auditing platform that parses complex settlement agreements, detects discrepancies using LLM logic, and flags compliance risks automatically.",
     github: "https://github.com/riti2043/AI_settlement_auditor",
     demo: "https://ai-settlement-auditor.vercel.app",
-    image: "https://raw.githubusercontent.com/riti2043/AI_settlement_auditor/main/screenshot.png"
+    image: "https://raw.githubusercontent.com/riti2043/AI_settlement_auditor/main/frontend/src/assets/hero.png"
   },
   { 
     id: 3, 
@@ -33,7 +33,7 @@ const submissions = [
     desc: "An automated web application designed to research and identify non-conventional, cost-effective bio-precursors for aviation lubricating oil using advanced NLP models and web scraping.",
     github: "https://github.com/riti2043/sih_2026",
     demo: null,
-    image: null
+    image: "https://raw.githubusercontent.com/riti2043/sih_2026/main/data/processed/shap_summary_plot.png"
   },
   { 
     id: 4, 
@@ -145,7 +145,7 @@ export const Submissions = () => {
                     {sub.image && (
                         <div className="mb-4 border border-[var(--border-color)] p-1 bg-[#111]">
                             <div className="aspect-video w-full bg-[#222] flex items-center justify-center overflow-hidden">
-                                <span className="text-xs opacity-50">UI_IMAGE_PLACEHOLDER</span>
+                                <img src={sub.image} alt={sub.title} className="w-full h-full object-cover" />
                             </div>
                         </div>
                     )}
